@@ -354,7 +354,9 @@ file_m::_create_rec(
         smsize_t est_data_len = MAX((uint4_t)data.size(), len_hint);
         rec_impl = file_p::choose_rec_implementation( hdr.size(), 
                                                   est_data_len,
-                                                  space_needed);
+                                                  space_needed,
+                                                  NULL
+                                                  );
     }
     DBG(<<"create_rec with policy " << int(policy)
         << " space_needed=" << space_needed
@@ -467,7 +469,8 @@ file_m::_create_mrbt_rec(
         smsize_t est_data_len = MAX((uint4_t)data.size(), len_hint);
         rec_impl = file_mrbt_p::choose_rec_implementation( hdr.size(), 
 							   est_data_len,
-							   space_needed);
+							   space_needed,
+                 NULL);
     }
     DBG(<<"create_rec with policy " << int(policy)
         << " space_needed=" << space_needed
@@ -573,7 +576,8 @@ file_m::move_mrbt_rec_to_given_page(
         smsize_t est_data_len = MAX((uint4_t)data.size(), len_hint);
         rec_impl = file_mrbt_p::choose_rec_implementation( hdr.size(), 
 							   est_data_len,
-							   space_needed);
+							   space_needed,
+                 &page);
     }
     DBG(<< "create_rec "
         << " space_needed=" << space_needed
@@ -659,7 +663,8 @@ file_m::create_mrbt_rec_in_given_page(
         smsize_t est_data_len = MAX((uint4_t)data.size(), len_hint);
         rec_impl = file_mrbt_p::choose_rec_implementation( hdr.size(), 
 							   est_data_len,
-							   space_needed);
+							   space_needed,
+                 &page);
     }
     DBG(<<"create_rec "
         << " space_needed=" << space_needed
@@ -862,7 +867,7 @@ file_m::create_mrbt_rec_l(
 	// 2. try to find a file page with empty slot and pointed by leaf
 	btree_p leaf_page;
 	W_DO( leaf_page.fix(leaf, latch) );
-	set<lpid_t> pages; // to not to look at already looked at heap pages
+	std::set<lpid_t> pages; // to not to look at already looked at heap pages
 	rid_t current_rid;
 	for(int i=0; !space_found && i < leaf_page.nrecs(); i++) {
 	    // get a rec from the leaf to find a heap page pointed by this leaf
@@ -963,7 +968,7 @@ file_m::create_mrbt_rec_p(
     
 	// 1. try to find a file page with empty slot and pointed by this sub-tree
 	rid_t current_rid;
-	set<lpid_t> pages; // to not to look at already looked at heap pages
+	std::set<lpid_t> pages; // to not to look at already looked at heap pages
 	// 1.1 start with the leaf page that the insert will take place
 	for(int i=0; !space_found && i < leaf_page.nrecs(); i++) {
 	    // get the rec from the leaf_page
@@ -1824,10 +1829,10 @@ file_m::append_rec(const rid_t& rid, const vec_t& data, const sdesc_t& sd)
     // make sure we don't grow the record to larger than 4GB
     if ( (record_t::max_len - orig_size) < data.size() ) {
 #if W_DEBUG_LEVEL > 2
-        cerr << "can't grow beyond 4GB=" << int(record_t::max_len)
+        std::cerr << "can't grow beyond 4GB=" << int(record_t::max_len)
                 << " orig_size " << int(orig_size)
                 << " append.size() " << data.size()
-                << endl;
+                << std::endl;
 #endif 
         return RC(eBADAPPEND);
     }
@@ -1836,7 +1841,7 @@ file_m::append_rec(const rid_t& rid, const vec_t& data, const sdesc_t& sd)
     smsize_t space_needed;
     if ( rec->is_small() &&
         file_p::choose_rec_implementation(rec->hdr_size(), 
-            orig_size + data.size(), space_needed) == t_small) {
+            orig_size + data.size(), space_needed, &page) == t_small) {
 
         if (page.usable_space() < data.size()) { return RC(eRECWONTFIT); }
 
@@ -1956,10 +1961,10 @@ file_m::append_mrbt_rec(const rid_t& rid, const vec_t& data, const sdesc_t& sd, 
     // make sure we don't grow the record to larger than 4GB
     if ( (record_t::max_len - orig_size) < data.size() ) {
 #if W_DEBUG_LEVEL > 2
-        cerr << "can't grow beyond 4GB=" << int(record_t::max_len)
+        std::cerr << "can't grow beyond 4GB=" << int(record_t::max_len)
                 << " orig_size " << int(orig_size)
                 << " append.size() " << data.size()
-                << endl;
+                << std::endl;
 #endif 
         return RC(eBADAPPEND);
     }
@@ -1968,7 +1973,7 @@ file_m::append_mrbt_rec(const rid_t& rid, const vec_t& data, const sdesc_t& sd, 
     smsize_t space_needed;
     if ( rec->is_small() &&
 	 file_mrbt_p::choose_rec_implementation(rec->hdr_size(), 
-					       orig_size + data.size(), space_needed) == t_small) {
+					       orig_size + data.size(), space_needed, &page) == t_small) {
 
         if (page.usable_space() < data.size()) { return RC(eRECWONTFIT); }
 
@@ -2074,7 +2079,7 @@ file_m::truncate_rec(const rid_t& rid, uint4_t amount, bool& should_forward)
         smsize_t space_needed;
         recflags_t rec_impl;
         rec_impl = file_p::choose_rec_implementation(rec->hdr_size(), len, 
-                space_needed);
+                space_needed, &page);
         if (rec_impl == t_small) {
             DBG( << "rec was large, now is small");
 
@@ -2214,7 +2219,7 @@ file_m::truncate_mrbt_rec(const rid_t& rid, uint4_t amount, bool& should_forward
         smsize_t space_needed;
         recflags_t rec_impl;
         rec_impl = file_mrbt_p::choose_rec_implementation(rec->hdr_size(), len, 
-                space_needed);
+                space_needed, &page);
         if (rec_impl == t_small) {
             DBG( << "rec was large, now is small");
 
@@ -3635,14 +3640,24 @@ recflags_t
 file_p::choose_rec_implementation(
     uint4_t         est_hdr_len,
     smsize_t        est_data_len,
-    smsize_t&       rec_size // output: size of stuff going into slotted pg
+     smsize_t&       rec_size, // output: size of stuff going into slotted pg
+    file_p*         page
     )
 {
     est_hdr_len = sizeof(rectag_t) + align(est_hdr_len);
     w_assert2(is_aligned(est_hdr_len));
     w_assert2(is_aligned(sizeof(rectag_t)));
 
-    if ( (est_data_len+est_hdr_len) <= file_p::data_sz) {
+    smsize_t        available_for_small = file_p::data_sz;
+
+    if(page != NULL && page->is_mine()) {
+        available_for_small = page->usable_space();
+        // Problem: we don't know if we have enough room for a new
+        // slot. Caller will have to deal with that.
+    }
+    
+
+    if ( (est_data_len+est_hdr_len) <= available_for_small) {
         // NOTE: file_p::data_sz has already taken into account one slot_t
         // and space for the file_p_hdr_t
         rec_size = est_hdr_len + est_data_len + sizeof(slot_t);
@@ -3661,14 +3676,23 @@ recflags_t
 file_mrbt_p::choose_rec_implementation(
     uint4_t         est_hdr_len,
     smsize_t        est_data_len,
-    smsize_t&       rec_size // output: size of stuff going into slotted pg
+    smsize_t&       rec_size, // output: size of stuff going into slotted pg
+    file_p*         page
     )
 {
     est_hdr_len = sizeof(rectag_t) + align(est_hdr_len);
     w_assert2(is_aligned(est_hdr_len));
     w_assert2(is_aligned(sizeof(rectag_t)));
 
-    if ( (est_data_len+est_hdr_len) <= file_mrbt_p::data_sz) {
+    smsize_t        available_for_small = file_mrbt_p::data_sz;
+
+    if(page != NULL && page->is_mine()) {
+        available_for_small = page->usable_space();
+        // Problem: we don't know if we have enough room for a new
+        // slot. Caller will have to deal with that.
+    }
+
+    if ( (est_data_len+est_hdr_len) <= available_for_small) {
         // NOTE: file_mrbt_p::data_mrbt_sz has already taken into account one slot_t
         // and space for the file_p_hdr_t
         rec_size = est_hdr_len + est_data_len + sizeof(slot_t);
@@ -3836,22 +3860,22 @@ file_m::get_du_statistics(
         // lgindex_pg_cnt:  # pages referenced in the small-object store
         //                for metadata (index pages of t_large_1,2)
         if(lg_pg_cnt != lgdata_pg_cnt + lgindex_pg_cnt) {
-            cerr << "lg_pg_cnt= " << lg_pg_cnt
+            std::cerr << "lg_pg_cnt= " << lg_pg_cnt
                  << " BUT lgdata_pg_cnt= " << lgdata_pg_cnt
                  << " + lgindex_pg_cnt= " << lgindex_pg_cnt
                  << " = " << lgdata_pg_cnt + lgindex_pg_cnt
-                 << endl;
+                 << std::endl;
 
             base_stat_t in_extents = lg_pg_cnt;
             base_stat_t referenced = lgdata_pg_cnt  + lgindex_pg_cnt;
             if(in_extents < referenced) {
-                cerr  << (referenced - in_extents)
+                std::cerr  << (referenced - in_extents)
                     << " referenced pages are not in fact allocated to store "
-                    << endl;
+                    << std::endl;
             } else {
-                cerr  << (in_extents - referenced)
+                std::cerr  << (in_extents - referenced)
                     << " allocated pages have to references in the store "
-                    << endl;
+                    << std::endl;
             }
             W_FATAL_MSG(fcINTERNAL, << "AUDIT FAILURE in large object store!");
         }

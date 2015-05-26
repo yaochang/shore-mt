@@ -301,7 +301,7 @@ sub translate {
                     $base,$cnt+1 );
                 printf(CODEWSTAT 
                     "    if(e.is_error()) {\n");
-                printf(CODEWSTAT "        cerr <<  e << endl;\n");
+                printf(CODEWSTAT "        std::cerr <<  e << std::endl;\n");
                 printf(CODEWSTAT "    }\n");
 
 
@@ -316,8 +316,8 @@ sub translate {
             }
 
             &pifdef(*STRUCT);
-            printf(STRUCT "public: \nfriend ostream &\n");
-            printf(STRUCT "    operator<<(ostream &o,const $class &t);\n");
+            printf(STRUCT "public: \nfriend std::ostream &\n");
+            printf(STRUCT "    operator<<(std::ostream &o,const $class &t);\n");
             &pifdef(*STRUCT);
             if ($wstat)  {
 				printf(STRUCT "public: \nfriend w_statistics_t &\n");
@@ -443,9 +443,9 @@ sub translate {
 
             # define operator<<  to ostream
             &pifdef(*CODEOUTP);
-            printf(CODEOUTP "ostream &\n");
+            printf(CODEOUTP "std::ostream &\n");
             printf(CODEOUTP 
-                "operator<<(ostream &o,const $class &t)\n{\n");#}
+                "operator<<(std::ostream &o,const $class &t)\n{\n");#}
             &pendif(*CODEOUTP);
 
 
@@ -561,7 +561,7 @@ sub translate {
 
         # code for operator << to ostream
         printf(CODEOUTP 
-            "\to << setw(W_$class) << \"$def \" << t.$def << endl;\n");
+            "\to << std::setw(W_$class) << \"$def \" << t.$def << std::endl;\n");
         }
         if ($maxw < length($def)) {  $maxw = length($def); }
 

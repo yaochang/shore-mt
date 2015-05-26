@@ -132,7 +132,7 @@ public:
 
     static rc_t            draw(
     const lpid_t&             root,
-    ostream                &DrawFile,
+    std::ostream                &DrawFile,
         bool                 skip = false);
 
     static rc_t            stats(
@@ -247,7 +247,7 @@ private:
 
     static rc_t            _draw(
     const lpid_t&             pid,
-    ostream                &DrawFile,
+    std::ostream                &DrawFile,
     nbox_t                &CoverAll,
     bool                skip);
     

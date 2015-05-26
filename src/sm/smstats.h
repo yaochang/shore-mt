@@ -159,7 +159,7 @@ public:
         bfht.compute(); 
         sm.compute(); 
     }
-    friend ostream& operator<<(ostream&, const sm_stats_info_t& s);
+    friend std::ostream& operator<<(std::ostream&, const sm_stats_info_t& s);
     sm_stats_info_t() {
         memset(this, '\0', sizeof (*this));
     }
@@ -213,7 +213,7 @@ struct sm_config_info_t {
      */
     bool   logging; 
 
-    friend ostream& operator<<(ostream&, const sm_config_info_t& s);
+    friend std::ostream& operator<<(std::ostream&, const sm_config_info_t& s);
 };
 
 /*<std-footer incl-file-exclusion='SMSTATS_H'>  -- do not edit anything below this line -- */

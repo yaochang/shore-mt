@@ -66,8 +66,8 @@ stats_audit_failed(int
         )
 {
 #if DEBUG_GNATS_77
-    cerr << "stats audit failed at line " << line 
-        << " of file " __FILE__ << endl;
+    std::cerr << "stats audit failed at line " << line 
+        << " of file " __FILE__ << std::endl;
     w_assert1(0);
 #endif 
     return RC(smlevel_0::eDUAUDITFAILED);
@@ -104,8 +104,8 @@ file_pg_stats_t::audit() const
             << " smlevel_0::page_sz= " << int(smlevel_0::page_sz)
         );
 #if DEBUG_GNATS_77
-        cerr << " file_pg_stats_t::total_bytes= " << total_bytes()
-        << " smlevel_0::page_sz= " << int(smlevel_0::page_sz) << endl;
+        std::cerr << " file_pg_stats_t::total_bytes= " << total_bytes()
+        << " smlevel_0::page_sz= " << int(smlevel_0::page_sz) << std::endl;
 #endif
         result = stats_audit_failed(__LINE__);
     }
@@ -143,7 +143,7 @@ file_pg_stats_t::total_bytes() const
 }
 
 
-ostream& operator<<(ostream& o, const file_pg_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const file_pg_stats_t& s)
 {
     /*
     return o
@@ -168,25 +168,25 @@ ostream& operator<<(ostream& o, const file_pg_stats_t& s)
     return o;
 }
 
-void file_pg_stats_t::print(ostream& o, const char *pfx) const
+void file_pg_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const file_pg_stats_t &s = *this;
     o
-    << pfx << "hdr_bs "                        << s.hdr_bs << endl
-    << pfx << "slots_used_bs "                << s.slots_used_bs << endl
-    << pfx << "slots_unused_bs "        << s.slots_unused_bs << endl
-    << pfx << "rec_tag_bs "                << s.rec_tag_bs << endl
-    << pfx << "rec_hdr_bs "                << s.rec_hdr_bs << endl
-    << pfx << "rec_hdr_align_bs "        << s.rec_hdr_align_bs << endl
-    << pfx << "rec_body_bs "                << s.rec_body_bs << endl
-    << pfx << "rec_body_align_bs "        << s.rec_body_align_bs << endl
+    << pfx << "hdr_bs "                        << s.hdr_bs << std::endl
+    << pfx << "slots_used_bs "                << s.slots_used_bs << std::endl
+    << pfx << "slots_unused_bs "        << s.slots_unused_bs << std::endl
+    << pfx << "rec_tag_bs "                << s.rec_tag_bs << std::endl
+    << pfx << "rec_hdr_bs "                << s.rec_hdr_bs << std::endl
+    << pfx << "rec_hdr_align_bs "        << s.rec_hdr_align_bs << std::endl
+    << pfx << "rec_body_bs "                << s.rec_body_bs << std::endl
+    << pfx << "rec_body_align_bs "        << s.rec_body_align_bs << std::endl
 
-    << pfx << "rec_lg_chunk_bs "        << s.rec_lg_chunk_bs << endl
-    << pfx << "rec_lg_indirect_bs "        << s.rec_lg_indirect_bs << endl
-    << pfx << "free_bs "                << s.free_bs << endl
+    << pfx << "rec_lg_chunk_bs "        << s.rec_lg_chunk_bs << std::endl
+    << pfx << "rec_lg_indirect_bs "        << s.rec_lg_indirect_bs << std::endl
+    << pfx << "free_bs "                << s.free_bs << std::endl
 
-    << pfx << "small_rec_cnt "                << s.small_rec_cnt << endl
-    << pfx << "lg_rec_cnt "                << s.lg_rec_cnt << endl
+    << pfx << "small_rec_cnt "                << s.small_rec_cnt << std::endl
+    << pfx << "lg_rec_cnt "                << s.lg_rec_cnt << std::endl
     ;
 }
 
@@ -236,7 +236,7 @@ lgdata_pg_stats_t::total_bytes() const
 }
 
 
-ostream& operator<<(ostream& o, const lgdata_pg_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const lgdata_pg_stats_t& s)
 {
     /*
     return o
@@ -249,13 +249,13 @@ ostream& operator<<(ostream& o, const lgdata_pg_stats_t& s)
     return o;
 }
 
-void lgdata_pg_stats_t::print(ostream& o, const char *pfx) const
+void lgdata_pg_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const lgdata_pg_stats_t &s = *this;
     o
-    << pfx << "hdr_bs "                << s.hdr_bs << endl
-    << pfx << "data_bs "                << s.data_bs << endl
-    << pfx << "unused_bs "                << s.unused_bs << endl
+    << pfx << "hdr_bs "                << s.hdr_bs << std::endl
+    << pfx << "data_bs "                << s.data_bs << std::endl
+    << pfx << "unused_bs "                << s.unused_bs << std::endl
     ;
 }
 
@@ -300,7 +300,7 @@ lgindex_pg_stats_t::total_bytes() const
     return used_bs + unused_bs;
 }
 
-ostream& operator<<(ostream& o, const lgindex_pg_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const lgindex_pg_stats_t& s)
 {
     /*
     return o
@@ -312,12 +312,12 @@ ostream& operator<<(ostream& o, const lgindex_pg_stats_t& s)
     return o;
 }
 
-void lgindex_pg_stats_t::print(ostream& o, const char *pfx) const
+void lgindex_pg_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const lgindex_pg_stats_t &s = *this;
     o 
-    << pfx << "used_bs "                << s.used_bs << endl
-    << pfx << "unused_bs "                << s.unused_bs << endl
+    << pfx << "used_bs "                << s.used_bs << std::endl
+    << pfx << "unused_bs "                << s.unused_bs << std::endl
     ;
 }
 
@@ -378,12 +378,12 @@ file_stats_t::audit() const
             << " smlevel_0::ext_sz= " << int(smlevel_0::ext_sz)
         );
 #if DEBUG_GNATS_77
-            cerr 
+            std::cerr 
             << " total_alloc_pgs= " << total_alloc_pgs
             << " unalloc_file_pg_cnt= " << unalloc_file_pg_cnt
             << " unalloc_large_pg_cnt= " << unalloc_large_pg_cnt
             << " smlevel_0::ext_sz= " << int(smlevel_0::ext_sz)
-            << endl;
+            << std::endl;
 #endif
         if(result.is_error()) {} // don't croak on error-not-checked
         result = stats_audit_failed(__LINE__);
@@ -407,7 +407,7 @@ file_stats_t::alloc_pg_cnt() const
 }
 
 
-ostream& operator<<(ostream& o, const file_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const file_stats_t& s)
 {
     /*
     return 
@@ -423,7 +423,7 @@ ostream& operator<<(ostream& o, const file_stats_t& s)
     return o;
 }
 
-void file_stats_t::print(ostream& o, const char *pfx) const
+void file_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const file_stats_t &s = *this;
 
@@ -441,11 +441,11 @@ void file_stats_t::print(ostream& o, const char *pfx) const
     delete[] pfx1;
 
     o
-    << pfx<< "file_pg_cnt "                << s.file_pg_cnt << endl
-    << pfx<< "lgdata_pg_cnt "                << s.lgdata_pg_cnt << endl
-    << pfx<< "lgindex_pg_cnt "        << s.lgindex_pg_cnt << endl
-    << pfx<< "unalloc_file_pg_cnt "        << s.unalloc_file_pg_cnt << endl
-    << pfx<< "unalloc_large_pg_cnt "        << s.unalloc_large_pg_cnt << endl
+    << pfx<< "file_pg_cnt "                << s.file_pg_cnt << std::endl
+    << pfx<< "lgdata_pg_cnt "                << s.lgdata_pg_cnt << std::endl
+    << pfx<< "lgindex_pg_cnt "        << s.lgindex_pg_cnt << std::endl
+    << pfx<< "unalloc_file_pg_cnt "        << s.unalloc_file_pg_cnt << std::endl
+    << pfx<< "unalloc_large_pg_cnt "        << s.unalloc_large_pg_cnt << std::endl
     ;
 }
 
@@ -492,7 +492,7 @@ btree_lf_stats_t::total_bytes() const
 }
 
 
-ostream& operator<<(ostream& o, const btree_lf_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const btree_lf_stats_t& s)
 {
     /*
     return 
@@ -510,17 +510,17 @@ ostream& operator<<(ostream& o, const btree_lf_stats_t& s)
     return o;
 }
 
-void btree_lf_stats_t::print(ostream& o, const char *pfx) const
+void btree_lf_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const btree_lf_stats_t &s = *this;
     o
-    << pfx << "hdr_bs "                << s.hdr_bs << endl
-    << pfx << "key_bs "                << s.key_bs << endl
-    << pfx << "data_bs "                << s.data_bs << endl
-    << pfx << "entry_overhead_bs "        << s.entry_overhead_bs << endl
-    << pfx << "unused_bs "                << s.unused_bs << endl
-    << pfx << "entry_cnt "                << s.entry_cnt << endl
-    << pfx << "unique_cnt "                << s.unique_cnt << endl
+    << pfx << "hdr_bs "                << s.hdr_bs << std::endl
+    << pfx << "key_bs "                << s.key_bs << std::endl
+    << pfx << "data_bs "                << s.data_bs << std::endl
+    << pfx << "entry_overhead_bs "        << s.entry_overhead_bs << std::endl
+    << pfx << "unused_bs "                << s.unused_bs << std::endl
+    << pfx << "entry_cnt "                << s.entry_cnt << std::endl
+    << pfx << "unique_cnt "                << s.unique_cnt << std::endl
     ;
 }
 
@@ -566,7 +566,7 @@ btree_int_stats_t::total_bytes() const
 }
 
 
-ostream& operator<<(ostream& o, const btree_int_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const btree_int_stats_t& s)
 {
     /*
     return o
@@ -578,12 +578,12 @@ ostream& operator<<(ostream& o, const btree_int_stats_t& s)
     return o;
 }
 
-void btree_int_stats_t::print(ostream& o, const char *pfx) const
+void btree_int_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const btree_int_stats_t &s = *this;
     o
-    << pfx << "used_bs "                << s.used_bs << endl
-    << pfx << "unused_bs "                << s.unused_bs << endl
+    << pfx << "used_bs "                << s.used_bs << std::endl
+    << pfx << "unused_bs "                << s.unused_bs << std::endl
     ;
 }
 
@@ -673,7 +673,7 @@ btree_stats_t::alloc_pg_cnt() const
 }
 
 
-ostream& operator<<(ostream& o, const btree_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const btree_stats_t& s)
 {
     /*
     return o << s.leaf_pg << s.int_pg
@@ -688,7 +688,7 @@ ostream& operator<<(ostream& o, const btree_stats_t& s)
     return o;
 }
 
-void btree_stats_t::print(ostream& o, const char *pfx) const
+void btree_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const btree_stats_t &s = *this;
     unsigned int pfxlen = strlen(pfx);
@@ -702,11 +702,11 @@ void btree_stats_t::print(ostream& o, const char *pfx) const
     delete[] pfx1;
 
     o
-    << pfx << "leaf_pg_cnt "                << s.leaf_pg_cnt << endl
-    << pfx << "int_pg_cnt "                << s.int_pg_cnt << endl
-    << pfx << "unlink_pg_cnt "                << s.unlink_pg_cnt << endl
-    << pfx << "unalloc_pg_cnt "        << s.unalloc_pg_cnt << endl
-    << pfx << "level_cnt "                << s.level_cnt << endl
+    << pfx << "leaf_pg_cnt "                << s.leaf_pg_cnt << std::endl
+    << pfx << "int_pg_cnt "                << s.int_pg_cnt << std::endl
+    << pfx << "unlink_pg_cnt "                << s.unlink_pg_cnt << std::endl
+    << pfx << "unalloc_pg_cnt "        << s.unalloc_pg_cnt << std::endl
+    << pfx << "level_cnt "                << s.level_cnt << std::endl
     ;
 }
 
@@ -761,7 +761,7 @@ rtree_stats_t::total_bytes() const
 }
 
 
-ostream& operator<<(ostream& o, const rtree_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const rtree_stats_t& s)
 {
 /*
     return o
@@ -778,17 +778,17 @@ ostream& operator<<(ostream& o, const rtree_stats_t& s)
     return o;
 }
 
-void rtree_stats_t::print(ostream& o, const char *pfx) const
+void rtree_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const rtree_stats_t &s = *this;
     o
-    << pfx << "entry_cnt "                << s.entry_cnt << endl
-    << pfx << "unique_cnt "                << s.unique_cnt << endl
-    << pfx << "leaf_pg_cnt "                << s.leaf_pg_cnt << endl
-    << pfx << "int_pg_cnt "                << s.int_pg_cnt << endl
-    << pfx << "unalloc_pg_cnt "        << s.unalloc_pg_cnt << endl
-    << pfx << "fill_percent "                << s.fill_percent << endl
-    << pfx << "level_cnt "                << s.level_cnt << endl
+    << pfx << "entry_cnt "                << s.entry_cnt << std::endl
+    << pfx << "unique_cnt "                << s.unique_cnt << std::endl
+    << pfx << "leaf_pg_cnt "                << s.leaf_pg_cnt << std::endl
+    << pfx << "int_pg_cnt "                << s.int_pg_cnt << std::endl
+    << pfx << "unalloc_pg_cnt "        << s.unalloc_pg_cnt << std::endl
+    << pfx << "fill_percent "                << s.fill_percent << std::endl
+    << pfx << "level_cnt "                << s.level_cnt << std::endl
     ;
 }
 
@@ -833,7 +833,7 @@ volume_hdr_stats_t::total_bytes() const
     return hdr_ext_cnt * smlevel_0::ext_sz * smlevel_0::page_sz;
 }
 
-ostream& operator<<(ostream& o, const volume_hdr_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const volume_hdr_stats_t& s)
 {
     /*
     return o
@@ -847,14 +847,14 @@ ostream& operator<<(ostream& o, const volume_hdr_stats_t& s)
     return o;
 }
 
-void volume_hdr_stats_t::print(ostream& o, const char *pfx) const
+void volume_hdr_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const volume_hdr_stats_t &s = *this;
     o
-    << pfx << "hdr_ext_cnt "                << s.hdr_ext_cnt << endl
-    << pfx << "alloc_ext_cnt "                << s.alloc_ext_cnt << endl
-    << pfx << "unalloc_ext_cnt "        << s.unalloc_ext_cnt << endl
-    << pfx << "extent_size "                << s.extent_size << endl
+    << pfx << "hdr_ext_cnt "                << s.hdr_ext_cnt << std::endl
+    << pfx << "alloc_ext_cnt "                << s.alloc_ext_cnt << std::endl
+    << pfx << "unalloc_ext_cnt "        << s.unalloc_ext_cnt << std::endl
+    << pfx << "extent_size "                << s.extent_size << std::endl
     ;
 }
 
@@ -925,7 +925,7 @@ volume_map_stats_t::unlink_pg_cnt() const
 }
 
 
-ostream& operator<<(ostream& o, const volume_map_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const volume_map_stats_t& s)
 {
     /*
     return o << s.store_directory << s.root_index ;
@@ -934,7 +934,7 @@ ostream& operator<<(ostream& o, const volume_map_stats_t& s)
     return o;
 }
 
-void volume_map_stats_t::print(ostream& o, const char *pfx) const
+void volume_map_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const volume_map_stats_t &s = *this;
     unsigned int pfxlen = strlen(pfx);
@@ -1058,14 +1058,14 @@ sm_du_stats_t::audit() const
         // are, so too many are marked for deletion and the storage structures
         // haven't been adjusted to catch up.  
         
-        cerr << "Pages referenced in store structures " 
+        std::cerr << "Pages referenced in store structures " 
                 << alloc_and_unalloc_cnt 
                 << relation
                 << " volume totals ("
                 << unlink_pg_cnt3
                 << " unlinked pages, included in referenced-in-structures)"
-                << endl;
-        cerr 
+                << std::endl;
+        std::cerr 
             << " alloc_and_unalloc_cnt "
             << alloc_and_unalloc_cnt  
             << " ("<<alloc_pg_cnt2<<"+" << unalloc_pg_cnt << ")" 
@@ -1074,15 +1074,15 @@ sm_du_stats_t::audit() const
                     smlevel_0::ext_sz ) 
             << "((" << volume_hdr.alloc_ext_cnt << "-"
                     << marked_for_deletion_by_me << ")* extsize)"
-            << endl;
-        cerr
+            << std::endl;
+        std::cerr
             << " alloc2 total pages = " << alloc_pg_cnt2
             << " unalloc total pages = " << unalloc_pg_cnt
             << " marked_for_deletion_by_me = " << marked_for_deletion_by_me
             << " ext total pages = " << int(volume_hdr.alloc_ext_cnt * smlevel_0::ext_sz)
-            << endl;
+            << std::endl;
 
-        cerr
+        std::cerr
         << "alloc2 broken down: "
             << " btree.leaf_pg_cnt  "
             << btree.leaf_pg_cnt 
@@ -1096,9 +1096,9 @@ sm_du_stats_t::audit() const
             << file.lgindex_pg_cnt 
             << " volume_map.alloc_pg_cnt() "
             << volume_map.alloc_pg_cnt()
-            << endl;
+            << std::endl;
 
-        cerr
+        std::cerr
         << "unalloc total broken down: "
 
         << " file.unalloc_file_pg_cnt " <<
@@ -1111,13 +1111,13 @@ sm_du_stats_t::audit() const
          btree.unlink_pg_cnt 
          << " volume_map.unalloc_pg_cnt()  " <<
          volume_map.unalloc_pg_cnt() 
-            << endl;
+            << std::endl;
 
-        cerr
+        std::cerr
             << "volume_map.root_index " << volume_map.root_index
-            << endl
+            << std::endl
             << "volume_map.store_directory " << volume_map.store_directory
-            << endl;
+            << std::endl;
 
 #endif
         result = stats_audit_failed(__LINE__);
@@ -1155,7 +1155,7 @@ sm_du_stats_t::total_bytes() const
            ;
 }
 
-ostream& operator<<(ostream& o, const sm_du_stats_t& s)
+std::ostream& operator<<(std::ostream& o, const sm_du_stats_t& s)
 {
     /*
     return o << s.file << s.btree << s.rtree 
@@ -1169,7 +1169,7 @@ ostream& operator<<(ostream& o, const sm_du_stats_t& s)
     return o;
 }
 
-void sm_du_stats_t::print(ostream& o, const char *pfx) const
+void sm_du_stats_t::print(std::ostream& o, const char *pfx) const
 {
     const sm_du_stats_t &s = *this;
     unsigned int pfxlen = strlen(pfx);
@@ -1194,9 +1194,9 @@ void sm_du_stats_t::print(ostream& o, const char *pfx) const
     delete[] pfx1;
 
     o
-    << pfx << "file_cnt "        << s.file_cnt << endl
-    << pfx << "btree_cnt "        << s.btree_cnt << endl
-    << pfx << "rtree_cnt "        << s.rtree_cnt << endl
+    << pfx << "file_cnt "        << s.file_cnt << std::endl
+    << pfx << "btree_cnt "        << s.btree_cnt << std::endl
+    << pfx << "rtree_cnt "        << s.rtree_cnt << std::endl
     ;
 }
 

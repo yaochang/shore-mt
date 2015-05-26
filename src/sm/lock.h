@@ -85,7 +85,7 @@ public:
 
     int                          collect(vtable_t&, bool names_too);
     void                         assert_empty() const;
-    void                         dump(ostream &o);
+    void                         dump(std::ostream &o);
 
     void                         stats(
                                     u_long & buckets_used,

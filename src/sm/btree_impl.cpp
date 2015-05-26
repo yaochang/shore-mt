@@ -516,8 +516,8 @@ btree_impl::_split_tree(
     bool found = false;
     bool found_elem = false;
     slotid_t ret_slot;
-    vector<slotid_t> ret_slots;
-    vector<lpid_t> pids;
+    std::vector<slotid_t> ret_slots;
+    std::vector<lpid_t> pids;
     btree_p page;
     shpid_t prev_child = root_old.page;
     lpid_t pid;
@@ -670,8 +670,8 @@ btree_impl::_relocate_recs_l(
     DBGTHRD(<<"_relocate_recs_l: " << " leaf_old = " << leaf_old
 	    <<" leaf_new = " << leaf_new);
 
-    vector<rid_t> old_rids;
-    vector<rid_t> new_rids;
+    std::vector<rid_t> old_rids;
+    std::vector<rid_t> new_rids;
 
     latch_mode_t latch = bIgnoreLatches ? LATCH_NLX : LATCH_EX;
     btree_p leaf_page_old;
@@ -693,8 +693,8 @@ btree_impl::_relocate_recs_l(
 
     // 1. collect info on the heap_pages
     // 1.1 from the new page
-    map<lpid_t, vector<rid_t> > recs_map_new;
-    map<rid_t, slotid_t> slot_map_new;
+    std::map<lpid_t, std::vector<rid_t> > recs_map_new;
+    std::map<rid_t, slotid_t> slot_map_new;
     for(int i=0; i < leaf_page_new.nrecs(); i++) {
 	btrec_t rec(leaf_page_new, i);
 	rid_t rid;
@@ -703,8 +703,8 @@ btree_impl::_relocate_recs_l(
 	slot_map_new[rid] = i;
     }
     // 1.2 from the old page
-    map<lpid_t, vector<rid_t> > recs_map_old;
-    map<rid_t, slotid_t> slot_map_old;
+    std::map<lpid_t, std::vector<rid_t> > recs_map_old;
+    std::map<rid_t, slotid_t> slot_map_old;
     for(int i=0; i < leaf_page_old.nrecs(); i++) {
 	btrec_t rec(leaf_page_old, i);
 	rid_t rid;
@@ -719,7 +719,7 @@ btree_impl::_relocate_recs_l(
     file_mrbt_p new_page_new;
     bool first_old = true;
     bool first_new = true;
-    for(map<lpid_t, vector<rid_t> >::iterator iter = recs_map_new.begin(); iter != recs_map_new.end(); iter++) {
+    for(std::map<lpid_t, std::vector<rid_t> >::iterator iter = recs_map_new.begin(); iter != recs_map_new.end(); iter++) {
 	W_DO( heap_page.fix(iter->first, latch) );
 	if( recs_map_old[iter->first].size() > (iter->second).size() ) {
 	    // have to move some records that are pointed by the new leaf page
@@ -792,10 +792,10 @@ btree_impl::_move_recs_l(
     btree_p& leaf_page,
     file_mrbt_p& new_page,
     file_mrbt_p& old_page,
-    vector<rid_t>& recs,
-    map<rid_t, slotid_t>& slot_map,
-    vector<rid_t>& old_rids,
-    vector<rid_t>& new_rids,
+    std::vector<rid_t>& recs,
+    std::map<rid_t, slotid_t>& slot_map,
+    std::vector<rid_t>& old_rids,
+    std::vector<rid_t>& new_rids,
     const bool bIgnoreLatches) 
 {
     lpid_t new_page_id;
@@ -883,8 +883,8 @@ btree_impl::_relocate_recs_p(
     DBGTHRD(<<"_relocate_recs_p: " << " root_old = " << root_old
 	    << " root_new = " << root_new);
 
-    vector<rid_t> old_rids;
-    vector<rid_t> new_rids;
+    std::vector<rid_t> old_rids;
+    std::vector<rid_t> new_rids;
 
     latch_mode_t latch = bIgnoreLatches ? LATCH_NLS : LATCH_SH;
 
@@ -914,9 +914,9 @@ btree_impl::_relocate_recs_p(
 
     // 1. collect info on the heap_pages
     // 1.1 for old sub-tree
-    map<lpid_t, vector<rid_t> > recs_map_old;
-    map<rid_t, slotid_t> slot_map_old;
-    map<rid_t, lpid_t> leaf_page_map_old;
+    std::map<lpid_t, std::vector<rid_t> > recs_map_old;
+    std::map<rid_t, slotid_t> slot_map_old;
+    std::map<rid_t, lpid_t> leaf_page_map_old;
     int i = 0;
     while(true) {
 	if(i >= page_old.nrecs()) {
@@ -938,9 +938,9 @@ btree_impl::_relocate_recs_p(
 	i++;
     }
     // 1.2 for new sub-tree
-    map<lpid_t, vector<rid_t> > recs_map_new;
-    map<rid_t, slotid_t> slot_map_new;
-    map<rid_t, lpid_t> leaf_page_map_new;
+    std::map<lpid_t, std::vector<rid_t> > recs_map_new;
+    std::map<rid_t, slotid_t> slot_map_new;
+    std::map<rid_t, lpid_t> leaf_page_map_new;
     i = 0;
     while(true) {
 	if(i >= page_new.nrecs()) {
@@ -969,7 +969,7 @@ btree_impl::_relocate_recs_p(
     bool first_old = true;
     bool first_new = true;
     latch = bIgnoreLatches ? LATCH_NLX : LATCH_EX;
-    for(map<lpid_t, vector<rid_t> >::iterator iter = recs_map_new.begin(); iter != recs_map_new.end(); iter++) {
+    for(std::map<lpid_t, std::vector<rid_t> >::iterator iter = recs_map_new.begin(); iter != recs_map_new.end(); iter++) {
 	W_DO( heap_page.fix(iter->first, latch) );
 	if( recs_map_old[iter->first].size() > (iter->second).size() ) {
 	    // have to move some records from the heap_page that are pointed by the new sub-tree
@@ -1036,11 +1036,11 @@ btree_impl::_move_recs_p(
     const lpid_t& root,
     file_mrbt_p& new_page,
     file_mrbt_p& old_page,
-    vector<rid_t>& recs,
-    map<rid_t, slotid_t>& slot_map,
-    map<rid_t, lpid_t>& leaf_map,
-    vector<rid_t>& old_rids,
-    vector<rid_t>& new_rids,
+    std::vector<rid_t>& recs,
+    std::map<rid_t, slotid_t>& slot_map,
+    std::map<rid_t, lpid_t>& leaf_map,
+    std::vector<rid_t>& old_rids,
+    std::vector<rid_t>& new_rids,
     const bool bIgnoreLatches) 
 {
     lpid_t new_page_id;
@@ -1270,7 +1270,7 @@ rc_t btree_impl::_update_owner(const lpid_t& new_owner,
     // 1. update the owners of the heap_pages
     int i = 0;
     file_mrbt_p heap_page;
-    set<lpid_t> pages;
+    std::set<lpid_t> pages;
     while(true) {
 	if(i >= page.nrecs()) {
 	    pid.page = page.next();

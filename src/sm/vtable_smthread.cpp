@@ -109,7 +109,7 @@ smthread_t::vtable_collect(vtable_row_t& t)
     t.set_int(smthread_is_in_sm_attr, is_in_sm());
     if(tcb().xct) {
       w_ostrstream o;
-      o << tcb().xct->tid() << ends;
+      o << tcb().xct->tid() << std::ends;
       t.set_string(smthread_tid_attr, o.c_str());
     } else {
        t.set_string(smthread_tid_attr, "");

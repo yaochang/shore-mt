@@ -204,7 +204,7 @@ int bm_num_set(const u_char* bm, int size)
 void bm_print(u_char* bm, int size)
 {
     for (int i = 0; i < size; i++)  {
-        cout << (bm_is_set(bm, i) != 0);
+        std::cout << (bm_is_set(bm, i) != 0);
     }
 }
 

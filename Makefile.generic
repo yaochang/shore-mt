@@ -185,7 +185,7 @@ if COMPILER_IS_GCC
 # Note: gcc seems to issue a false positive warning about strict aliasing
 # in the new override code, so we have to add -fno-strict-aliasing.
 # --------------------------------------------------------
-GCC_WARN_FLAGS += -Wall -fno-strict-aliasing -Wextra -Wpointer-arith -Wwrite-strings
+GCC_WARN_FLAGS += -Wall -fno-strict-aliasing -Wextra -Wpointer-arith -Wwrite-strings -fpermissive
 
 if GCC_VER_34_WARNINGS
 # /* In adition to the 3.2 warnings, prototype errors for c/objc only */

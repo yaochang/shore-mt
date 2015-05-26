@@ -422,23 +422,23 @@ bool smthread_t::_try_initialize_fingerprint()
 
         s << "all_fingerprints " ;
         all_fingerprints.print(s);
-        s << endl;
+        s << std::endl;
 
-        s << "num_bits_set " << all_fingerprints.num_bits_set()  << endl;
+        s << "num_bits_set " << all_fingerprints.num_bits_set()  << std::endl;
 
         if(all_fingerprints.is_full()) {
-            s << " FULL! "  << endl;
+            s << " FULL! "  << std::endl;
         }
         s 
             << "matches=" << matches
             << " num_words()=" << all_fingerprints.num_words()
             << " nonunique=" << nonunique
             << " first_time=" << first_time
-        << " failure="  << failure << endl;
+        << " failure="  << failure << std::endl;
 
         s << "_fingerprint_map " ;
         _fingerprint_map.print(s) ;
-        s << endl;
+        s << std::endl;
 
         fprintf(stderr, 
         "%s ------ fingerprint %d.%d.%d\n", s.c_str(), a,b,c);
@@ -646,20 +646,20 @@ smthread_t::detach_xct(xct_t* x)
 }
 
 void                
-smthread_t::_dump(ostream &o) const
+smthread_t::_dump(std::ostream &o) const
 {
         sthread_t *t = (sthread_t *)this;
         t->sthread_t::_dump(o);
 
         o << "smthread_t: " << (char *)(is_in_sm()?"in sm ":"");
         if(tcb().xct) {
-          o << "xct " << tcb().xct->tid() << endl;
+          o << "xct " << tcb().xct->tid() << std::endl;
         }
 // no output operator yet
 //        if(sdesc_cache()) {
 //          o << *sdesc_cache() ;
 //        }
-         o << endl;
+         o << std::endl;
 }
 
 
@@ -667,21 +667,21 @@ smthread_t::_dump(ostream &o) const
 class PrintBlockedThread : public ThreadFunc
 {
     public:
-                        PrintBlockedThread(ostream& o) : out(o) {};
+                        PrintBlockedThread(std::ostream& o) : out(o) {};
                         ~PrintBlockedThread() {};
         void                operator()(const sthread_t& thread)
                         {
                             if (thread.status() == sthread_t::t_blocked)  {
-                                out << "*******" << endl;
+                                out << "*******" << std::endl;
                                 thread._dump(out);
                             }
                         };
     private:
-        ostream&        out;
+        std::ostream&        out;
 };
 
 void
-DumpBlockedThreads(ostream& o)
+DumpBlockedThreads(std::ostream& o)
 {
     PrintBlockedThread f(o);
     sthread_t::for_each_thread(f);

@@ -346,7 +346,7 @@ ss_m::destroy_md_assoc(stid_t stid, const nbox_t& key, const vec_t& el)
  *  ss_m::draw_rtree()                                                *
  *--------------------------------------------------------------*/
 rc_t
-ss_m::draw_rtree(const stid_t& stid, ostream &s)
+ss_m::draw_rtree(const stid_t& stid, std::ostream &s)
 {
     SM_PROLOGUE_RC(ss_m::draw_rtree, in_xct, read_only, 0);
     W_DO(_draw_rtree(stid, s));
@@ -714,7 +714,7 @@ rc_t ss_m::_create_mr_index(vid_t                   vid,
 	 ) return RC(eBADCCLEVEL);
 
      // create the sub-tree roots
-     vector<lpid_t> roots;
+     std::vector<lpid_t> roots;
      bool isCompressed = kcomp[0].compressed != 0;
      for(uint i=0; i< ranges.getNumPartitions(); i++) {
 	 lpid_t subroot;
@@ -723,10 +723,10 @@ rc_t ss_m::_create_mr_index(vid_t                   vid,
      }
 
      // scramble the start keys
-     vector<cvec_t*> keys;
+     std::vector<cvec_t*> keys;
      assert(0);// TODO
      //ranges.getAllStartKeys(keys);
-     vector<cvec_t*> real_keys;
+     std::vector<cvec_t*> real_keys;
 
      for(uint i=0; i< keys.size(); i++) {
 	 cvec_t* real_key;
@@ -804,7 +804,7 @@ rc_t ss_m::_print_mr_index(const stid_t& stid)
         return RC(eNOTIMPLEMENTED);
     }
     sortorder::keytype k = sortorder::convert(sd->sinfo().kc);
-    vector<lpid_t> pidVec;
+    std::vector<lpid_t> pidVec;
     uint i = 0;
     cvec_t start_key;
     cvec_t* key;
@@ -821,18 +821,18 @@ rc_t ss_m::_print_mr_index(const stid_t& stid)
     
 	sd->partitions().getAllPartitions(pidVec);
 	for(i = 0; i < pidVec.size(); i++) {
-	    cout << "Partition " << i << endl;
+	    std::cout << "Partition " << i << std::endl;
 	    bt->print(pidVec[i], k);
 	    sd->partitions().getBoundaries(pidVec[i], start_key, end_key);
 	    if(start_key.size() != 0) {
 		W_DO(bt->_unscramble_key(key, start_key, sd->sinfo().nkc, sd->sinfo().kc));
 		key->copy_to(&value, sizeof(value));
-		cout << "Start Key was " << value << endl;
+		std::cout << "Start Key was " << value << std::endl;
 	    }
 	    else {
-		cout << "Start Key was " << 0 << endl;
+		std::cout << "Start Key was " << 0 << std::endl;
 	    }
-	    cout << endl;
+	    std::cout << std::endl;
 	}
 
 	break;
@@ -1425,7 +1425,7 @@ rc_t ss_m::_make_equal_partitions(stid_t stid, const vec_t& minKey,
 	real_key->put(subParts[i], size);
 	// W_DO(bt->_unscramble_key(real_key2, *real_key, maxKey.count(), sd->sinfo().kc, true)); // d
 	// real_key2->copy_to(copy_char, size); // d
-	// cout << *(int*) copy_char << endl; // d
+	// cout << *(int*) copy_char << std::endl; // d
 	// if(i != 0) {
 	W_DO(bt->create(stid, root, isCompressed));
 	sd->partitions().addPartition(*real_key, root);
@@ -1446,7 +1446,7 @@ rc_t ss_m::_make_equal_partitions(stid_t stid, const vec_t& minKey,
 
     // pin: FOR INTEGERS ONLY
     /*
-    vector<lpid_t> roots;
+    std::vector<lpid_t> roots;
     for(uint i=0; i<numParts-1; i++) {
 	lpid_t root;
 	W_DO(bt->create(stid, root, isCompressed));
@@ -2430,7 +2430,7 @@ ss_m::_find_md_assoc(
  *  ss_m::_draw_rtree()                                                *
  *--------------------------------------------------------------*/
 rc_t
-ss_m::_draw_rtree(const stid_t& stid, ostream &s)
+ss_m::_draw_rtree(const stid_t& stid, std::ostream &s)
 {
     sdesc_t* sd;
     W_DO( dir->access(stid, sd, IS) );

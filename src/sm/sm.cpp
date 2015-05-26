@@ -300,14 +300,14 @@ sm_quark_t::close(bool release) {
     return RCOK;
 }
 
-ostream&
-operator<<(ostream& o, const sm_quark_t& q)
+std::ostream&
+operator<<(std::ostream& o, const sm_quark_t& q)
 {
     return o << "q." << q._tid;
 }
 
-istream&
-operator>>(istream& i, sm_quark_t& q)
+std::istream&
+operator>>(std::istream& i, sm_quark_t& q)
 {
     char ch;
     i >> ch;
@@ -336,7 +336,7 @@ const char *four_pages_min(int kb) {
 
     int four = 4 * SM_PAGESIZE/1024;
 
-    sprintf(buf, "%d", ::max(four, kb));
+    sprintf(buf, "%d", std::max(four, kb));
 
     return   buf;
 }
@@ -430,13 +430,13 @@ rc_t ss_m::setup_options(option_group_t* options)
 rc_t ss_m::_set_option_logsize(
         option_t* opt, 
         const char* value, 
-        ostream* _err_stream
+        std::ostream* _err_stream
 )
 {
-    ostream* err_stream = _err_stream;
+    std::ostream* err_stream = _err_stream;
 
     if (err_stream == NULL) {
-        err_stream = &cerr;
+        err_stream = &std::cerr;
     }
 
     // the logging system should not be running.  if it is
@@ -488,9 +488,9 @@ rc_t ss_m::_set_option_logsize(
 
         *err_stream << "Partition size " << psize 
                 << " exceeds limit (" << log_m::max_partition_size() << ") "
-                <<endl;
-        *err_stream << " Choose a smaller sm_logsize." <<endl;
-        *err_stream << " Maximum is :" << tmp << endl;
+                <<std::endl;
+        *err_stream << " Choose a smaller sm_logsize." <<std::endl;
+        *err_stream << " Maximum is :" << tmp << std::endl;
         return RC(OPT_BadValue);
     }
 
@@ -500,11 +500,11 @@ rc_t ss_m::_set_option_logsize(
         tmp /= 1024;
         *err_stream 
             << "Log size (sm_logsize="
-            << maxlogsize/1024 << ") is too small. " << endl
+            << maxlogsize/1024 << ") is too small. " << std::endl
             << " Does not allow a partition (" << psize << ")"
             << " to contain a full segment ("  
-                << log_m::min_partition_size()   << ")" << endl
-            << " Minimum is :" << tmp << endl;
+                << log_m::min_partition_size()   << ")" << std::endl
+            << " Minimum is :" << tmp << std::endl;
         return RC(OPT_BadValue);
     }
 
@@ -518,7 +518,7 @@ rc_t ss_m::_set_option_logsize(
     return RCOK;
 }
 
-rc_t ss_m::_set_option_lock_escalate_to_page(option_t* opt, const char* value, ostream* err_stream)
+rc_t ss_m::_set_option_lock_escalate_to_page(option_t* opt, const char* value, std::ostream* err_stream)
 {
     w_assert3(opt == _lockEscalateToPageThreshold);
     W_DO(option_t::set_value_long(opt, value, err_stream));
@@ -527,7 +527,7 @@ rc_t ss_m::_set_option_lock_escalate_to_page(option_t* opt, const char* value, o
         defaultLockEscalateToPageThreshold = dontEscalate;
     else if (defaultLockEscalateToPageThreshold < 0)  {
         *err_stream << "Default mininum children to escalate to a page lock must be >= 0."
-                    << endl;
+                    << std::endl;
         return RC(OPT_BadValue);
     }
     DBG(<<"default escalate-to-page-thresh is " 
@@ -536,7 +536,7 @@ rc_t ss_m::_set_option_lock_escalate_to_page(option_t* opt, const char* value, o
     return RCOK;
 }
 
-rc_t ss_m::_set_option_lock_escalate_to_store(option_t* opt, const char* value, ostream* err_stream)
+rc_t ss_m::_set_option_lock_escalate_to_store(option_t* opt, const char* value, std::ostream* err_stream)
 {
     w_assert3(opt == _lockEscalateToStoreThreshold);
     W_DO(option_t::set_value_long(opt, value, err_stream));
@@ -545,14 +545,14 @@ rc_t ss_m::_set_option_lock_escalate_to_store(option_t* opt, const char* value, 
         defaultLockEscalateToStoreThreshold = dontEscalate;
     else if (defaultLockEscalateToStoreThreshold < 0)  {
         *err_stream << "Default mininum children to escalate to a store lock must be >= 0."
-                    << endl;
+                    << std::endl;
         return RC(OPT_BadValue);
     }
 
     return RCOK;
 }
 
-rc_t ss_m::_set_option_lock_escalate_to_volume(option_t* opt, const char* value, ostream* err_stream)
+rc_t ss_m::_set_option_lock_escalate_to_volume(option_t* opt, const char* value, std::ostream* err_stream)
 {
     w_assert3(opt == _lockEscalateToVolumeThreshold);
     W_DO(option_t::set_value_long(opt, value, err_stream));
@@ -561,7 +561,7 @@ rc_t ss_m::_set_option_lock_escalate_to_volume(option_t* opt, const char* value,
         defaultLockEscalateToVolumeThreshold = dontEscalate;
     else if (defaultLockEscalateToVolumeThreshold < 0)  {
         *err_stream << "Default mininum children to escalate to a volume lock must be >= 0."
-                    << endl;
+                    << std::endl;
         return RC(OPT_BadValue);
     }
 
@@ -753,10 +753,10 @@ ss_m::_construct_once(
      e = smthread_t::set_hugetlbfs_path(_hugetlbfs_path->value());
 #else
      if(_hugetlbfs_path->is_set() /* by user, as opposed to default value */) {
-         cerr << "Warning: sm_hugetlbfs_path option " <<
+         std::cerr << "Warning: sm_hugetlbfs_path option " <<
              _hugetlbfs_path->value() 
              << " ignored: not configured --with-hugetlbfs"
-             << endl;
+             << std::endl;
      }
 #endif
     e = smthread_t::set_bufsize(space_needed, shmbase);
@@ -1005,7 +1005,7 @@ ss_m::_construct_once(
             << "conf.max_small_rec " << conf.max_small_rec
             << " ssm_constants::max_small_rec " << 
             ssm_constants::max_small_rec
-            << endl;
+            << std::endl;
         }
         w_assert1(conf.max_small_rec == ssm_constants::max_small_rec);
         w_assert1(conf.lg_rec_page_space == ssm_constants::lg_rec_page_space);
@@ -1041,9 +1041,9 @@ ss_m::_destruct_once()
              << "\twarning --- destructor called more than once\n"
              << "\tignored" << flushl;
         } else {
-            cerr << "ss_m::~ss_m() : \n"
+            std::cerr << "ss_m::~ss_m() : \n"
              << "\twarning --- destructor called more than once\n"
-             << "\tignored" << endl;
+             << "\tignored" << std::endl;
         }
         return;
     }
@@ -1171,7 +1171,7 @@ ss_m::_destruct_once()
      char        *unused;
      e = smthread_t::set_bufsize(0, unused);
      if (e.is_error())  {
-        cerr << "ss_m: Warning: set_bufsize(0):" << endl << e << endl;
+        std::cerr << "ss_m: Warning: set_bufsize(0):" << std::endl << e << std::endl;
      }
 }
 
@@ -1452,7 +1452,7 @@ tid_t ss_m::xct_to_tid(const xct_t* x)
 /*--------------------------------------------------------------*
  *  ss_m::dump_xcts()                                           *
  *--------------------------------------------------------------*/
-rc_t ss_m::dump_xcts(ostream& o)
+rc_t ss_m::dump_xcts(std::ostream& o)
 {
     xct_t::dump(o);
     return RCOK;
@@ -1606,7 +1606,7 @@ ss_m::force_store_buffers(const stid_t& stid, bool invalidate)
  *  For debugging, smsh
  *--------------------------------------------------------------*/
 rc_t
-ss_m::dump_buffers(ostream &o)
+ss_m::dump_buffers(std::ostream &o)
 {
     bf->dump(o);
     return RCOK;
@@ -1617,7 +1617,7 @@ ss_m::dump_buffers(ostream &o)
  *  For debugging, smsh
  *--------------------------------------------------------------*/
 rc_t
-ss_m::dump_exts(ostream &o, vid_t vid, extnum_t start, extnum_t end)
+ss_m::dump_exts(std::ostream &o, vid_t vid, extnum_t start, extnum_t end)
 {
     W_DO( io->dump_exts(o, vid, start, end) );
     return RCOK;
@@ -1628,7 +1628,7 @@ ss_m::dump_exts(ostream &o, vid_t vid, extnum_t start, extnum_t end)
  *  For debugging, smsh
  *--------------------------------------------------------------*/
 rc_t
-ss_m::dump_stores(ostream &o, vid_t vid, int start, int end)
+ss_m::dump_stores(std::ostream &o, vid_t vid, int start, int end)
 {
     W_DO( io->dump_stores(o, vid, start, end) );
     return RCOK;
@@ -1638,10 +1638,10 @@ ss_m::dump_stores(ostream &o, vid_t vid, int start, int end)
  *  ss_m::dump_histo()                                *
  *  For debugging, smsh
  *--------------------------------------------------------------*/
-rc_t ss_m::dump_histo(ostream &o, bool locked)
+rc_t ss_m::dump_histo(std::ostream &o, bool locked)
 {
         histoid_t::print_cache(o, locked);
-        o << endl;
+        o << std::endl;
         return RCOK;
 }
 
@@ -1673,35 +1673,35 @@ ss_m::config_info(sm_config_info_t& info)
     if( w_offsetof(page_s,lsn2) + sizeof(lsn_t) != ss_m::page_sz)
     {
         std::cerr << "page size arithmetic is broken! "
-            << endl
+            << std::endl
             << " page_sz " <<  ss_m::page_sz
-            << endl
-            << "w_offsetof(page_s,lsn2) + sizeof(lsn_t) "
+            << std::endl
+            << "std::w_offsetof(page_s,lsn2) + sizeof(lsn_t) "
             << w_offsetof(page_s,lsn2) + sizeof(lsn_t) 
-            << endl
+            << std::endl
             << " data_sz " <<  page_s::data_sz
-            << endl
+            << std::endl
             << " footer_sz " <<  page_s::footer_sz
-            << endl
+            << std::endl
             << " align(footer_sz) " <<  align(page_s::footer_sz)
-            << endl
+            << std::endl
             << " _hdr_sz " <<  page_s::_hdr_sz
-            << endl
+            << std::endl
             << " hdr_sz " <<  page_s::hdr_sz
-            << endl
+            << std::endl
             << " slot_t " <<  sizeof(page_s::slot_t)
-            << endl
+            << std::endl
             << " lsn_t " <<  sizeof(lsn_t)
-            << endl
+            << std::endl
             << " lpid_t " <<  sizeof(lpid_t)
-            << endl
+            << std::endl
             << " shpid_t " <<  sizeof(shpid_t)
-            << endl
+            << std::endl
             << " space_t " <<  sizeof(page_s::space_t)
-            << endl
+            << std::endl
             << " sum " <<  
             (page_s::data_sz + page_s::hdr_sz)
-            << endl;
+            << std::endl;
         std::cerr << " offsetof lsn1 " << w_offsetof(page_s,lsn1) << std::endl;
         std::cerr << " ---> " << 
             w_offsetof(page_s,lsn1) + sizeof(lsn_t) << std::endl;
@@ -2132,13 +2132,13 @@ ss_m::get_volume_quota(const lvid_t& lvid, smksize_t& quota_KB, smksize_t& quota
 }
 
 
-ostream& operator<<(ostream& o, const extid_t& x)
+std::ostream& operator<<(std::ostream& o, const extid_t& x)
 {
         return o << "x(" << x.vol << '.' << x.ext << ')';
 }
 
 /* XXX from stid parser, which is similar but different */
-istream& operator>>(istream& i, extid_t &extid)
+std::istream& operator>>(std::istream& i, extid_t &extid)
 {
         char c[5];
         memset(c, '\0', sizeof(c));
@@ -2156,19 +2156,19 @@ istream& operator>>(istream& i, extid_t &extid)
         c[4] = '\0';
         if (i) {
                 if (strcmp(c, "x(.)")) {
-                    i.clear(ios::badbit|i.rdstate());  // error
+                    i.clear(std::ios::badbit|i.rdstate());  // error
                 }
         }
         return i;
 }
 
 
-ostream& operator<<(ostream& o, const lpid_t& pid)
+std::ostream& operator<<(std::ostream& o, const lpid_t& pid)
 {
     return o << "p(" << pid.vol() << '.' << pid.store() << '.' << pid.page << ')';
 }
 
-istream& operator>>(istream& i, lpid_t& pid)
+std::istream& operator>>(std::istream& i, lpid_t& pid)
 {
     char c[6];
     memset(c, 0, sizeof(c));
@@ -2177,13 +2177,13 @@ istream& operator>>(istream& i, lpid_t& pid)
     c[5] = '\0';
     if (i)  {
         if (strcmp(c, "p(..)")) {
-            i.clear(ios::badbit|i.rdstate());  // error
+            i.clear(std::ios::badbit|i.rdstate());  // error
         }
     }
     return i;
 }
 
-ostream& operator<<(ostream& o, const shrid_t& r)
+std::ostream& operator<<(std::ostream& o, const shrid_t& r)
 {
     return o << "sr("
              << r.store << '.'
@@ -2191,7 +2191,7 @@ ostream& operator<<(ostream& o, const shrid_t& r)
              << r.slot << ')';
 }
 
-istream& operator>>(istream& i, shrid_t& r)
+std::istream& operator>>(std::istream& i, shrid_t& r)
 {
     char c[7];
     memset(c, 0, sizeof(c));
@@ -2202,13 +2202,13 @@ istream& operator>>(istream& i, shrid_t& r)
     c[6] = '\0';
     if (i)  {
         if (strcmp(c, "sr(..)"))  {
-            i.clear(ios::badbit|i.rdstate());  // error
+            i.clear(std::ios::badbit|i.rdstate());  // error
         }
     }
     return i;
 }
 
-ostream& operator<<(ostream& o, const rid_t& rid)
+std::ostream& operator<<(std::ostream& o, const rid_t& rid)
 {
     return o << "r(" << rid.pid.vol() << '.'
              << rid.pid.store() << '.'
@@ -2216,7 +2216,7 @@ ostream& operator<<(ostream& o, const rid_t& rid)
              << rid.slot << ')';
 }
 
-istream& operator>>(istream& i, rid_t& rid)
+std::istream& operator>>(std::istream& i, rid_t& rid)
 {
     char c[7];
     memset(c, 0, sizeof(c));
@@ -2227,7 +2227,7 @@ istream& operator>>(istream& i, rid_t& rid)
     c[6] = '\0';
     if (i)  {
         if (strcmp(c, "r(...)"))  {
-            i.clear(ios::badbit|i.rdstate());  // error
+            i.clear(std::ios::badbit|i.rdstate());  // error
         }
     }
     return i;
@@ -2235,7 +2235,7 @@ istream& operator>>(istream& i, rid_t& rid)
 
 
 #if defined(__GNUC__) && __GNUC_MINOR__ > 6
-ostream& operator<<(ostream& o, const smlevel_1::xct_state_t& xct_state)
+std::ostream& operator<<(std::ostream& o, const smlevel_1::xct_state_t& xct_state)
 {
 // NOTE: these had better be kept up-to-date wrt the enumeration
 // found in sm_int_1.h
@@ -2258,7 +2258,7 @@ ostream& operator<<(ostream& o, const smlevel_1::xct_state_t& xct_state)
  *  ss_m::dump_locks()                                *
  *--------------------------------------------------------------*/
 rc_t
-ss_m::dump_locks(ostream &o)
+ss_m::dump_locks(std::ostream &o)
 {
     lm->dump(o);
     return RCOK;
@@ -3346,9 +3346,9 @@ ss_m::gather_xct_stats(sm_stats_info_t& _stats, bool reset)
                 "none"
                 };
 
-            cout << "PAGE FIXES " <<endl;
+            std::cout << "PAGE FIXES " <<endl;
             for (int i=0; i<=14; i++) {
-                    cout  << names[i] << "="  
+                    std::cout  << names[i] << "="  
                         << '\t' << bffix_SH[i] << "+" 
                     << '\t' << bffix_EX[i] << "=" 
                     << '\t' << bffix_EX[i] + bffix_SH[i]
@@ -3360,7 +3360,7 @@ ss_m::gather_xct_stats(sm_stats_info_t& _stats, bool reset)
                     sumSH += bffix_SH[i];
                     sumEX += bffix_EX[i];
             }
-            cout  << "TOTALS" << "="  
+            std::cout  << "TOTALS" << "="  
                         << '\t' << sumSH<< "+" 
                     << '\t' << sumEX << "=" 
                     << '\t' << sumSH+sumEX
@@ -3430,13 +3430,13 @@ void dump_all_sm_stats()
     static sm_stats_info_t s;
     W_COERCE(ss_m::gather_stats(s));
     w_ostrstream o;
-    o << s << endl; 
+    o << s << std::endl; 
     fprintf(stderr, "%s\n", o.c_str());
 }
 #endif
 
-ostream &
-operator<<(ostream &o, const sm_stats_info_t &s) 
+std::ostream &
+operator<<(std::ostream &o, const sm_stats_info_t &s) 
 {
     o << s.sm;
     return o;
@@ -3457,8 +3457,8 @@ ss_m::get_store_info(
 }
 
 
-ostream&
-operator<<(ostream& o, smlevel_3::sm_store_property_t p)
+std::ostream&
+operator<<(std::ostream& o, smlevel_3::sm_store_property_t p)
 {
     if (p == smlevel_3::t_regular)                o << "regular";
     if (p == smlevel_3::t_temporary)                o << "temporary";
@@ -3476,8 +3476,8 @@ operator<<(ostream& o, smlevel_3::sm_store_property_t p)
     return o;
 }
 
-ostream&
-operator<<(ostream& o, smlevel_0::store_flag_t flag)
+std::ostream&
+operator<<(std::ostream& o, smlevel_0::store_flag_t flag)
 {
     if (flag == smlevel_0::st_bad)            o << "|bad";
     if (flag & smlevel_0::st_regular)            o << "|regular";
@@ -3498,8 +3498,8 @@ operator<<(ostream& o, smlevel_0::store_flag_t flag)
     return o << "|";
 }
 
-ostream& 
-operator<<(ostream& o, const smlevel_0::store_operation_t op)
+std::ostream& 
+operator<<(std::ostream& o, const smlevel_0::store_operation_t op)
 {
     const char *names[] = {"delete_store", 
                         "create_store", 
@@ -3515,8 +3515,8 @@ operator<<(ostream& o, const smlevel_0::store_operation_t op)
     }
 }
 
-ostream& 
-operator<<(ostream& o, const smlevel_0::store_deleting_t value)
+std::ostream& 
+operator<<(std::ostream& o, const smlevel_0::store_deleting_t value)
 {
     const char *names[] = { "not_deleting_store", 
                         "deleting_store", 
@@ -3546,41 +3546,41 @@ extern "C" {
 void        sm_dumplocks()
 {
         if (smlevel_0::lm) {
-                W_IGNORE(ss_m::dump_locks(cout));
+                W_IGNORE(ss_m::dump_locks(std::cout));
         }
         else
-                cout << "no smlevel_0::lm" << endl;
-        cout << flush;
+                std::cout << "no smlevel_0::lm" << std::endl;
+        std::cout << std::flush;
 }
 
 void        sm_dumpxcts()
 {
-        W_IGNORE(ss_m::dump_xcts(cout));
-        cout << flush;
+        W_IGNORE(ss_m::dump_xcts(std::cout));
+        std::cout << std::flush;
 }
 
 void        sm_dumpbuffers()
 {
-        W_IGNORE(ss_m::dump_buffers(cout));
-        cout << flush;
+        W_IGNORE(ss_m::dump_buffers(std::cout));
+        std::cout << std::flush;
 }
 
 void         sm_dumpexts(int vol, extnum_t start, extnum_t end)
 {
-        W_IGNORE( ss_m::dump_exts(cout, vol, start, end) );
-        cout << flush;
+        W_IGNORE( ss_m::dump_exts(std::cout, vol, start, end) );
+        std::cout << std::flush;
 }
 
 void         sm_dumpstores(int vol, int start, int end)
 {
-        W_IGNORE( ss_m::dump_stores(cout, vol, start, end) );
-        cout << flush;
+        W_IGNORE( ss_m::dump_stores(std::cout, vol, start, end) );
+        std::cout << std::flush;
 }
 
 void        sm_dumphisto(bool locked)
 {
-        ss_m::dump_histo(cout, locked);
-        cout << flush;
+        ss_m::dump_histo(std::cout, locked);
+        std::cout << std::flush;
 }
 
 }

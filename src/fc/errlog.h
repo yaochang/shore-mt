@@ -67,7 +67,6 @@ class logstream; // forward
 /** \brief A namespace for errlog-related types.
  */
 namespace shore_errlog {
-using namespace std;
 
 /*!\enum LogPriority
  * \brief Enumeration that enables filtering of messages by priority.
@@ -98,16 +97,16 @@ enum LogPriority {
 
 using namespace shore_errlog;
 
-extern ostream& flushl(ostream& o);
-extern ostream& emerg_prio(ostream& o);
-extern ostream& fatal_prio(ostream& o);
-extern ostream& internal_prio(ostream& o);
-extern ostream& error_prio(ostream& o);
-extern ostream& warning_prio(ostream& o);
-extern ostream& info_prio(ostream& o);
-extern ostream& debug_prio(ostream& o);
-extern void setprio(ostream&, LogPriority);
-extern logstream *is_logstream(ostream &);
+extern std::ostream& flushl(std::ostream& o);
+extern std::ostream& emerg_prio(std::ostream& o);
+extern std::ostream& fatal_prio(std::ostream& o);
+extern std::ostream& internal_prio(std::ostream& o);
+extern std::ostream& error_prio(std::ostream& o);
+extern std::ostream& warning_prio(std::ostream& o);
+extern std::ostream& info_prio(std::ostream& o);
+extern std::ostream& debug_prio(std::ostream& o);
+extern void setprio(std::ostream&, LogPriority);
+extern logstream *is_logstream(std::ostream &);
 /** \brief A strstream-based log output stream. 
  * \details
  * Responds to these iomanip functions :
@@ -121,14 +120,14 @@ extern logstream *is_logstream(ostream &);
  */
 class logstream : public w_ostrstream {
     friend class ErrLog;
-    friend ostream &flush_and_setprio(ostream& o, LogPriority p);
-    friend ostream& emerg_prio(ostream& o);
-    friend ostream& fatal_prio(ostream& o);
-    friend ostream& internal_prio(ostream& o);
-    friend ostream& error_prio(ostream& o);
-    friend ostream& warning_prio(ostream& o);
-    friend ostream& info_prio(ostream& o);
-    friend ostream& debug_prio(ostream& o);
+    friend std::ostream &flush_and_setprio(std::ostream& o, LogPriority p);
+    friend std::ostream& emerg_prio(std::ostream& o);
+    friend std::ostream& fatal_prio(std::ostream& o);
+    friend std::ostream& internal_prio(std::ostream& o);
+    friend std::ostream& error_prio(std::ostream& o);
+    friend std::ostream& warning_prio(std::ostream& o);
+    friend std::ostream& info_prio(std::ostream& o);
+    friend std::ostream& debug_prio(std::ostream& o);
 
     unsigned int     __magic1;
     LogPriority     _prio;
@@ -137,7 +136,7 @@ class logstream : public w_ostrstream {
 
 public:
 /** \cond skip */
-    friend logstream *is_logstream(ostream &);
+    friend logstream *is_logstream(std::ostream &);
 
     enum { LOGSTREAM__MAGIC = 0xad12bc45 };
 private:
@@ -192,8 +191,8 @@ typedef void (*ErrLogFunc)(ErrLog *, void *);
  */
 class ErrLog {
     friend class logstream;
-    friend logstream *is_logstream(ostream &);
-    friend ostream &flush_and_setprio(ostream& o, LogPriority p);
+    friend logstream *is_logstream(std::ostream &);
+    friend std::ostream &flush_and_setprio(std::ostream& o, LogPriority p);
 
     LoggingDestination    _destination;
     LogPriority         _level;

@@ -308,10 +308,10 @@ zkeyed_p::insert(
         if(_w_debug.flag_on("zkeyed_p::insert",__FILE__)) {
         _w_debug.clog << __LINE__ << " " << __FILE__ 
             << " KEY BEFORE INSERT " 
-            << " in page " << pid().page << endl;
+            << " in page " << pid().page << std::endl;
         _w_debug.clog << key;
         _w_debug.clog << __LINE__ << " " << __FILE__ 
-            << " AUX BEFORE INSERT "  << endl;
+            << " AUX BEFORE INSERT "  << std::endl;
         _w_debug.clog << aux;
         _w_debug.clog << flushl;
         }
@@ -1371,7 +1371,7 @@ zkeyed_p::dump(slotid_t W_IFTRACE(idx),
         << " page " << pid().page 
         << " record " <<  idx
          << key
-        << endl;
+        << std::endl;
     _w_debug.clog << __LINE__ << " " << __FILE__ 
         << " junklen " <<  junklen
         << flushl;

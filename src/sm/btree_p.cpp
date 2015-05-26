@@ -931,35 +931,35 @@ btree_p::print(
     btctrl_t hdr = _hdr();
     const int L = 3;
 
-    for (i = 0; i < L - hdr.level; i++)  cout << '\t';
-    cout << pid0() << "=" << pid0() << endl;
+    for (i = 0; i < L - hdr.level; i++)  std::cout << '\t';
+    std::cout << pid0() << "=" << pid0() << std::endl;
 
     for (i = 0; i < nrecs(); i++)  {
-    for (int j = 0; j < L - hdr.level; j++)  cout << '\t' ;
+    for (int j = 0; j < L - hdr.level; j++)  std::cout << '\t' ;
 
     btrec_t r(*this, i);
     cvec_t* real_key;
 
     if(r.key().size() == 0) {
         // null
-        cout << "<key = " << r.key() ;
+        std::cout << "<key = " << r.key() ;
     } else switch(kt) {
     case sortorder::kt_b: {
-        cout     << "<key = " << r.key() ;
+        std::cout     << "<key = " << r.key() ;
         } break;
     case sortorder::kt_i8: {
         w_base_t::int8_t value;
         key_type_s k(key_type_s::i, 0, 8);
         W_COERCE(btree_m::_unscramble_key(real_key, r.key(), 1, &k));
         real_key->copy_to(&value, sizeof(value));
-        cout     << "<key = " << value;
+        std::cout     << "<key = " << value;
         }break;
     case sortorder::kt_u8:{
         uint4_t value;
         key_type_s k(key_type_s::u, 0, 8);
         W_COERCE(btree_m::_unscramble_key(real_key, r.key(), 1, &k));
         real_key->copy_to(&value, sizeof(value));
-        cout     << "<key = " << value;
+        std::cout     << "<key = " << value;
         } break;
 
     case sortorder::kt_i4: {
@@ -967,42 +967,42 @@ btree_p::print(
         key_type_s k(key_type_s::i, 0, 4);
         W_COERCE(btree_m::_unscramble_key(real_key, r.key(), 1, &k));
         real_key->copy_to(&value, sizeof(value));
-        cout     << "<key = " << value;
+        std::cout     << "<key = " << value;
         }break;
     case sortorder::kt_u4:{
         uint4_t value;
         key_type_s k(key_type_s::u, 0, 4);
         W_COERCE(btree_m::_unscramble_key(real_key, r.key(), 1, &k));
         real_key->copy_to(&value, sizeof(value));
-        cout     << "<key = " << value;
+        std::cout     << "<key = " << value;
         } break;
     case sortorder::kt_i2: {
         int2_t value;
         key_type_s k(key_type_s::i, 0, 2);
         W_COERCE(btree_m::_unscramble_key(real_key, r.key(), 1, &k));
         real_key->copy_to(&value, sizeof(value));
-        cout     << "<key = " << value;
+        std::cout     << "<key = " << value;
         }break;
     case sortorder::kt_u2: {
         uint2_t value;
         key_type_s k(key_type_s::u, 0, 2);
         W_COERCE(btree_m::_unscramble_key(real_key, r.key(), 1, &k));
         real_key->copy_to(&value, sizeof(value));
-        cout     << "<key = " << value;
+        std::cout     << "<key = " << value;
         } break;
     case sortorder::kt_i1: {
         int1_t value;
         key_type_s k(key_type_s::i, 0, 1);
         W_COERCE(btree_m::_unscramble_key(real_key, r.key(), 1, &k));
         real_key->copy_to(&value, sizeof(value));
-        cout     << "<key = " << value;
+        std::cout     << "<key = " << value;
         }break;
     case sortorder::kt_u1: {
         uint1_t value;
         key_type_s k(key_type_s::u, 0, 1);
         W_COERCE(btree_m::_unscramble_key(real_key, r.key(), 1, &k));
         real_key->copy_to(&value, sizeof(value));
-        cout     << "<key = " << value;
+        std::cout     << "<key = " << value;
         } break;
 
     case sortorder::kt_f8:{
@@ -1010,14 +1010,14 @@ btree_p::print(
         key_type_s k(key_type_s::f, 0, 8);
         W_COERCE(btree_m::_unscramble_key(real_key, r.key(), 1, &k));
         real_key->copy_to(&value, sizeof(value));
-        cout     << "<key = " << value;
+        std::cout     << "<key = " << value;
         } break;
     case sortorder::kt_f4:{
         f4_t value;
         key_type_s k(key_type_s::f, 0, 4);
         W_COERCE(btree_m::_unscramble_key(real_key, r.key(), 1, &k));
         real_key->copy_to(&value, sizeof(value));
-        cout     << "<key = " << value;
+        std::cout     << "<key = " << value;
         } break;
 
     default:
@@ -1029,14 +1029,14 @@ btree_p::print(
         if(print_elem) {
 	    rid_t rid;
 	    r.elem().copy_to(&rid, sizeof(rid_t));
-	    cout << ", elen="  << r.elen() << " bytes: " << rid;
+	    std::cout << ", elen="  << r.elen() << " bytes: " << rid;
         }
     } else {
-	cout << ", pid = " << r.child();
+	std::cout << ", pid = " << r.child();
     }
-    cout << ">" << endl;
+    std::cout << ">" << std::endl;
     }
-    for (i = 0; i < L - hdr.level; i++)  cout << '\t';
-    cout << "]" << endl;
+    for (i = 0; i < L - hdr.level; i++)  std::cout << '\t';
+    std::cout << "]" << std::endl;
 }
 

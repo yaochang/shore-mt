@@ -95,7 +95,7 @@ void htab_dumplocks(bf_core_m *core)
     bf_core_m::htab::bucket &b = core->_htab->_table[i];
     if(b._lock.is_mine())
     {
-         cerr << "bucket " << i << " held" << endl;
+         std::cerr << "bucket " << i << " held" << std::endl;
     }
     }
 }
@@ -148,8 +148,8 @@ bfcb_t* htab_insert(bf_core_m *core, bfpid_t const &pid, bf_core_m::Tstats &s)
         cb->latch.latch_release();
     }
     if(cb == NULL) {
-        cerr << " htab_insert could not get a replacement frame "
-        << endl;
+        std::cerr << " htab_insert could not get a replacement frame "
+        << std::endl;
     }
 
     if(cb) {

@@ -201,7 +201,7 @@ public:
     
     static bfcb_t*              get_cb(const page_s*) ;
 
-    static void                 dump(ostream &o);
+    static void                 dump(std::ostream &o);
     static void                 stats(
         u_long&                     fixes, 
         u_long&                     unfixes,

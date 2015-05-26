@@ -134,7 +134,7 @@ int SearchableHeap<T, Cmp>::Match(const T& t) const
     return -1; // none found
 }
 
-ostream &operator<<(ostream &o,
+std::ostream &operator<<(std::ostream &o,
             const SearchableHeap<pginfo_t, histoid_compare_t> &sh)
 {
     sh.Print(o);
@@ -426,7 +426,7 @@ histoid_t::_insert_store_pages(const stid_t& s)
     pginfo_t     pages[pages_in_heap];
     int         numpages = pages_in_heap;
     W_COERCE(io->init_store_histo(&histogram, s, pages, numpages));
-    // DBGTHRD(<<"histogram for store " << cmp.key << "=" << histogram << endl );
+    // DBGTHRD(<<"histogram for store " << cmp.key << "=" << histogram << std::endl );
     DBGTHRD(<<"_insert_store_pages  " << this << " for store " << cmp.key );
     DBGTHRD(<<"io_m scan found " << numpages << " pages" );
 
@@ -1046,7 +1046,7 @@ histoid_t::exists_page(
 {
     space_bucket_t b = file_p::free_space2bucket(space_needed);
     _grab_mutex();
-    // DBGTHRD(<<"histogram for store " << cmp.key << "=" << histogram << endl );
+    // DBGTHRD(<<"histogram for store " << cmp.key << "=" << histogram << std::endl );
     DBGTHRD(<<"exists_page store " << cmp.key);
     while (! (found = histogram.exists(b)) 
                 && b < (space_num_buckets-1)) b++;
@@ -1073,7 +1073,7 @@ histoid_t::bucket_change(
 
 
 
-ostream &histoid_t::print(ostream &o) const
+std::ostream &histoid_t::print(std::ostream &o) const
 {
     o << this;
     o  << " key=" << cmp.key
@@ -1086,25 +1086,25 @@ ostream &histoid_t::print(ostream &o) const
     return o;
 }
 
-ostream &operator<<(ostream&o, const histoid_t&h)
+std::ostream &operator<<(std::ostream&o, const histoid_t&h)
 {
     return h.print(o);
 }
 
 
-ostream &histoid_t::print_cache(ostream &o, bool locked)
+std::ostream &histoid_t::print_cache(std::ostream &o, bool locked)
 {
     if (initialized>0 && locked)
         htab_mutex.acquire_read();
 
-    o << "HISTOID_T::PRINT_CACHE { " << endl;
+    o << "HISTOID_T::PRINT_CACHE { " << std::endl;
 
     o << "histoid_m:";
     if (initialized>0)
         o << " initialized";
 
     if (htab) {
-        o << ' ' << htab->num_members() << " entries" << endl;
+        o << ' ' << htab->num_members() << " entries" << std::endl;
 
         w_hash_i_histoid_t_stid_t_iterator    iter(*htab);
         histoid_t                *h;
@@ -1112,12 +1112,12 @@ ostream &histoid_t::print_cache(ostream &o, bool locked)
         while ((h = iter.next()))  {
             if (locked)
                 h->_grab_mutex();
-            o << '\t' << *h << endl;
+            o << '\t' << *h << std::endl;
             if (locked)
                 h->_release_mutex();
         }
     }
-    o << "END PRINT_CACHE } " << endl;
+    o << "END PRINT_CACHE } " << std::endl;
 
     if (initialized>0 && locked)
         htab_mutex.release_read();
@@ -1241,14 +1241,14 @@ histoid_update_t::~histoid_update_t()
     DBGTHRD(<<"end ~histoid_update_t "); 
 }
 
-ostream &
-operator<<(ostream&o, const histoid_update_t&u)
+std::ostream &
+operator<<(std::ostream&o, const histoid_update_t&u)
 {
     o << " info: page= " << u._info.page() << " space=" << u._info.space();
     o << " found in table: " << u._found_in_table;
     o << " old space: " << u._old_space;
     if(u._h) {
-        o << endl << "\thistoid_t:" << *u._h << endl;
+        o << std::endl << "\thistoid_t:" << *u._h << std::endl;
     }
     return o;
 }

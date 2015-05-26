@@ -171,7 +171,7 @@ class sdesc_t {
 private:
     key_ranges_map _partitions;
     bool _partitions_filled;
-    map< lpid_t, shpid_t > _pages_with_space;
+    std::map< lpid_t, shpid_t > _pages_with_space;
 
 
 public:
@@ -229,7 +229,7 @@ public:
     void		set_inherited(bool flag) { _inherited = flag; }
     bool		is_inherited() const { return _inherited; }
 
-    friend ostream &operator<<(ostream &os, sdesc_t const &sd);
+    friend std::ostream &operator<<(std::ostream &os, sdesc_t const &sd);
     
     inline stid_t stid() { return _stid; }
     inline bool has_partitions() { return _partitions_filled; }
@@ -239,7 +239,7 @@ public:
     // therefore, reading or writing a wrong page will be noticed during record insertion
     // and a scan will be done; this is just for doing less of those scans
     inline shpid_t get_page_with_space(const lpid_t& btree_page) {
-	map< lpid_t, shpid_t >::iterator iter =  _pages_with_space.find(btree_page);
+	std::map< lpid_t, shpid_t >::iterator iter =  _pages_with_space.find(btree_page);
 	if(iter == _pages_with_space.end()) {
 	    return 0;
 	} else {
@@ -306,7 +306,7 @@ public:
     sdesc_t*    add(const stid_t& stid, const sinfo_s& sinfo);
 
     void  copy( const sdesc_cache_t &other);  
-    friend ostream &operator<<(ostream &os, sdesc_cache_t const &sdc);
+    friend std::ostream &operator<<(std::ostream &os, sdesc_cache_t const &sdc);
     
 
 private:

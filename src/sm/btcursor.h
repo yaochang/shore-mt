@@ -88,7 +88,7 @@ public:
     );
 
     // for mrbt index scan
-    void            set_roots(vector<lpid_t>& roots);
+    void            set_roots(std::vector<lpid_t>& roots);
     bool            get_next_root();
     bool is_mrbt;
     void            set_slot(int slot) { _slot = slot; }
@@ -136,7 +136,7 @@ private:
     lpid_t            _root;
 
     // for mrbt index scan
-    vector<lpid_t> _roots;
+    std::vector<lpid_t> _roots;
     int _next_root;
     
     bool            _unique;

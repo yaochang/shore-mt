@@ -997,7 +997,7 @@ void QuickSort(char* a[], int cnt, int (*compar)(const void*, const void*) )
 error:
     // not likely 
     smlevel_0::errlog->clog << fatal_prio
-        << "QuickSort: stack too small" <<endl;
+        << "QuickSort: stack too small" <<std::endl;
     W_FATAL(fcOUTOFMEMORY);
 }
 
@@ -1436,26 +1436,26 @@ sort_stream_i::sort_stream_i(const key_info_t& k, const sort_parm_t& s,
         * sp.run_size);
 #ifdef W_TRACE
     if(sd->max_rec_cnt <= 0) {
-        cerr 
+        std::cerr 
             << " file_p::data_sz " << file_p::data_sz
-            << endl
+            << std::endl
             << " sizeof(rectag_t) " << sizeof(rectag_t)
-            << endl
+            << std::endl
             << " ALIGNON " << ALIGNON
-            << endl
+            << std::endl
             << " est_rec_sz " << est_rec_sz
-            << endl
+            << std::endl
             << " sizeof(page_s::slot_t) " << sizeof(page_s::slot_t)
-            << endl
+            << std::endl
             << " sp.run_size " << sp.run_size
-            << endl;
-        cerr << " align(sizeof(rectag_t)+ALIGNON+est_rec_sz) " 
+            << std::endl;
+        std::cerr << " align(sizeof(rectag_t)+ALIGNON+est_rec_sz) " 
             << align(sizeof(rectag_t)+ALIGNON+est_rec_sz)
-            << endl
+            << std::endl
             << " (align(sizeof(rectag_t)+ALIGNON+est_rec_sz) +sizeof(page_s::slot_t)) "
             << (align(sizeof(rectag_t)+ALIGNON+est_rec_sz)
              +sizeof(page_s::slot_t))
-            << endl;
+            << std::endl;
     }
 #endif
     w_assert1(sd->max_rec_cnt > 0);

@@ -38,6 +38,7 @@ include_HEADERS = \
     w_findprime.h \
     w_getopt.h w_gettimeofday.h \
     w_hash.h w_heap.h w_list.h w_minmax.h \
+    w_rand.h \
     w_rc.h w_rusage.h \
     w_stream.h w_strstream.h \
     w_stat.h \

@@ -451,22 +451,22 @@ rtree_p::print()
 
     for (i=0; i<nrecs(); i++)  {
             key.bytes2box(rec(i).key(), rec(i).klen());
-        key.print(cout, level() );
+        key.print(std::cout, level() );
 
-        for (j=0; j<5-level(); j++) cout << "\t";
+        for (j=0; j<5-level(); j++) std::cout << "\t";
         if ( is_node() )  
-            cout << ":- pid = " << rec(i).child() << endl;
+            std::cout << ":- pid = " << rec(i).child() << std::endl;
         else 
-            cout << "elem=(" << rec(i).elem() << ")" << endl;
+            std::cout << "elem=(" << rec(i).elem() << ")" << std::endl;
     }
-    cout << endl;
+    std::cout << std::endl;
 }
 
 //
 // draw all the entries in the current rtree page
 //
 void 
-rtree_p::draw(ostream &DrawFile, nbox_t &CoverAll)
+rtree_p::draw(std::ostream &DrawFile, nbox_t &CoverAll)
 {
     int i;
     nbox_t key;
@@ -1942,13 +1942,13 @@ rtree_m::print(const lpid_t& root)
         // print real root boundary
             nbox_t bound(page.dim());
             W_DO(page.calc_bound(bound));
-            cout << "Universe:\n";
-            bound.print(cout, 5);
+            std::cout << "Universe:\n";
+            bound.print(std::cout, 5);
     }
    
     int i;
-    for (i = 0; i < 5 - page.level(); i++)  { cout << "\t"; }
-    cout << "LEVEL " << page.level() << ", page " 
+    for (i = 0; i < 5 - page.level(); i++)  { std::cout << "\t"; }
+    std::cout << "LEVEL " << page.level() << ", page " 
          << page.pid().page << ":\n";
     page.print();
     
@@ -1975,13 +1975,13 @@ rtree_m::print(const lpid_t& root)
     if (page.level() == 1) {
         nbox_t bound(page.dim());
         W_DO(page.calc_bound(bound));
-        cout << endl;
-        cout << page.nrecs() << endl;
-        cout << bound.bound(0) << " " << bound.bound(1) << endl;
-        cout << bound.bound(0) << " " << bound.bound(3) << endl;
-        cout << bound.bound(2) << " " << bound.bound(3) << endl;
-        cout << bound.bound(2) << " " << bound.bound(1) << endl;
-        cout << endl;
+        std::cout << std::endl;
+        std::cout << page.nrecs() << std::endl;
+        std::cout << bound.bound(0) << " " << bound.bound(1) << std::endl;
+        std::cout << bound.bound(0) << " " << bound.bound(3) << std::endl;
+        std::cout << bound.bound(2) << " " << bound.bound(3) << std::endl;
+        std::cout << bound.bound(2) << " " << bound.bound(1) << std::endl;
+        std::cout << std::endl;
     } else {
         lpid_t sub_tree = page.pid();
         for (int i = 0; i < page.nrecs(); i++) {
@@ -1999,7 +1999,7 @@ rtree_m::print(const lpid_t& root)
 rc_t
 rtree_m::draw(
     const lpid_t&        root,
-    ostream                &DrawFile,
+    std::ostream                &DrawFile,
     bool                skip)
 {
     rtree_p page;
@@ -2024,7 +2024,7 @@ rtree_m::draw(
 rc_t
 rtree_m::_draw(
     const lpid_t&        pid,
-    ostream                &DrawFile,
+    std::ostream                &DrawFile,
     nbox_t                &CoverAll,
     bool                skip)
 {

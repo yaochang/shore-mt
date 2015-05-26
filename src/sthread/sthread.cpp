@@ -182,8 +182,8 @@ void sthread_t::check_all_stacks(const char *file, int line)
     }
 
     if (corrupt > 0) {
-        cerr << "sthread_t::check_all: " << corrupt
-        << " thread stacks, dieing" << endl;
+        std::cerr << "sthread_t::check_all: " << corrupt
+        << " thread stacks, dieing" << std::endl;
         W_FATAL(fcINTERNAL);
     }
 }
@@ -316,7 +316,7 @@ w_rc_t    sthread_t::cold_startup()
 w_rc_t sthread_t::shutdown()
 {
     if (me() != _main_thread) {
-        cerr << "sthread_t::shutdown(): not main thread!" << endl;
+        std::cerr << "sthread_t::shutdown(): not main thread!" << std::endl;
         return RC(stINTERNAL);
     }
 
@@ -372,8 +372,8 @@ w_rc_t sthread_t::set_priority(priority_t priority)
     if (_priority > max_priority) _priority = max_priority;
 
     if (_status == t_ready)  {
-        cerr << "sthread_t::set_priority()  :- "
-            << "cannot change priority of ready thread" << endl;
+        std::cerr << "sthread_t::set_priority()  :- "
+            << "cannot change priority of ready thread" << std::endl;
         W_FATAL(stINTERNAL);
     }
 
@@ -442,7 +442,7 @@ sthread_t::join(timeout_in_ms /*timeout*/)
 #define TRACE_START_TERM 0
 #if TRACE_START_TERM
             {   w_ostrstream o;
-                o << *this << endl;
+                o << *this << std::endl;
                 fprintf(stderr, 
                         "me: %#lx Joining on (%s = %s) \n", 
                         (long) pthread_self() , 
@@ -455,7 +455,7 @@ sthread_t::join(timeout_in_ms /*timeout*/)
 
 #if TRACE_START_TERM
             {   w_ostrstream o;
-                o << *this << endl;
+                o << *this << std::endl;
                 fprintf(stderr, 
                         "me: %#lx Join on (%s = %s) done\n", 
                         (long) pthread_self() , 
@@ -508,7 +508,7 @@ w_rc_t    sthread_t::fork()
     }
 #if TRACE_START_TERM
     {   w_ostrstream o;
-        o << *this << endl;
+        o << *this << std::endl;
         fprintf(stderr, "me: %#lx Forked: %s : %s\n", 
                     (long) pthread_self() , 
                     (const char *)(name()?name():"anonymous"), 
@@ -595,13 +595,13 @@ sthread_t::sthread_t(priority_t        pr,
      // TODO: should probably merge sthread_core_pthread.cpp in here
      */
     if (sthread_core_init(_core, __start, this, stack_size) == -1) {
-        cerr << "sthread_t: cannot initialize thread core" << endl;
+        std::cerr << "sthread_t: cannot initialize thread core" << std::endl;
         W_FATAL(stINTERNAL);
     }
 
 #if TRACE_START_TERM
     {   w_ostrstream o;
-        o << *this << endl;
+        o << *this << std::endl;
         fprintf(stderr, "me: %#lx Constructed: %s : %s\n", 
                     (long) pthread_self() , 
                     (const char *)(name()?name():"anonymous"), 
@@ -654,13 +654,13 @@ sthread_t::~sthread_t()
                   );
 
     if (_link.member_of()) {
-        W_FORM2(cerr,("sthread_t(%#lx): \"%s\": destroying a thread on a list!",
+        W_FORM2(std::cerr,("sthread_t(%#lx): \"%s\": destroying a thread on a list!",
               (long)this, name()));
     }
     }
 #if TRACE_START_TERM
     {   w_ostrstream o;
-        o << *this << endl;
+        o << *this << std::endl;
         fprintf(stderr, 
                 "me: %#lx Destruction of (%s = %s) \n", 
                 (long) pthread_self() , 
@@ -815,11 +815,11 @@ void sthread_t::_start()
             after_run();
         }
         catch (...) {
-            cerr << endl
+            std::cerr << std::endl
                  << "sthread_t(id = " << id << "  name = " << name()
                  << "): run() threw an exception."
-                 << endl
-                 << endl;
+                 << std::endl
+                 << std::endl;
         }
 #else
         before_run();
@@ -1100,15 +1100,15 @@ void sthread_t::yield()
 }
 
 /* print all threads */
-void sthread_t::dumpall(const char *str, ostream &o)
+void sthread_t::dumpall(const char *str, std::ostream &o)
 {
     if (str)
-        o << str << ": " << endl;
+        o << str << ": " << std::endl;
 
     dumpall(o);
 }
 
-void sthread_t::dumpall(ostream &o)
+void sthread_t::dumpall(std::ostream &o)
 {
 // We've put this into a huge critical section
 // to make it thread-safe, even though it's probably not necessary
@@ -1120,7 +1120,7 @@ void sthread_t::dumpall(ostream &o)
         o << "******* ";
         if (me() == i.curr())
             o << " --->ME<---- ";
-        o << endl;
+        o << std::endl;
 
         i.curr()->_dump(o);
     }
@@ -1129,9 +1129,9 @@ void sthread_t::dumpall(ostream &o)
 
 
 /* XXX individual thread dump function... obsoleted by print method */
-void sthread_t::_dump(ostream &o) const
+void sthread_t::_dump(std::ostream &o) const
 {
-    o << *this << endl;
+    o << *this << std::endl;
 }
 
 /* XXX it is not a bug that you can sometime see >100% cpu utilization.
@@ -1139,7 +1139,7 @@ void sthread_t::_dump(ostream &o) const
    is an *estimate* developed by statistics gathered by the process,
    not something solid given by the kernel. */
 
-static void print_time(ostream &o, const sinterval_t &real,
+static void print_time(std::ostream &o, const sinterval_t &real,
                const sinterval_t &user, const sinterval_t &kernel)
 {
     sinterval_t    total(user + kernel);
@@ -1147,20 +1147,20 @@ static void print_time(ostream &o, const sinterval_t &real,
     double     pcpu2 = ((double)user / (double)real) * 100.0;
 
     o << "\t" << "real: " << real
-        << endl;
+        << std::endl;
     o << "\tcpu:"
         << "  kernel: " << kernel
         << "  user: " << user
         << "  total: " << total
-        << endl;
+        << std::endl;
     o << "\t%CPU:"
-        << " " << setprecision(3) << pcpu
-        << "  %user: " << setprecision(2) << pcpu2;
+        << " " << std::setprecision(3) << pcpu
+        << "  %user: " << std::setprecision(2) << pcpu2;
         o 
-        << endl;
+        << std::endl;
 }
 
-void sthread_t::dump_stats(ostream &o)
+void sthread_t::dump_stats(std::ostream &o)
 {
     o << SthreadStats;
 
@@ -1174,7 +1174,7 @@ void sthread_t::dump_stats(ostream &o)
     n = getrusage(RUSAGE_SELF, &ru);
     if (n == -1) {
         w_rc_t    e = RC(fcOS);
-        cerr << "getrusage() fails:" << endl << e << endl;
+        std::cerr << "getrusage() fails:" << std::endl << e << std::endl;
         return;
     }
 
@@ -1190,13 +1190,13 @@ void sthread_t::dump_stats(ostream &o)
     static    sinterval_t    last_user;
     static    bool last_valid = false;
 
-    o << "TIME:" << endl;
+    o << "TIME:" << std::endl;
     print_time(o, real, user, kernel);
     if (last_valid) {
         sinterval_t    r(real - last_real);
         sinterval_t    u(user - last_user);
         sinterval_t    k(kernel - last_kernel);
-        o << "RECENT:" << endl;
+        o << "RECENT:" << std::endl;
         print_time(o, r, u, k);
     }
     else
@@ -1206,7 +1206,7 @@ void sthread_t::dump_stats(ostream &o)
     last_user = user;
     last_real = real;
 
-    o << endl;
+    o << std::endl;
 }
 
 void sthread_t::reset_stats()
@@ -1232,7 +1232,7 @@ const char *sthread_t::priority_strings[]= {
 };
 
 
-ostream& operator<<(ostream &o, const sthread_t &t)
+std::ostream& operator<<(std::ostream &o, const sthread_t &t)
 {
     return t.print(o);
 }
@@ -1243,7 +1243,7 @@ ostream& operator<<(ostream &o, const sthread_t &t)
  *
  *  Print thread status to an stream
  */
-ostream &sthread_t::print(ostream &o) const
+std::ostream &sthread_t::print(std::ostream &o) const
 {
     o << "thread id = " << id ;
 
@@ -1253,18 +1253,18 @@ ostream &sthread_t::print(ostream &o) const
 
     o
     << ", addr = " <<  (void *) this
-    << ", core = " <<  (void *) _core << endl;
+    << ", core = " <<  (void *) _core << std::endl;
     o
     << "priority = " << sthread_t::priority_strings[priority()]
     << ", status = " << sthread_t::status_strings[status()];
-    o << endl;
+    o << std::endl;
 
     if (user)
-        o << "user = " << user << endl;
+        o << "user = " << user << std::endl;
 
     if ((status() != t_defunct)  && !isStackOK(__FILE__,__LINE__))
     {
-        cerr << "***  warning:  Thread stack overflow  ***" << endl;
+        std::cerr << "***  warning:  Thread stack overflow  ***" << std::endl;
     }
 
     return o;
@@ -1294,7 +1294,7 @@ void sthread_t::for_each_thread(ThreadFunc& f)
     pthread_mutex_unlock(&_class_list_lock);
 }
 
-void print_timeout(ostream& o, const sthread_base_t::timeout_in_ms timeout)
+void print_timeout(std::ostream& o, const sthread_base_t::timeout_in_ms timeout)
 {
     if (timeout > 0)  {
     o << timeout;
@@ -1377,7 +1377,7 @@ sthread_name_t::rename(
         if(n3) len += strlen(n3);
         len++;
         if(len>sizeof(_name)) {
-            cerr << "WARNING-- name too long for sthread_named_t: "
+            std::cerr << "WARNING-- name too long for sthread_named_t: "
                 << n1 << n2 << n3;
         }
 #endif
@@ -1463,14 +1463,14 @@ const smthread_t* sthread_t::dynamic_cast_to_const_smthread() const
  *********************************************************************/
 void dumpthreads()
 {
-    sthread_t::dumpall("dumpthreads()", cerr);
-    sthread_t::dump_io(cerr);
+    sthread_t::dumpall("dumpthreads()", std::cerr);
+    sthread_t::dump_io(std::cerr);
 
 }
 
 void threadstats()
 {
-    sthread_t::dump_stats(cerr);
+    sthread_t::dump_stats(std::cerr);
 }
 
 
@@ -1487,7 +1487,7 @@ static    void    get_large_file_size(w_base_t::int8_t &max_os_file_size)
     n = os_getrlimit(RLIMIT_FSIZE, &r);
     if (n == -1) {
         w_rc_t e = RC(fcOS);
-        cerr << "getrlimit(RLIMIT_FSIZE):" << endl << e << endl;
+        std::cerr << "getrlimit(RLIMIT_FSIZE):" << std::endl << e << std::endl;
         W_COERCE(e);
     }
     if (r.rlim_cur < r.rlim_max) {
@@ -1495,9 +1495,9 @@ static    void    get_large_file_size(w_base_t::int8_t &max_os_file_size)
         n = os_setrlimit(RLIMIT_FSIZE, &r);
         if (n == -1) {
             w_rc_t e = RC(fcOS);
-            cerr << "setrlimit(RLIMIT_FSIZE, " << r.rlim_cur
-                << "):" << endl << e << endl;
-                cerr << e << endl;
+            std::cerr << "setrlimit(RLIMIT_FSIZE, " << r.rlim_cur
+                << "):" << std::endl << e << std::endl;
+                std::cerr << e << std::endl;
             W_FATAL(fcINTERNAL);
         }
     }
@@ -1560,8 +1560,8 @@ sthread_init_t::do_init()
                 error_info,
                 sizeof(error_info) / sizeof(error_info[0])))   {
 
-                    cerr << "sthread_init_t::do_init: "
-                     << " cannot register error code" << endl;
+                    std::cerr << "sthread_init_t::do_init: "
+                     << " cannot register error code" << std::endl;
 
                     W_FATAL(stINTERNAL);
                 }

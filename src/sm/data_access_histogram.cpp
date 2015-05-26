@@ -78,7 +78,7 @@ void data_access_histogram::initialize(key_ranges_map& krm,
     // TODO: pin: if no local ones are going to be used remove is_local also
     
     _foo_keys.clear();
-    vector<lpid_t> subtrees;
+    std::vector<lpid_t> subtrees;
     w_rc_t r = krm.getAllPartitions(subtrees);
     if (r.is_error()) { W_FATAL(r.err_num()); }
 
@@ -147,16 +147,16 @@ data_access_histogram::~data_access_histogram()
 
     
     // pin: temp: write the values to a file to check now
-    ofstream data_accesses("data_accesses.txt", ios::app);
+    std::ofstream data_accesses("data_accesses.txt", std::ios::app);
     for(ranges_hist_iter ranges_iter = _range_accesses.begin();
 	ranges_iter != _range_accesses.end();
 	ranges_iter++) {
-	data_accesses << endl;
-	data_accesses << ranges_iter->first << endl;
+	data_accesses << std::endl;
+	data_accesses << ranges_iter->first << std::endl;
 	for(sub_ranges_hist_iter sub_ranges_iter = (ranges_iter->second).begin();
 	    sub_ranges_iter != (ranges_iter->second).end();
 	    sub_ranges_iter++) {
-	    data_accesses << "\t" << (sub_ranges_iter->first)._m << " : " << (sub_ranges_iter->second)[0] << endl;
+	    data_accesses << "\t" << (sub_ranges_iter->first)._m << " : " << (sub_ranges_iter->second)[0] << std::endl;
 	}
     }
     

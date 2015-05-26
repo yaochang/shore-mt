@@ -98,14 +98,14 @@ devid_t::devid_t(const char* path)
        be generated in a valid state. */
     if (e.is_error()) {
 #if W_DEBUG_LEVEL > 2
-        cerr << "devid_t::devid_t(" << path 
-            << "): " << what << ":" << endl << e << endl;
+        std::cerr << "devid_t::devid_t(" << path 
+            << "): " << what << ":" << std::endl << e << std::endl;
 #endif
         *this = null;
     }
 }
 
-ostream& operator<<(ostream& o, const devid_t& d)
+std::ostream& operator<<(std::ostream& o, const devid_t& d)
 {
     return o << d.dev << "." << d.id;
 }

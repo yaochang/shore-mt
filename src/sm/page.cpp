@@ -1683,12 +1683,12 @@ page_p::splice(slotid_t idx, slot_length_t start, slot_length_t len, const cvec_
     // existing slot.
 #if W_DEBUG_LEVEL > 1
     if((start + len <= s.length)==false) {
-        cerr << "Assertion failure on page " 
+        std::cerr << "Assertion failure on page " 
             << _pp->pid
             << "lsn " <<_pp->lsn1
             << "s.length " << s.length
             << "buf start + len = " << start + len
-            << endl;
+            << std::endl;
     }
 #endif
     w_assert1(start + len <= s.length);
@@ -2834,12 +2834,12 @@ page_p::free_space2bucket(smsize_t sp)
 }
 
 
-ostream &
-operator<<(ostream& o, const store_histo_t&s)
+std::ostream &
+operator<<(std::ostream& o, const store_histo_t&s)
 {
     for (shpid_t p=0; p < space_num_buckets; p++) {
         o << " " << s.bucket[p] << "/" ;
     }
-    o<<endl;
+    o<<std::endl;
     return o;
 }

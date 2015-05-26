@@ -129,7 +129,7 @@ lg_tag_chunks_h::append(uint4_t num_pages, const lpid_t new_pages[])
                 << " _cref.chunk_cnt " << _cref.chunk_cnt
                 << " contig " << contig
                 << " max_chunks " << int(max_chunks)
-                << endl;
+                << std::endl;
 #endif 
         return RC(smlevel_0::eBADAPPEND);
     }
@@ -243,7 +243,7 @@ shpid_t lg_tag_chunks_h::_pid(uint4_t pid_num) const
 }
 
 void         
-lg_tag_chunks_h::print(ostream &o) const
+lg_tag_chunks_h::print(std::ostream &o) const
 {
     w_assert1(_page.is_fixed());
     for (smsize_t i = 0; 
@@ -253,11 +253,11 @@ lg_tag_chunks_h::print(ostream &o) const
             << " -> " << _cref.chunks[i].first_pid + 
                 _cref.chunks[i].npages - 1 
             << " (" << _cref.chunks[i].npages << ")"
-            <<endl;
+            <<std::endl;
     }
 }
 
-ostream &operator<<(ostream& o, const lg_tag_chunks_h &l)
+std::ostream &operator<<(std::ostream& o, const lg_tag_chunks_h &l)
 {
         l.print(o);
         return o;

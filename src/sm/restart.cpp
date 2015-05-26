@@ -111,7 +111,7 @@ public:
 
     int                          size() const { return tab.num_members(); }
     
-    friend ostream& operator<<(ostream&, const dirty_pages_tab_t& s);
+    friend std::ostream& operator<<(std::ostream&, const dirty_pages_tab_t& s);
     
 private:
     w_hash_t<dp_entry_t, unsafe_list_dummy_lock_t, bfpid_t> tab; // hash table for dictionary
@@ -277,7 +277,7 @@ restart_m::recover(lsn_t master)
         int number=0;
 
         smlevel_0::errlog->clog << info_prio 
-		<< "Prepared transactions:" << endl;
+		<< "Prepared transactions:" << std::endl;
         DBG(<<"TX TABLE at end of recovery:");
         xct_i iter(true); // lock list
         xct_t* xd;
@@ -286,13 +286,13 @@ restart_m::recover(lsn_t master)
             server_handle_t ch = xd->get_coordinator();
             const gtid_t *gtid = xd->gtid();
             smlevel_0::errlog->clog << info_prio 
-                << "Tid: " <<xd->tid() << endl;
+                << "Tid: " <<xd->tid() << std::endl;
                 if(gtid) {
                     smlevel_0::errlog->clog << info_prio 
-                    << "\t Global tid: " << *gtid << endl;
+                    << "\t Global tid: " << *gtid << std::endl;
                 } else {
                     smlevel_0::errlog->clog << info_prio 
-                    << "\t No global tid. " << endl;
+                    << "\t No global tid. " << std::endl;
                 }
                 smlevel_0::errlog->clog << info_prio 
                 << "\t Coordinator: " << ch
@@ -300,17 +300,17 @@ restart_m::recover(lsn_t master)
             number++;
         }
         if(number == 0) {
-            smlevel_0::errlog->clog << info_prio  << " none." << endl;
+            smlevel_0::errlog->clog << info_prio  << " none." << std::endl;
         } else {
 			smlevel_0::errlog->clog << info_prio 
 			<< "*************************  WARNING ****************************"
-			<< endl
-			<< endl
+			<< std::endl
+			<< std::endl
 			<< "WARNING: There are prepared transactions to be resolved!" 
-			<< endl
-			<< endl
+			<< std::endl
+			<< std::endl
 			<< "***************************************************************"
-			<< endl;
+			<< std::endl;
 		}
         DBG(<<"END TX TABLE at end of recovery:");
     }
@@ -813,7 +813,7 @@ restart_m::redo_pass(
             << "Internal error during redo recovery." << flushl;
             smlevel_0::errlog->clog << error_prio 
             << "    log record at position: " << lsn 
-            << " appears invalid." << endl << flushl;
+            << " appears invalid." << std::endl << flushl;
             abort();
         }
 
@@ -1020,11 +1020,11 @@ restart_m::redo_pass(
                     } else 
 #if W_DEBUG_LEVEL>2
                     if(page_lsn >= highest_lsn) {
-                        cerr << "WAL violation! page " 
+                        std::cerr << "WAL violation! page " 
                         << page.pid()
                         << " has lsn " << page_lsn
                         << " end of log is record prior to " << highest_lsn
-                        << endl;
+                        << std::endl;
 
                         W_FATAL(eINTERNAL);
                     } else
@@ -1255,16 +1255,16 @@ dirty_pages_tab_t::~dirty_pages_tab_t()
  *
  *********************************************************************/
 NORET
-ostream& operator<<(ostream& o, const dirty_pages_tab_t& s)
+std::ostream& operator<<(std::ostream& o, const dirty_pages_tab_t& s)
 {
-    o << " Dirty page table: " <<endl;
+    o << " Dirty page table: " <<std::endl;
 
     w_hash_i<dp_entry_t, unsafe_list_dummy_lock_t, bfpid_t> iter(s.tab);
     const dp_entry_t* p;
     while ((p = iter.next()))  {
         o << " Page " << p->pid
         << " lsn " << p->rec_lsn
-        << endl;
+        << std::endl;
     }
     return o;
 }

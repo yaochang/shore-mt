@@ -142,7 +142,7 @@ bt_cursor_t::set_up_part_2(cmp_t cond1, const cvec_t& bound1)
 }
 
 void
-bt_cursor_t::set_roots(vector<lpid_t>& roots) {
+bt_cursor_t::set_roots(std::vector<lpid_t>& roots) {
     is_mrbt = true;
     _roots = roots;
     if(_backward) {

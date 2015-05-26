@@ -60,7 +60,6 @@
 #pragma interface
 #endif 
 
-using namespace std;
 
 struct sinfo_s;
 
@@ -159,9 +158,9 @@ class key_ranges_map
 {
 public:
 
-    typedef map<foo, lpid_t, cmp_greater >                 KRMap;
-    typedef map<foo, lpid_t, cmp_greater >::iterator       KRMapIt;
-    typedef map<foo, lpid_t, cmp_greater >::const_iterator KRMapCIt;
+    typedef std::map<foo, lpid_t, cmp_greater >                 KRMap;
+    typedef std::map<foo, lpid_t, cmp_greater >::iterator       KRMapIt;
+    typedef std::map<foo, lpid_t, cmp_greater >::const_iterator KRMapCIt;
 
 private:
 
@@ -173,7 +172,7 @@ protected:
     KRMap _keyRangesMap;
     uint  _numPartitions;
 
-    vector<foo*> _fookeys;
+    std::vector<foo*> _fookeys;
 
     // for the hack to reduce number of mallocs (if something is put
     // to the map without any space allocation, then in destructor it
@@ -243,9 +242,9 @@ public:
     
     // Returns the list of partitions that cover: 
     // [key1, key2], (key1, key2], [key1, key2), or (key1, key2) ranges
-    w_rc_t getPartitions(const Key& key1, const Key& key2, vector<lpid_t>& pidVec);
+    w_rc_t getPartitions(const Key& key1, const Key& key2, std::vector<lpid_t>& pidVec);
     // Returns the list of all root ids in partitions
-    w_rc_t getAllPartitions(vector<lpid_t>& pidVec);
+    w_rc_t getAllPartitions(std::vector<lpid_t>& pidVec);
 
 
     // Returns the range boundaries of a partition in start&end key

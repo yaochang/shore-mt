@@ -677,7 +677,7 @@ io_m::_dismount(vid_t vid, bool flush)
         lsn_t theLSN;
         W_COERCE( log->insert(*logrec, &theLSN) );
         DBG( << "dismount_vol_log(" << _dev_name(vid) 
-                << endl
+                << std::endl
                 << ", vid=" << vid << ") lsn=" << theLSN << " prevLSN=" << GetLastMountLSN());;
         SetLastMountLSN(theLSN);
 
@@ -2802,7 +2802,7 @@ io_m::_init_store_histo(store_histo_t *h, const stid_t& stid,
     return RCOK;
 }
 
-ostream& operator<<(ostream& o, const store_operation_param& param)
+std::ostream& operator<<(std::ostream& o, const store_operation_param& param)
 {
     o << "snum="    << param.snum()
       << ", op="    << param.op();
@@ -2836,7 +2836,7 @@ ostream& operator<<(ostream& o, const store_operation_param& param)
  */
 
 rc_t
-io_m::dump_exts(ostream& o, vid_t vid, extnum_t start, extnum_t end)
+io_m::dump_exts(std::ostream& o, vid_t vid, extnum_t start, extnum_t end)
 {
     int i = _find(vid);
     if (i == -1)  {
@@ -2849,7 +2849,7 @@ io_m::dump_exts(ostream& o, vid_t vid, extnum_t start, extnum_t end)
 }
 
 rc_t
-io_m::dump_stores(ostream& o, vid_t vid, int start, int end)
+io_m::dump_stores(std::ostream& o, vid_t vid, int start, int end)
 {
     int i = _find(vid);
     if (i == -1)  {

@@ -355,7 +355,7 @@ public:
     static uint8_t    strtou8(const char *, char ** end=0, int base=0);
 
     // Input to an instream
-    static istream&    _scan_uint8(istream& i, uint8_t &, 
+    static std::istream&   _scan_uint8(std::istream& i, uint8_t &, 
                 bool chew_white,
                 bool is_signed,
                 bool& rangerr);
@@ -379,8 +379,8 @@ public:
     static uint4_t    w_htonl(uint4_t);
 
     ///  standard streams
-    friend ostream&        operator<<(
-        ostream&            o,
+    friend std::ostream&   operator<<(
+        std::ostream&            o,
         const w_base_t&            obj);
 
     /// print a message and abort
@@ -471,7 +471,7 @@ public:
 #define    w_reset_strstream(s)        \
     do {                \
         s.clear();        \
-        s.seekp(ios::beg);    \
+        s.seekp(std::ios::beg);    \
     } while (0)
 #endif
 

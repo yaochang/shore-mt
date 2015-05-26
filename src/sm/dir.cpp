@@ -784,15 +784,15 @@ sdesc_cache_t::inherit_all()
 #include <iostream>
 
 struct pretty_printer {
-    ostringstream _out;
-    string _tmp;
-    operator ostream&() { return _out; }
+    std::ostringstream _out;
+    std::string _tmp;
+    operator std::ostream&() { return _out; }
     operator char const*() { _tmp = _out.str(); _out.str(""); return _tmp.c_str(); }
 };
-ostream &operator<<(ostream &os, sdesc_t const &sd) {
+std::ostream &operator<<(std::ostream &os, sdesc_t const &sd) {
     return os << sd.stid();
 }
-ostream &operator<<(ostream &os, sdesc_cache_t const  &sdc) {
+std::ostream &operator<<(std::ostream &os, sdesc_cache_t const  &sdc) {
     for (uint4_t i = 0; i < sdc._num_buckets(); i++) {
         for (uint4_t j = 0; j < sdc._elems_in_bucket(i); j++)  {
             os << sdc._sdescsBuckets[i][j] << " ";

@@ -210,7 +210,7 @@ private:
 
 public:
 
-    friend ostream&             operator<<(ostream&, const xct_t&);
+    friend std::ostream&             operator<<(std::ostream&, const xct_t&);
 
     static int                  collect(vtable_t&, bool names_too);
     void                        vtable_collect(vtable_row_t &);
@@ -246,7 +246,7 @@ public:
      * basic tx commands:
      */
 public:
-    static void                 dump(ostream &o); 
+    static void                 dump(std::ostream &o); 
     static int                  cleanup(bool dispose_prepared=false); 
                                  // returns # prepared txs not disposed-of
 
@@ -515,7 +515,7 @@ public:
     rc_t                        ConvertAllLoadStoresToRegularStores();
     void                        ClearAllLoadStores();
 
-    ostream &                   dump_locks(ostream &) const;
+    std::ostream &                   dump_locks(std::ostream &) const;
 
     /////////////////////////////////////////////////////////////////
 private:

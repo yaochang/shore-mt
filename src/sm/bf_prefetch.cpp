@@ -146,9 +146,9 @@ bf_prefetch_thread_t::new_state(int i, prefetch_event_t e)
     bf_prefetch_thread_t::frame_info &inf = _info[i];
     old = inf._status;
     if( (nw = _table[old][e]) == pf_fatal) {
-        cerr << "Bad transition for state " << int(old)
+        std::cerr << "Bad transition for state " << int(old)
                 << " and event " << int(e)
-                <<endl;
+                <<std::endl;
         W_FATAL(fcINTERNAL);
     }
     DBGTHRD(<< " change : _table[" << int(old) << "," << int(e)

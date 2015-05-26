@@ -44,7 +44,6 @@
 #pragma interface
 #endif 
 
-using namespace std;
 
 
 
@@ -80,33 +79,33 @@ public:
     // NOTE: pin: lpid_t has comparison functions but they only work correctly if the compared lpid_t are of the
     //            same store, it's easy to change this so this note is also a TODO
 
-    typedef map< lpid_t, map< foo, vector<uint>, cmp_greater > >                 ranges_hist;
-    typedef map< lpid_t, map< foo, vector<uint>, cmp_greater > >::iterator       ranges_hist_iter;
-    typedef map< lpid_t, map< foo, vector<uint>, cmp_greater > >::const_iterator ranges_hist_citer;
-    typedef map< foo, vector<uint>, cmp_greater >::iterator                      sub_ranges_hist_iter;
-    typedef map< foo, vector<uint>, cmp_greater >::const_iterator                sub_ranges_hist_citer;
-    typedef vector<uint>::iterator                                               sub_ranges_hist_buckets_iter;
-    typedef vector<uint>::const_iterator                                         sub_ranges_hist_buckets_citer;  
+    typedef std::map< lpid_t, std::map< foo, std::vector<uint>, cmp_greater > >                 ranges_hist;
+    typedef std::map< lpid_t, std::map< foo, std::vector<uint>, cmp_greater > >::iterator       ranges_hist_iter;
+    typedef std::map< lpid_t, std::map< foo, std::vector<uint>, cmp_greater > >::const_iterator ranges_hist_citer;
+    typedef std::map< foo, std::vector<uint>, cmp_greater >::iterator                      sub_ranges_hist_iter;
+    typedef std::map< foo, std::vector<uint>, cmp_greater >::const_iterator                sub_ranges_hist_citer;
+    typedef std::vector<uint>::iterator                                               sub_ranges_hist_buckets_iter;
+    typedef std::vector<uint>::const_iterator                                         sub_ranges_hist_buckets_citer;  
     
-    //    typedef map< lpid_t, map< foo, occ_rwlock, cmp_greater > >                 ranges_locks;
-    //    typedef map< lpid_t, map< foo, occ_rwlock, cmp_greater > >::iterator       ranges_locks_iter;
-    //    typedef map< lpid_t, map< foo, occ_rwlock, cmp_greater > >::const_iterator ranges_locks_citer;
-    //    typedef map< foo, occ_rwlock, cmp_greater >::iterator                      sub_ranges_locks_iter;
-    //    typedef map< foo, occ_rwlock, cmp_greater >::const_iterator                sub_ranges_locks_citer;
+    //    typedef std::map< lpid_t, std::map< foo, occ_rwlock, cmp_greater > >                 ranges_locks;
+    //    typedef std::map< lpid_t, std::map< foo, occ_rwlock, cmp_greater > >::iterator       ranges_locks_iter;
+    //    typedef std::map< lpid_t, std::map< foo, occ_rwlock, cmp_greater > >::const_iterator ranges_locks_citer;
+    //    typedef std::map< foo, occ_rwlock, cmp_greater >::iterator                      sub_ranges_locks_iter;
+    //    typedef std::map< foo, occ_rwlock, cmp_greater >::const_iterator                sub_ranges_locks_citer;
 
-    typedef map< lpid_t, occ_rwlock >                 root_locks;
-    typedef map< lpid_t, occ_rwlock >::iterator       root_locks_iter;
-    typedef map< lpid_t, occ_rwlock >::const_iterator root_locks_citer;
+    typedef std::map< lpid_t, occ_rwlock >                 root_locks;
+    typedef std::map< lpid_t, occ_rwlock >::iterator       root_locks_iter;
+    typedef std::map< lpid_t, occ_rwlock >::const_iterator root_locks_citer;
     
-    typedef map< lpid_t, int >                 gran_map;
-    typedef map< lpid_t, int >::iterator       gran_map_iter;
-    typedef map< lpid_t, int >::const_iterator gran_map_citer;
+    typedef std::map< lpid_t, int >                 gran_map;
+    typedef std::map< lpid_t, int >::iterator       gran_map_iter;
+    typedef std::map< lpid_t, int >::const_iterator gran_map_citer;
 
-    typedef map< lpid_t, vector<foo*> >                 key_values;
-    typedef map< lpid_t, vector<foo*> >::iterator       key_values_iter;
-    typedef map< lpid_t, vector<foo*> >::const_iterator key_values_citer;
-    typedef vector<foo*>::iterator                      sub_key_values_iter;
-    typedef vector<foo*>::const_iterator                sub_key_values_citer;
+    typedef std::map< lpid_t, std::vector<foo*> >                 key_values;
+    typedef std::map< lpid_t, std::vector<foo*> >::iterator       key_values_iter;
+    typedef std::map< lpid_t, std::vector<foo*> >::const_iterator key_values_citer;
+    typedef std::vector<foo*>::iterator                      sub_key_values_iter;
+    typedef std::vector<foo*>::const_iterator                sub_key_values_citer;
     
 private:
 
@@ -115,7 +114,7 @@ private:
     // to keep the key values in the ranges
     key_values _foo_keys;
     
-    // keeps for each subtree a ranges map that indicates which key range is accessed how many times
+    // keeps for each subtree a ranges std::map that indicates which key range is accessed how many times
     ranges_hist _range_accesses;
     
     // percentage that indicates with what granuarity we should collect the data access info for each subtree

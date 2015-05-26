@@ -213,7 +213,7 @@ struct sli_lock_stats_t : std::map<lockid_t, int> {
 		    continue;
 		out << it->first << "(" << it->second << ") ";
 	    }
-	    out << endl << ends;
+	    out << std::endl << std::ends;
 	    printf("%s", out.str().c_str());
 	}
 #endif
@@ -223,9 +223,9 @@ DECLARE_TLS(sli_lock_stats_t, sli_lock_stats);
 
 
 struct pretty_printer {
-    ostringstream _out;
-    string _tmp;
-    operator ostream&() { return _out; }
+    std::ostringstream _out;
+    std::string _tmp;
+    operator std::ostream&() { return _out; }
     operator char const*() { _tmp = _out.str(); _out.str(""); return _tmp.c_str(); }
 };
 void xct_lock_info_t::print_sli_list() {
@@ -266,7 +266,7 @@ char const* db_pretty_print(lock_head_t const* lock, int i=0, char const* s=0)
   static pretty_printer pp;
     (void) i;
     (void) s;
-  ostream &out = pp;
+  std::ostream &out = pp;
   pp << lock->name << ":" 
       << lock_base_t::mode_str[lock->granted_mode] << " queue: {";
 
@@ -491,11 +491,11 @@ bool xct_lock_info_t::update_wait_map(atomic_thread_map_t const &other)
         s << "----------mine "
             << (void *)(this)
             << " is " ;
-        _wait_map_copy.print(s) << endl;
+        _wait_map_copy.print(s) << std::endl;
         s << "----------other "
             << (void *)(&other)
             << " is " ;
-        other.print(s) << endl;
+        other.print(s) << std::endl;
         other.unlock_reader();
         fprintf(stderr,  "%s\n", s.c_str());
     }
@@ -529,7 +529,7 @@ bool xct_lock_info_t::update_wait_map(atomic_thread_map_t const &other)
             s << "----------mine "
                 << (void *)(this)
                 << " updated to " ;
-            _wait_map.print(s) << endl;
+            _wait_map.print(s) << std::endl;
             fprintf(stderr, 
             "%s ------ matches=%d\n", s.c_str(),
             matches
@@ -555,9 +555,9 @@ bool xct_lock_info_t::update_wait_map(atomic_thread_map_t const &other)
             other.lock_for_read();
             other.print(s);
             other.unlock_reader();
-            s << endl 
+            s << std::endl 
                 << "----------mine  " << (void *)(this);
-                _wait_map.print(s) << endl;
+                _wait_map.print(s) << std::endl;
 
             fprintf(stderr, 
             "%s ------ matches=%d\n", s.c_str(),
@@ -588,14 +588,14 @@ void xct_lock_info_t::done_waiting() {
 }
 
 // Obviously not mt-safe:
-ostream &                        
-xct_lock_info_t::dump_locks(ostream &out) const
+std::ostream &                        
+xct_lock_info_t::dump_locks(std::ostream &out) const
 {
     const lock_request_t         *req;
     const lock_head_t                 *lh;
     int                                                i;
     for(i=0; i< t_num_durations; i++) {
-        out << "***Duration " << i <<endl;
+        out << "***Duration " << i <<std::endl;
 
         request_list_i   iter(my_req_list[i]); // obviously not mt-safe
         while ((req = iter.next())) {
@@ -603,7 +603,7 @@ xct_lock_info_t::dump_locks(ostream &out) const
             lh = req->get_lock_head();
             out << "Lock: " << lh->name 
                 << " Mode: " << int(req->mode())
-                << " State: " << int(req->status()) <<endl;
+                << " State: " << int(req->status()) <<std::endl;
         }
     }
     return out;
@@ -792,8 +792,8 @@ xct_lock_info_t::get_locks(
  *  xct_lock_info_t output operator
  *
  *********************************************************************/
-ostream &            
-operator<<(ostream &o, const xct_lock_info_t &x)
+std::ostream &            
+operator<<(std::ostream &o, const xct_lock_info_t &x)
 {
         lock_request_t *waiting = x.waiting_request();
         if (waiting) {
@@ -979,29 +979,29 @@ lock_request_t::init(xct_t* x, lmode_t m, duration_t d)
 #if defined(W_TRACE) && W_DEBUG_LEVEL > 4
     {
         w_ostrstream o;
-        o <<"size of lock_head_t " << sizeof(lock_head_t)  << endl;
-        o <<"size of request_list_t " << sizeof(request_list_t)  << endl;
+        o <<"size of lock_head_t " << sizeof(lock_head_t)  << std::endl;
+        o <<"size of request_list_t " << sizeof(request_list_t)  << std::endl;
         fprintf(stderr, "%s", o.c_str());
 
         lock_head_t* lock = NULL;
         if(rlink.member_of() != 0) lock = this->get_lock_head();
         if(lock) {
             w_reset_strstream(o);
-            o <<"pushed lock request " << this << endl;
-            o <<"get_lock_head returns " << lock << endl;
-            o <<"rlink.member_of() returns " << ((void*)rlink.member_of()) << endl;
+            o <<"pushed lock request " << this << std::endl;
+            o <<"get_lock_head returns " << lock << std::endl;
+            o <<"rlink.member_of() returns " << ((void*)rlink.member_of()) << std::endl;
             fprintf(stderr, "%s", o.c_str());
 
             w_reset_strstream(o);
-            o << " " << lock->name << endl;
+            o << " " << lock->name << std::endl;
             fprintf(stderr, "%s", o.c_str());
 
             w_reset_strstream(o);
-            o << " on my_req_list["<<int(_duration)<<"] : "  << endl;
+            o << " on my_req_list["<<int(_duration)<<"] : "  << std::endl;
             fprintf(stderr, "%s", o.c_str());
 
             w_reset_strstream(o);
-            o << *this << endl;
+            o << *this << std::endl;
             fprintf(stderr, "%s", o.c_str());
         } else {
             DBGTHRD(<<"pushed lock request " << this << " " 
@@ -1396,21 +1396,21 @@ lock_core_m::acquire_lock(
 
             if(!compatible) {
                 if(name.lspace() == lockid_t::t_extent) {
-                  cerr << 
+                  std::cerr << 
                   "--- Trx " << xd->tid().get_hi() << "." << xd->tid().get_lo()
                   << " (t@" << pthread_self() << ") requested " << mode_str[mode]
                   << " on " << mode_str[lock->granted_mode]
                   << "-locked extent " << name.extent() 
-                  << endl;
+                  << std::endl;
 
 #if W_DEBUG_LEVEL > 4
     // not safe, but oh well - saved for ad-hoc debugging.
                     {
-                        cerr << "\t " << *lock << endl;
+                        std::cerr << "\t " << *lock << std::endl;
                         lock_request_t* request;
                         request_list_i r(lock->_queue);
                         while ((request = r.next()))  {
-                            cerr << "\t\t" << *request << endl;
+                            std::cerr << "\t\t" << *request << std::endl;
                         }
                     }
 
@@ -2808,8 +2808,8 @@ lock_core_m::_check_deadlock(xct_t* self,
 
         if(0)
         {
-            ostringstream os;
-            os << *lock << ends;
+            std::ostringstream os;
+            os << *lock << std::ends;
             fprintf(stderr, 
                 "Possible deadlock waiting on %s req %p\n", os.str().c_str(),
                     req);
@@ -2893,8 +2893,8 @@ lock_core_m::_check_deadlock(xct_t* self,
                 }
                 if(0)
                 {
-                    ostringstream os;
-                    os << req << ends;
+                    std::ostringstream os;
+                    os << req << std::ends;
                     fprintf(stderr, 
         "Unblocked non-waiting deadlock victim while acquiring on %s\n", 
                         os.str().c_str());
@@ -2946,15 +2946,15 @@ lock_core_m::_update_cache(xct_lock_info_t* the_xlinfo, const lockid_t& name, lm
  *
  *********************************************************************/
 void
-lock_core_m::dump(ostream & o)
+lock_core_m::dump(std::ostream & o)
 {
     // disabled because there's no safe way to iterate over the lock table
     // but you can use it in a debugger.  It is used by smsh in
     // single-thread cases.
-    o << "WARNING: lock_core_m::dump is not thread-safe:" << endl;
+    o << "WARNING: lock_core_m::dump is not thread-safe:" << std::endl;
     o << "lock_core_m:"
       << " _htabsz=" << _htabsz
-      << endl;
+      << std::endl;
     for (unsigned h = 0; h < _htabsz; h++)  {
         ACQUIRE_BUCKET_MUTEX(h);
         chain_list_i i(_htab[h].chain);
@@ -2970,16 +2970,16 @@ lock_core_m::dump(ostream & o)
                 o << "ERROR!  hash table bucket h=" << h 
                     << " contains lock head " << *lock
                     << " which hashes to " << hh
-                    << endl;
+                    << std::endl;
             }
             
             MUTEX_ACQUIRE(lock->head_mutex);
-            o << "\t " << *lock << endl;
+            o << "\t " << *lock << std::endl;
             lock_request_t* request;
             lock_head_t::safe_queue_iterator_t r(*lock);
 
             while ((request = r.next()))  {
-                o << "\t\t" << *request << endl;
+                o << "\t\t" << *request << std::endl;
             }
             MUTEX_RELEASE(lock->head_mutex);
             lock = i.next();
@@ -2991,8 +2991,8 @@ lock_core_m::dump(ostream & o)
 
 void lock_core_m::dump()
 {
-    dump(cerr);
-    cerr << flushl;
+    dump(std::cerr);
+    std::cerr << flushl;
 }
 
 
@@ -3019,17 +3019,17 @@ lock_core_m::assert_empty() const
         lock_head_t* lock;
         lock = i.next();
         if (lock) {
-            cerr << h << ": ";
+            std::cerr << h << ": ";
         }
         while (lock)  {
             found_lock++;
-            cerr << "\t " << *lock << endl;
+            std::cerr << "\t " << *lock << std::endl;
             lock_request_t* request;
             lock_head_t::unsafe_queue_iterator_t r(*lock); // ok - debugging only
 
             while ((request = r.next()))  {
                 found_request++;
-                cerr << "\t\t" << *request << endl;
+                std::cerr << "\t\t" << *request << std::endl;
             }
             lock = i.next();
         }
@@ -3049,7 +3049,7 @@ lock_core_m::assert_empty() const
  *
  *********************************************************************/
 void
-lock_core_m::_dump(ostream &o)
+lock_core_m::_dump(std::ostream &o)
 {
     for (uint h = 0; h < _htabsz; h++)  {
         chain_list_i i(_htab[h].chain);
@@ -3059,28 +3059,28 @@ lock_core_m::_dump(ostream &o)
             o << h << ": ";
         }
         while (lock)  {
-            o << "\t " << *lock << endl;
+            o << "\t " << *lock << std::endl;
             lock_request_t* request;
             lock_head_t::unsafe_queue_iterator_t r(*lock); // ok - debugging only
             while ((request = r.next()))  {
-                o << "\t\t" << *request << endl;
+                o << "\t\t" << *request << std::endl;
             }
             lock = i.next();
         }
     }
-    o << "--end of lock table--" << endl;
+    o << "--end of lock table--" << std::endl;
 }
 
 
 /*********************************************************************
  *
- *  operator<<(ostream, lock_request)
+ *  operator<<(std::ostream, lock_request)
  *
- *  Pretty print a lock request to "ostream".
+ *  Pretty print a lock request to "std::ostream".
  *
  *********************************************************************/
-ostream& 
-operator<<(ostream& o, const lock_request_t& r)
+std::ostream& 
+operator<<(std::ostream& o, const lock_request_t& r)
 {
     o << "xct:" << r.get_lock_info()->tid()
       << " mode:" << lock_base_t::mode_str[r.mode()]
@@ -3138,13 +3138,13 @@ operator<<(ostream& o, const lock_request_t& r)
 
 /*********************************************************************
  *
- *  operator<<(ostream, lock_head)
+ *  operator<<(std::ostream, lock_head)
  *
- *  Pretty print a lock_head to "ostream".
+ *  Pretty print a lock_head to "std::ostream".
  *
  *********************************************************************/
-ostream& 
-operator<<(ostream& o, const lock_head_t& l)
+std::ostream& 
+operator<<(std::ostream& o, const lock_head_t& l)
 {
     o << l.name << ' ' << lock_base_t::mode_str[l.granted_mode];
     if (l.waiting) o << " W";
@@ -3156,13 +3156,13 @@ operator<<(ostream& o, const lock_head_t& l)
 
 /*********************************************************************
  *
- *  operator<<(ostream, lockid)
+ *  operator<<(std::ostream, lockid)
  *
- *  Pretty print a lockid to "ostream".
+ *  Pretty print a lockid to "std::ostream".
  *
  *********************************************************************/
-ostream& 
-operator<<(ostream& o, const lockid_t& i)
+std::ostream& 
+operator<<(std::ostream& o, const lockid_t& i)
 {
     o << "L(";
     switch (i.lspace())  {
@@ -3239,8 +3239,8 @@ operator<<(ostream& o, const lockid_t& i)
  *
  *********************************************************************/
 
-istream&
-operator>>(istream& i, lockid_t::user1_t& u)
+std::istream&
+operator>>(std::istream& i, lockid_t::user1_t& u)
 {
     char cU, c1, cLParen, cRParen;
     i >> cU >> c1 >> cLParen >> u.u1 >> cRParen;
@@ -3256,8 +3256,8 @@ operator>>(istream& i, lockid_t::user1_t& u)
  *
  *********************************************************************/
 
-istream&
-operator>>(istream& i, lockid_t::user2_t& u)
+std::istream&
+operator>>(std::istream& i, lockid_t::user2_t& u)
 {
     char cU, c2, cLParen, cSep1, cRParen;
     i >> cU >> c2 >> cLParen >> u.u1 >> cSep1 >> u.u2 >> cRParen;
@@ -3273,8 +3273,8 @@ operator>>(istream& i, lockid_t::user2_t& u)
  *
  *********************************************************************/
 
-istream&
-operator>>(istream& i, lockid_t::user3_t& u)
+std::istream&
+operator>>(std::istream& i, lockid_t::user3_t& u)
 {
     char cU, c3, cLParen, cSep1, cSep2, cRParen;
     i >> cU >> c3 >> cLParen >> u.u1 >> cSep1 >> u.u2 >> cSep2 >> u.u3 >> cRParen;
@@ -3290,8 +3290,8 @@ operator>>(istream& i, lockid_t::user3_t& u)
  *
  *********************************************************************/
 
-istream&
-operator>>(istream& i, lockid_t::user4_t& u)
+std::istream&
+operator>>(std::istream& i, lockid_t::user4_t& u)
 {
     char cU, c4, cLParen, cSep1, cSep2, cSep3, cRParen;
     i >> cU >> c4 >> cLParen >> u.u1 >> cSep1 >> u.u2 >> cSep2 >> u.u3 >> cSep3 >> u.u4 >> cRParen;
@@ -3436,7 +3436,7 @@ lock_request_t::vtable_collect(vtable_row_t & t)
 
     {
         w_ostrstream o;
-        o<< lh->name <<ends;
+        o<< lh->name <<std::ends;
         t.set_string(lock_name_attr, o.c_str());
     }
     t.set_string(lock_mode_attr, lock_base_t::mode_str[mode()]);
@@ -3445,7 +3445,7 @@ lock_request_t::vtable_collect(vtable_row_t & t)
 
     {
         w_ostrstream o;
-        o << get_lock_info()->tid() <<  ends;
+        o << get_lock_info()->tid() <<  std::ends;
         t.set_string(lock_tid_attr, o.c_str());
     }
 

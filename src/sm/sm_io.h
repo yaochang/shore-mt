@@ -74,7 +74,7 @@ class xct_t; // forward
 struct volume_hdr_stats_t;
 
 class store_operation_param  {
-    friend ostream & operator<<(ostream&, const store_operation_param &);
+    friend std::ostream & operator<<(std::ostream&, const store_operation_param &);
     
 public:
         typedef w_base_t::uint2_t uint2_t;
@@ -563,12 +563,12 @@ public:
     // For debugging ONLY:
     //
     static rc_t                 dump_exts(
-        ostream&                        o,
+        std::ostream&                        o,
         vid_t                           vid,
         extnum_t                        start,
         extnum_t                        end);
     static rc_t                 dump_stores(
-        ostream&                        o,
+        std::ostream&                        o,
         vid_t                           vid,
         int                             start,
         int                             end);

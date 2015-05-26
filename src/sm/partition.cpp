@@ -268,7 +268,7 @@ partition_t::flush(
                                     << file_offset
                                     << " + " << start()
                                     << " to write log record"
-                                    << endl);
+                                    << std::endl);
         }
     } // end sync log
     
@@ -326,10 +326,10 @@ partition_t::flush(
                                 << " " << iov[1].iov_len
                                 << " " << iov[2].iov_len
                                 << " " << iov[3].iov_len
-                                    << ":" << endl
+                                    << ":" << std::endl
                                     << e
                                     << flushl;
-            cerr 
+            std::cerr 
                                     << "ERROR: could not flush log buf:"
                                     << " fd=" << fd
                                     << " xfersize=" << log_core::BLOCK_SIZE
@@ -339,7 +339,7 @@ partition_t::flush(
                                 << " " << iov[1].iov_len
                                 << " " << iov[2].iov_len
                                 << " " << iov[3].iov_len
-                                    << ":" << endl
+                                    << ":" << std::endl
                                     << e
                                     << flushl;
             W_COERCE(e);
@@ -842,7 +842,7 @@ partition_t::close(bool both)
             if (e.is_error()) {
                 smlevel_0::errlog->clog << error_prio 
                         << "ERROR: could not close the log file."
-                        << e << endl << flushl;
+                        << e << std::endl << flushl;
                 err_encountered = true;
             }
         }
@@ -856,7 +856,7 @@ partition_t::close(bool both)
         if (e.is_error()) {
             smlevel_0::errlog->clog << error_prio 
             << "ERROR: could not close the log file."
-            << endl << e << endl << flushl;
+            << std::endl << e << std::endl << flushl;
             err_encountered = true;
         }
         _fhdl_app = invalid_fhdl;
@@ -967,7 +967,7 @@ partition_t::peek(
     e = me()->open(fname, flags, 0744, fd);
     if (e.is_error()) {
         smlevel_0::errlog->clog << fatal_prio
-            << "ERROR: cannot open log file: " << endl << e << flushl;
+            << "ERROR: cannot open log file: " << std::endl << e << flushl;
         W_COERCE(e);
     }
     DBGTHRD(<<"partition " << __num << " peek  opened " << fname);
@@ -978,7 +978,7 @@ partition_t::peek(
          if (e.is_error()) {
                 smlevel_0::errlog->clog << fatal_prio 
                 << " Cannot stat fd " << fd << ":" 
-                << endl << e  << flushl;
+                << std::endl << e  << flushl;
                 W_COERCE(e);
          }
          part_size = statbuf.st_size;
@@ -1072,7 +1072,7 @@ partition_t::close_for_append()
         if (e.is_error()) {
             smlevel_0::errlog->clog  << warning_prio
                 << "warning: error in unix log on close(app):" 
-                    << endl <<  e << endl;
+                    << std::endl <<  e << std::endl;
         }
         _fhdl_app = invalid_fhdl;
     }
@@ -1089,7 +1089,7 @@ partition_t::close_for_read()
         if (e.is_error()) {
             smlevel_0::errlog->clog  << warning_prio
                 << "warning: error in unix partition on close(rd):" 
-                << endl <<  e << endl;
+                << std::endl <<  e << std::endl;
         }
         _fhdl_rd = invalid_fhdl;
     }

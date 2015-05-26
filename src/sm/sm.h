@@ -486,10 +486,10 @@ struct sinfo_s;
 class sm_save_point_t : public lsn_t {
 public:
     NORET            sm_save_point_t(): _tid(0,0) {};
-    friend ostream& operator<<(ostream& o, const sm_save_point_t& p) {
+    friend std::ostream& operator<<(std::ostream& o, const sm_save_point_t& p) {
         return o << p._tid << ':' << (const lsn_t&) p;
     }
-    friend istream& operator>>(istream& i, sm_save_point_t& p) {
+    friend std::istream& operator>>(std::istream& i, sm_save_point_t& p) {
         char ch;
         return i >> p._tid >> ch >> (lsn_t&) p;
     }
@@ -549,8 +549,8 @@ public:
 
     tid_t            tid()const { return _tid; }
     operator         bool()const { return (_tid != tid_t::null); }
-    friend ostream& operator<<(ostream& o, const sm_quark_t& q);
-    friend istream& operator>>(istream& i, sm_quark_t& q);
+    friend std::ostream& operator<<(std::ostream& o, const sm_quark_t& q);
+    friend std::istream& operator>>(std::istream& i, sm_quark_t& q);
 
 private:
     friend class ss_m;
@@ -1349,7 +1349,7 @@ public:
      * \details
      * This is for debugging only, and is not thread-safe. 
      */
-    static rc_t            dump_xcts(ostream &o);
+    static rc_t            dump_xcts(std::ostream &o);
 
     /**\brief Get the transaction state for a given transaction (structure).
      *\ingroup SSMXCT
@@ -1410,7 +1410,7 @@ public:
      *
      * All attribute values will be strings.
      * The virtual table v can be printed with its output operator
-     * operator\<\< for ostreams.
+     * operator\<\< for std::ostreams.
 	 *
 	 * \attention Not atomic. Can yield stale data. 
      */
@@ -1427,7 +1427,7 @@ public:
      *
      * All attribute values will be strings.
      * The virtual table v can be printed with its output operator
-     * operator<< for ostreams.
+     * operator<< for std::ostreams.
 	 *
 	 * \attention Not atomic. Can yield stale data. 
      */
@@ -1442,7 +1442,7 @@ public:
      *
      * All attribute values will be strings.
      * The virtual table v can be printed with its output operator
-     * operator<< for ostreams.
+     * operator<< for std::ostreams.
 	 *
 	 * \attention Not atomic. Can yield stale data. 
 	 * Cannot be used in a multi-threaded-transaction context.
@@ -1458,7 +1458,7 @@ public:
      *
      * All attribute values will be strings.
      * The virtual table v can be printed with its output operator
-     * operator<< for ostreams.
+     * operator<< for std::ostreams.
 	 *
 	 * \attention Not thread-safe. Can yield stale data. 
      */
@@ -1528,20 +1528,20 @@ public:
     /**\cond skip 
      * Do not document. Very un-thread-safe.
      */
-    static rc_t            dump_buffers(ostream &o);
-    static rc_t            dump_locks(ostream &o);
+    static rc_t            dump_buffers(std::ostream &o);
+    static rc_t            dump_locks(std::ostream &o);
     static rc_t            dump_locks(); // defaults to std::cout
-    static rc_t            dump_exts(ostream &o, 
+    static rc_t            dump_exts(std::ostream &o, 
         vid_t                    v, 
         extnum_t                 start, 
         extnum_t                 end);
 
-    static rc_t            dump_stores(ostream &o, 
+    static rc_t            dump_stores(std::ostream &o, 
         vid_t                    v, 
         int                      start, 
         int                      end);
 
-    static rc_t            dump_histo(ostream &o, bool locked);
+    static rc_t            dump_histo(std::ostream &o, bool locked);
 
     static rc_t            snapshot_buffers(
         u_int&                 ndirty, 
@@ -2869,7 +2869,7 @@ public:
 
     /**\cond skip */
     // for debugging
-    static rc_t            draw_rtree(const stid_t& stid, ostream &);
+    static rc_t            draw_rtree(const stid_t& stid, std::ostream &);
     /**\endcond skip */
 
     /**\brief Gather usage statistics about an R*-Tree index.
@@ -3512,22 +3512,22 @@ private:
     static rc_t            _set_option_logsize(
         option_t*              opt,
         const char*            value,
-        ostream*               err_stream);
+        std::ostream*               err_stream);
     
     static rc_t            _set_option_lock_escalate_to_page(
         option_t*              opt,
         const char*            value,
-        ostream*               err_stream);
+        std::ostream*               err_stream);
     
     static rc_t            _set_option_lock_escalate_to_store(
         option_t*              opt,
         const char*            value,
-        ostream*               err_stream);
+        std::ostream*               err_stream);
     
     static rc_t            _set_option_lock_escalate_to_volume(
         option_t*              opt,
         const char*            value,
-        ostream*               err_stream);
+        std::ostream*               err_stream);
     
     static rc_t            _set_store_property(
         stid_t                stid,
@@ -3914,7 +3914,7 @@ private:
         );
 
     
-    static rc_t            _draw_rtree(const stid_t& stid, ostream &);
+    static rc_t            _draw_rtree(const stid_t& stid, std::ostream &);
 
     static rc_t            _rtree_stats(
             const stid_t&       stid,
@@ -4043,21 +4043,21 @@ public:
 };
 
 
-ostream& operator<<(ostream& o, const vid_t& v);
-istream& operator>>(istream& i, vid_t& v);
-ostream& operator<<(ostream& o, const extid_t& x);
-istream& operator>>(istream& o, extid_t &x);
-ostream& operator<<(ostream& o, const stid_t& stid);
-istream& operator>>(istream& i, stid_t& stid);
-ostream& operator<<(ostream& o, const lpid_t& pid);
-istream& operator>>(istream& i, lpid_t& pid);
-ostream& operator<<(ostream& o, const shrid_t& r);
-istream& operator>>(istream& i, shrid_t& r);
-ostream& operator<<(ostream& o, const rid_t& rid);
-istream& operator>>(istream& i, rid_t& rid);
-ostream& operator<<(ostream& o, const sm_stats_info_t& s);
+std::ostream& operator<<(std::ostream& o, const vid_t& v);
+std::istream& operator>>(std::istream& i, vid_t& v);
+std::ostream& operator<<(std::ostream& o, const extid_t& x);
+std::istream& operator>>(std::istream& o, extid_t &x);
+std::ostream& operator<<(std::ostream& o, const stid_t& stid);
+std::istream& operator>>(std::istream& i, stid_t& stid);
+std::ostream& operator<<(std::ostream& o, const lpid_t& pid);
+std::istream& operator>>(std::istream& i, lpid_t& pid);
+std::ostream& operator<<(std::ostream& o, const shrid_t& r);
+std::istream& operator>>(std::istream& i, shrid_t& r);
+std::ostream& operator<<(std::ostream& o, const rid_t& rid);
+std::istream& operator>>(std::istream& i, rid_t& rid);
+std::ostream& operator<<(std::ostream& o, const sm_stats_info_t& s);
 template<class ostream>
-ostream& operator<<(ostream& o, const sm_config_info_t& s)
+std::ostream& operator<<(std::ostream& o, const sm_config_info_t& s)
 {
     o    << "  page_size " << s.page_size
      << "  max_small_rec " << s.max_small_rec

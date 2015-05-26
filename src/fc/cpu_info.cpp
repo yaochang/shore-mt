@@ -21,15 +21,23 @@ struct cpu_info::impl_helper {
 };
 
 long cpu_info::cpuid() {
-    return impl_helper::cpuid();
+	return 0;
+//    return 1;
+//    return impl_helper::cpuid();
 }
 
 long cpu_info::socket_self() {
-    unsigned a1b = impl_helper::cpuid_a1_b();
-    return impl_helper::cpuid(a1b)/impl_helper::socket_size(a1b);
+	return 0;
+//    return 1;
+//    unsigned a1b = impl_helper::cpuid_a1_b();
+ //   printf("a1b is %d\n", impl_helper::cpuid(a1b));
+  //  printf(" and $d\n", impl_helper::socket_size(a1b));
+   // return impl_helper::cpuid(a1b)/impl_helper::socket_size(a1b);
 }
 long cpu_info::socket_of(long cpuid) {
-    return cpuid/impl_helper::socket_size();
+	return 0;
+//    return 1;
+//    return cpuid/impl_helper::socket_size();
 }
 void cpu_info::init_impl() { }
 
@@ -298,7 +306,7 @@ int main() {
 
     for(int i=0; i < 5; i++) {
 	long cpuid = cpu_info::cpuid();
-	std::printf("My cpuid pointer is %p\n", &cpu_info::impl_helper::dtrace_cpuid);
+	std::printf("My cpuid pointer is %p\n", &cpu_info::impl_helper::cpuid);
 	std::printf("I'm running on cpu:%ld and socket:%ld\n", cpuid, cpu_info::socket_of(cpuid));
 	sleep(1);
     }

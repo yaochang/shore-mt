@@ -47,30 +47,28 @@
  */
 namespace shore_compat {
 
-using namespace std;
-
 
 /**\brief Streambuf class that manages an array of char.
  *
  * Note that this class is not a template.
  */
-class strstreambuf : public basic_streambuf<char, char_traits<char> >
+class strstreambuf : public std::basic_streambuf<char, std::char_traits<char> >
 {
 public:                         // Types.
-  typedef char_traits<char>              _Traits;
-  typedef basic_streambuf<char, _Traits> _Base;
+  typedef std::char_traits<char>              _Traits;
+  typedef std::basic_streambuf<char, _Traits> _Base;
 
 public:                         // Constructor, destructor
-  explicit strstreambuf(streamsize __initial_capacity = 0);
+  explicit strstreambuf(std::streamsize __initial_capacity = 0);
   strstreambuf(void* (*__alloc)(size_t), void (*__free)(void*));
 
-  strstreambuf(char* __get, streamsize __n, char* __put = 0);
-  strstreambuf(signed char* __get, streamsize __n, signed char* __put = 0);
-  strstreambuf(unsigned char* __get, streamsize __n, unsigned char* __put=0);
+  strstreambuf(char* __get, std::streamsize __n, char* __put = 0);
+  strstreambuf(signed char* __get, std::streamsize __n, signed char* __put = 0);
+  strstreambuf(unsigned char* __get, std::streamsize __n, unsigned char* __put=0);
 
-  strstreambuf(const char* __get, streamsize __n);
-  strstreambuf(const signed char* __get, streamsize __n);
-  strstreambuf(const unsigned char* __get, streamsize __n);
+  strstreambuf(const char* __get, std::streamsize __n);
+  strstreambuf(const signed char* __get, std::streamsize __n);
+  strstreambuf(const unsigned char* __get, std::streamsize __n);
 
   virtual ~strstreambuf();
 
@@ -82,12 +80,12 @@ protected:                      // Overridden virtual member functions.
   virtual int_type overflow(int_type __c  = _Traits::eof());
   virtual int_type pbackfail(int_type __c = _Traits::eof());
   virtual int_type underflow();
-  virtual _Base* setbuf(char* __buf, streamsize __n);
-  virtual pos_type seekoff(off_type __off, ios_base::seekdir __dir,
-                           ios_base::openmode __mode 
-                                      = ios_base::in | ios_base::out);
-  virtual pos_type seekpos(pos_type __pos, ios_base::openmode __mode 
-                                      = ios_base::in | ios_base::out);
+  virtual _Base* setbuf(char* __buf, std::streamsize __n);
+  virtual pos_type seekoff(off_type __off, std::ios_base::seekdir __dir,
+                           std::ios_base::openmode __mode 
+                                      = std::ios_base::in | std::ios_base::out);
+  virtual pos_type seekpos(pos_type __pos, std::ios_base::openmode __mode 
+                                      = std::ios_base::in | std::ios_base::out);
 
 private:                        // Helper functions.
   // Dynamic allocation, possibly using _M_alloc_fun and _M_free_fun.
@@ -95,7 +93,7 @@ private:                        // Helper functions.
   void  _M_free(char*);
 
   // Helper function used in constructors.
-  void _M_setup(char* __get, char* __put, streamsize __n);
+  void _M_setup(char* __get, char* __put, std::streamsize __n);
 
 private:                        // Data members.
   void* (*_M_alloc_fun)(size_t);
@@ -106,13 +104,13 @@ private:                        // Data members.
 };
 
 /// Class istrstream, an istream that manages a strstreambuf.
-class istrstream : public basic_istream<char>
+class istrstream : public std::basic_istream<char>
 {
 public:
   explicit istrstream(char*);
   explicit istrstream(const char*);
-  istrstream(char* , streamsize);
-  istrstream(const char*, streamsize);
+  istrstream(char* , std::streamsize);
+  istrstream(const char*, std::streamsize);
   virtual ~istrstream();
   
   strstreambuf* rdbuf() const;
@@ -124,11 +122,11 @@ private:
 
 
 /// Class ostrstream, an ostream that manages a strstreambuf.
-class ostrstream : public basic_ostream<char>
+class ostrstream : public std::basic_ostream<char>
 {
 public:
   ostrstream();
-  ostrstream(char*, int, ios_base::openmode = ios_base::out);
+  ostrstream(char*, int, std::ios_base::openmode = std::ios_base::out);
   virtual ~ostrstream();
 
   strstreambuf* rdbuf() const;

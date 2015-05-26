@@ -160,7 +160,7 @@ public:
     bool                include_nulls);
 
     void             print();
-    void             draw(ostream &, nbox_t &);
+    void             draw(std::ostream &, nbox_t &);
     uint2_t          ovp();        
 
 };

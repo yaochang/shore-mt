@@ -242,8 +242,8 @@ public:
                     const bool bIgnoreParents = false
             ) const;
 
-    ostream            &print(ostream &) const;
-    static ostream    &print_cache(ostream &, bool locked = false);
+    std::ostream            &print(std::ostream &) const;
+    static std::ostream    &print_cache(std::ostream &, bool locked = false);
 
 private:
     // these mutex methods violate const-ness:
@@ -293,7 +293,7 @@ private:
     histoid_t &operator=(const histoid_t &);
 };
 
-extern ostream    &operator<<(ostream&, const histoid_t&);
+extern std::ostream    &operator<<(std::ostream&, const histoid_t&);
 
 class file_p;
 
@@ -339,7 +339,7 @@ public:
 
     void  remove();
     void  update();
-    friend ostream &operator<<(ostream&, const histoid_update_t&);
+    friend std::ostream &operator<<(std::ostream&, const histoid_update_t&);
 };
 
 /*<std-footer incl-file-exclusion='HISTO_H'>  -- do not edit anything below this line -- */

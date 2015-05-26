@@ -131,9 +131,9 @@ int sthread_t::do_unmap()
         munmap( _disk_buffer -  _disk_buffer_disalignment,  _disk_buffer_size);
 
     if(err) {
-        cerr << "munmap returns " << err 
+        std::cerr << "munmap returns " << err 
             << " errno is " <<  errno  << " " << strerror(errno)
-            << endl;
+            << std::endl;
         w_assert1(!err);
     }
 
@@ -176,25 +176,25 @@ long sthread_t::get_max_page_size(long system_page_size)
            }
                 }
             } else {
-           cerr << "getpagesizes(pagesize, " << nelem << ") failed. "
+           std::cerr << "getpagesizes(pagesize, " << nelem << ") failed. "
             << " errno is " <<  errno  << " " << strerror(errno)
-            << endl;
+            << std::endl;
             }
             delete[] pagesize;
         } else {
-           cerr << "getpagesizes(NULL,0) failed. "
+           std::cerr << "getpagesizes(NULL,0) failed. "
             << " errno is " <<  errno  << " " << strerror(errno)
-           << endl;
+           << std::endl;
         }
     }
 #else
     max_page_size = system_page_size;
 #endif
     /*
-    cerr << "Max    page size is " << max_page_size
-        << "( " << int(max_page_size/1024) << " KB) " << endl;
-    cerr << "System page size is " << system_page_size 
-        << "( " << int(system_page_size/1024) << " KB) " << endl;
+    std::cerr << "Max    page size is " << max_page_size
+        << "( " << int(max_page_size/1024) << " KB) " << std::endl;
+    std::cerr << "System page size is " << system_page_size 
+        << "( " << int(system_page_size/1024) << " KB) " << std::endl;
     */
     return max_page_size;
 }
@@ -344,7 +344,7 @@ w_rc_t sthread_t::set_bufsize_normal(
                );
 
     if (_disk_buffer == MAP_FAILED) {
-        cerr 
+        std::cerr 
             << __LINE__ << " " 
             << "mmap (size=" << _disk_buffer_size 
             << " = " << int(_disk_buffer_size/1024)
@@ -352,13 +352,13 @@ w_rc_t sthread_t::set_bufsize_normal(
             << " errno is " <<  errno  << " " << strerror(errno)
             << " flags " <<  flags1  
             << " fd " <<  fd  
-            << endl;
+            << std::endl;
         return RC(fcMMAPFAILED);
     }
 #if W_DEBUG_LEVEL > 4
     else
     {
-        cerr 
+        std::cerr 
             << __LINE__ << " " 
             << "mmap SUCCESS! (size=" << _disk_buffer_size 
             << " = " << int(_disk_buffer_size/1024)
@@ -366,7 +366,7 @@ w_rc_t sthread_t::set_bufsize_normal(
             << " errno is " <<  errno  << " " << strerror(errno)
             << " flags " <<  flags1  
             << " fd " <<  fd  
-            << endl;
+            << std::endl;
     }
 #endif
 
@@ -379,12 +379,12 @@ w_rc_t sthread_t::set_bufsize_normal(
     _disk_buffer = (char*)alignon(_disk_buffer, align_page_size);
     alignon(requested_size, system_page_size);
     if (mprotect(_disk_buffer, requested_size, PROT_READ|PROT_WRITE)) {
-        cerr 
+        std::cerr 
             << __LINE__ << " " 
             << "mprotect (addr=" << long(_disk_buffer)
             << ", size=" << requested_size << ") returns -1;"
             << " errno is " <<  errno  << " " << strerror(errno)
-            << endl;
+            << std::endl;
         do_unmap();
         return RC(fcMMAPFAILED);
     }
@@ -398,9 +398,9 @@ w_rc_t sthread_t::set_bufsize_normal(
     if(memcntl(_disk_buffer, requested_size, MC_HAT_ADVISE, (char *)&info, 0, 0) < 0)
        
         {
-            cerr << "memcntl returns -1;"
+            std::cerr << "memcntl returns -1;"
                  << " errno is " <<  errno  << " " << strerror(errno)
-                 << " requested size " <<  max_page_size  << endl;
+                 << " requested size " <<  max_page_size  << std::endl;
         }
 #endif
 
@@ -447,12 +447,12 @@ sthread_t::set_bufsize_memalign(size_t size, char *&buf_start /* in/out*/,
     _disk_buffer =  malloc(size);
 #endif
     if (_disk_buffer == 0) {
-        cerr 
+        std::cerr 
             << __LINE__ << " " 
             << "could not allocate memory (alignment=" << SM_PAGESIZE 
         << "," << size << ") returns -error;"
             << " errno is " << strerror(errno)
-            << endl;
+            << std::endl;
         return RC(fcINTERNAL);
     }
     align_for_sm(requested_size);
@@ -491,7 +491,7 @@ sthread_t::set_hugetlbfs_path(const char *what)
             fprintf(stderr, "Could not create \"%s\"\n", what);
             return RC(stBADPATH);
         } else {
-            cerr << " created " << what << endl;
+            std::cerr << " created " << what << std::endl;
         }
     }
     hugefs_path = what; 
@@ -536,7 +536,7 @@ sthread_t::set_bufsize_huge(
     }
     int fd = ::open(hugefs_path, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
     if (fd < 0) {
-        cerr << " could not open " << hugefs_path << endl;
+        std::cerr << " could not open " << hugefs_path << std::endl;
         return RC(fcMMAPFAILED);
     }
 
@@ -592,7 +592,7 @@ sthread_t::set_bufsize_huge(
                );
 
     if (_disk_buffer == MAP_FAILED) {
-        cerr 
+        std::cerr 
             << __LINE__ << " " 
             << "mmap (size=" << _disk_buffer_size << ") returns "
             <<  long(_disk_buffer)
@@ -600,7 +600,7 @@ sthread_t::set_bufsize_huge(
             << " prot " <<  (PROT_READ | PROT_WRITE)
             << " flags " <<  flags
             << " fd " <<  fd  
-            << endl;
+            << std::endl;
         close(fd); 
         return RC(fcMMAPFAILED);
     }
@@ -697,8 +697,8 @@ sthread_t::set_bufsize(size_t size, char *&buf_start /* in/out*/,
     }
 
     if (_disk_buffer) {
-        cerr << "Can't re-allocate disk buffer without disabling"
-            << endl;
+        std::cerr << "Can't re-allocate disk buffer without disabling"
+            << std::endl;
         return RC(fcINTERNAL);
     }
 
@@ -725,7 +725,7 @@ sthread_t::set_bufsize(size_t size, char *&buf_start /* in/out*/,
 #if W_DEBUG_LEVEL > 10
             cout << "Using hugetlbfs size " << size
                 << " system_page_size " << system_page_size
-                << " path " << hugefs_path << ". " << endl;
+                << " path " << hugefs_path << ". " << std::endl;
 #endif
             return rc;
         }
@@ -734,9 +734,9 @@ sthread_t::set_bufsize(size_t size, char *&buf_start /* in/out*/,
             return rc;
         }
         // else, try the other way
-        cerr << "Skipping hugetlbfs sue to mmap failure: " << rc << endl;
+        std::cerr << "Skipping hugetlbfs sue to mmap failure: " << rc << std::endl;
     } else {
-        cout << "Skipping hugetlbfs based on user option. " << endl;
+        cout << "Skipping hugetlbfs based on user option. " << std::endl;
     }
 #endif
     return set_bufsize_normal(size, buf_start, system_page_size);
@@ -754,8 +754,8 @@ sthread_t::set_bufsize(size_t size)
     e = set_bufsize(size, start);
 
     if (e.is_error()) {
-        cerr << "Hidden Failure: set_bufsize(" << size << "):"
-            << endl << e << endl;
+        std::cerr << "Hidden Failure: set_bufsize(" << size << "):"
+            << std::endl << e << std::endl;
         return 0;
     }
 
@@ -1102,17 +1102,17 @@ w_rc_t    sthread_t::fisraw(int fd, bool &isRaw)
 }
 
 
-void    sthread_t::dump_io(ostream &s)
+void    sthread_t::dump_io(std::ostream &s)
 {
     s << "I/O:";
     s << " open_max=" << int(open_max);
     s << " open_count=" << open_count;
-    s << endl;
+    s << std::endl;
 }
 
 extern "C" void dump_io() 
 {
-    sthread_t::dump_io(cout);
-    cout << flush;
+    sthread_t::dump_io(std::cout);
+    std::cout << std::flush;
 }
 /**\endcond skip */

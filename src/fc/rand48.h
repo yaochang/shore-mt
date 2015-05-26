@@ -69,8 +69,8 @@ typedef w_base_t::uint8_t unsigned48_t;
 // used by testers (in tests/ and smsh).  Not operators because that would conflict
 // with the std:: operators for unsigned ints, alas.
 #include <fstream>
-void in(ifstream& i, unsigned48_t& what);
-void out(ofstream& o, const unsigned48_t& what);
+void in(std::ifstream& i, unsigned48_t& what);
+void out(std::ofstream& o, const unsigned48_t& what);
 
 /**\brief 48-bit pseudo-random-number generator.
  */

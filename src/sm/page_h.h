@@ -221,7 +221,7 @@ public:
             _space_left = v; 
             _pgid = pg;
         }
-    friend ostream &operator<<(ostream&, const pginfo_t&p);
+    friend std::ostream &operator<<(std::ostream&, const pginfo_t&p);
 };
 
 inline void 
@@ -233,8 +233,8 @@ pginfo_t::set_bucket(const shpid_t& pg, space_bucket_t b)
 }
 
 inline 
-ostream &operator<<(ostream&o, const pginfo_t&p) {
-    o << p._pgid << ":" << p._space_left << ends;
+std::ostream &operator<<(std::ostream&o, const pginfo_t&p) {
+    o << p._pgid << ":" << p._space_left << std::ends;
     return o;
 }
 
@@ -248,7 +248,7 @@ public:
     bool exists(space_bucket_t b) const {
         return bucket[b] > 0;
     }
-    friend ostream &operator<<(ostream&, const store_histo_t&);
+    friend std::ostream &operator<<(std::ostream&, const store_histo_t&);
 private:
     shpid_t bucket[space_num_buckets];
 };

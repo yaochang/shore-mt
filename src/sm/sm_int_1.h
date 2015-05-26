@@ -77,7 +77,7 @@ public:
     static w_rc_t check(xct_t*&);
 };
 #if defined(__GNUC__) && __GNUC_MINOR__ > 6
-ostream& operator<<(ostream& o, const smlevel_1::xct_state_t& xct_state);
+std::ostream& operator<<(std::ostream& o, const smlevel_1::xct_state_t& xct_state);
 #endif
 
 /*<std-footer incl-file-exclusion='SM_INT_1_H'>  -- do not edit anything below this line -- */

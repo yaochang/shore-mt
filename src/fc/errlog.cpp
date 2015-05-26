@@ -64,7 +64,7 @@ static char __c;
 w_ostrstream  logstream::static_stream(&__c,1);
 /** \endcond skip */
 
-ostream &operator<<(ostream &out, const simple_string x) {
+std::ostream &operator<<(std::ostream &out, const simple_string x) {
     out << x._s;
     return out;
 }
@@ -181,7 +181,7 @@ ErrLog::_openlogfile(
 {
     const char *filename=fn;
     if(strcmp(filename, "-")==0) {
-        // cerr << "log to stderr" << endl;
+        // std::cerr << "log to stderr" << std::endl;
         _destination = log_to_stderr;
         _file = stderr;
         return;
@@ -196,12 +196,12 @@ ErrLog::_openlogfile(
         _file = fopen(filename, "a+");
         if(_file == NULL) {
             w_rc_t e = RC(fcOS);
-            cerr << "Cannot fopen Unix file " << filename << endl;
-            cerr << e << endl;
+            std::cerr << "Cannot fopen Unix file " << filename << std::endl;
+            std::cerr << e << std::endl;
             W_COERCE(e);
         }
     } else {
-        cerr << "Unknown logging destination." << endl;
+        std::cerr << "Unknown logging destination." << std::endl;
         W_FATAL(fcINTERNAL);
     }
 
@@ -225,7 +225,7 @@ ErrLog::_init2()
 		ei = new ErrLogInfo(this);
 		_tab.put_in_order(ei); // not really ordered
     } else {
-		cerr <<  "An ErrLog called " << _ident << " already exists." << endl;
+		std::cerr <<  "An ErrLog called " << _ident << " already exists." << std::endl;
 		W_FATAL(fcINTERNAL);
     }
 }
@@ -270,7 +270,7 @@ ErrLog::ErrLog(
 
     default:
         // fatal error
-        cerr << "Bad argument 2 to ErrLog constructor" <<endl;
+        std::cerr << "Bad argument 2 to ErrLog constructor" <<std::endl;
         W_FATAL_MSG(fcINTERNAL, << "Bad argument 2 to ErrLog constructor");
         break;
     }
@@ -333,7 +333,7 @@ void
 ErrLog::log(enum LogPriority prio, const char *format, ...) 
 {
     if(_magic != ERRORLOG__MAGIC) {
-        cerr << "Trying to use uninitialized ErrLog." <<endl;
+        std::cerr << "Trying to use uninitialized ErrLog." <<std::endl;
         ::exit(1);
     }
     va_list ap;
@@ -392,10 +392,10 @@ ErrLog::_flush(bool
 #endif
 
     if(_magic != ERRORLOG__MAGIC) {
-        cerr << "Fatal error: Trying to use uninitialized ErrLog." <<endl;
+        std::cerr << "Fatal error: Trying to use uninitialized ErrLog." <<std::endl;
         ::exit(1);
     }
-    this->clog << ends ;
+    this->clog << std::ends ;
 
     if (this->clog._prio <= _level) {
         switch(_destination) {
@@ -422,18 +422,18 @@ ErrLog::_flush(bool
 }
 
 logstream *
-is_logstream(ostream &o) 
+is_logstream(std::ostream &o) 
 {
     logstream *l=0;
-    const ostream *tied = o.tie();
-    // cerr << "tied " << ::hex((unsigned int)tied) << endl;
+    const std::ostream *tied = o.tie();
+    // std::cerr << "tied " << ::hex((unsigned int)tied) << std::endl;
     if(tied == &logstream::static_stream) {
         l = (logstream *)&o;
     }
     if(l) {
-        // cerr << "magic1 " << (unsigned int)l->__magic1 << endl;
-        // cerr << "magic2 " << (unsigned int)l->__magic1 << endl;
-        // cerr << "_prio" << l->_prio << endl;
+        // std::cerr << "magic1 " << (unsigned int)l->__magic1 << std::endl;
+        // std::cerr << "magic2 " << (unsigned int)l->__magic1 << std::endl;
+        // std::cerr << "_prio" << l->_prio << std::endl;
     }
     if(l && 
         (l->__magic1 == logstream::LOGSTREAM__MAGIC) &&
@@ -442,18 +442,18 @@ is_logstream(ostream &o)
         (l->_prio <= log_all) &&
         (l->_log->_magic == ErrLog::ERRORLOG__MAGIC)
        ) {
-        // cerr << " IS log stream" << endl;
+        // std::cerr << " IS log stream" << std::endl;
         return l;
     } else {
-        // cerr << " NOT log stream" << endl;
+        // std::cerr << " NOT log stream" << std::endl;
         return (logstream *)0;
     }
 }
 
-ostream & 
-flush_and_setprio(ostream& o, LogPriority p)
+std::ostream & 
+flush_and_setprio(std::ostream& o, LogPriority p)
 {
-    // cerr << "flush_and_setprio o=" << &o << endl;
+    // std::cerr << "flush_and_setprio o=" << &o << std::endl;
     logstream *l = is_logstream(o);
     if(l) {
         l->_log->_flush(false); 
@@ -461,23 +461,23 @@ flush_and_setprio(ostream& o, LogPriority p)
         l->_prio =  p;
     }
     } else {
-    o << flush;
+    o << std::flush;
     }
     return o;
 }
 
-ostream& flushl(ostream& out)
+std::ostream& flushl(std::ostream& out)
 {
-    out << endl;
+    out << std::endl;
     return flush_and_setprio(out, log_none); 
 }
-ostream& emerg_prio(ostream& o){return flush_and_setprio(o, log_emerg); }
-ostream& fatal_prio(ostream& o){return flush_and_setprio(o, log_fatal); }
-ostream& internal_prio(ostream& o){ return flush_and_setprio(o, log_internal); }
-ostream& error_prio(ostream& o){return flush_and_setprio(o, log_error); }
-ostream& warning_prio(ostream& o){ return flush_and_setprio(o, log_warning); }
-ostream& info_prio(ostream& o){ return flush_and_setprio(o, log_info); }
-ostream& debug_prio(ostream& o){ return flush_and_setprio(o, log_debug); }
+std::ostream& emerg_prio(std::ostream& o){return flush_and_setprio(o, log_emerg); }
+std::ostream& fatal_prio(std::ostream& o){return flush_and_setprio(o, log_fatal); }
+std::ostream& internal_prio(std::ostream& o){ return flush_and_setprio(o, log_internal); }
+std::ostream& error_prio(std::ostream& o){return flush_and_setprio(o, log_error); }
+std::ostream& warning_prio(std::ostream& o){ return flush_and_setprio(o, log_warning); }
+std::ostream& info_prio(std::ostream& o){ return flush_and_setprio(o, log_info); }
+std::ostream& debug_prio(std::ostream& o){ return flush_and_setprio(o, log_debug); }
 
 #ifdef USE_REGEX
 #include "regex_posix.h"

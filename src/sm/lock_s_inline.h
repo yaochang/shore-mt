@@ -672,25 +672,25 @@ lockid_t::hash() const
 
 
 inline
-ostream& operator<<(ostream& o, const lockid_t::user1_t& u)
+std::ostream& operator<<(std::ostream& o, const lockid_t::user1_t& u)
 {
     return o << "u1(" << u.u1 << ")";
 }
 
 inline
-ostream& operator<<(ostream& o, const lockid_t::user2_t& u)
+std::ostream& operator<<(std::ostream& o, const lockid_t::user2_t& u)
 {
     return o << "u2(" << u.u1 << "," << u.u2 << ")";
 }
 
 inline
-ostream& operator<<(ostream& o, const lockid_t::user3_t& u)
+std::ostream& operator<<(std::ostream& o, const lockid_t::user3_t& u)
 {
     return o << "u3(" << u.u1 << "," << u.u2 << "," << u.u3 << ")";
 }
 
 inline
-ostream& operator<<(ostream& o, const lockid_t::user4_t& u)
+std::ostream& operator<<(std::ostream& o, const lockid_t::user4_t& u)
 {
     return o << "u4(" << u.u1 << "," << u.u2 << "," << u.u3 << "," << u.u4 << ")";
 }

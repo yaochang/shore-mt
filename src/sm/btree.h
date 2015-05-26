@@ -321,7 +321,7 @@ public:
 
         static rc_t                        mr_fetch_init(
         cursor_t&                     cursor, 
-        vector<lpid_t>&                     roots,
+        std::vector<lpid_t>&                     roots,
         int                            nkc,
         const key_type_s*            kc,
         bool                             unique, 

@@ -102,10 +102,10 @@ lock_m::~lock_m()
 
 extern "C" void lock_dump_locks();
 void lock_dump_locks() { 
-    smlevel_0::lm->dump(cerr);
-    cerr << flushl;
+    smlevel_0::lm->dump(std::cerr);
+    std::cerr << flushl;
 }
-void lock_m::dump(ostream &o)
+void lock_m::dump(std::ostream &o)
 {
     _core->dump(o);
 }

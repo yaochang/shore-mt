@@ -97,9 +97,9 @@ struct file_pg_stats_t {
     w_rc_t             audit() const; 
     base_stat_t        total_bytes() const;
 
-    void               print(ostream&, const char *) const;/* pretty print */
+    void               print(std::ostream&, const char *) const;/* pretty print */
 
-    friend ostream&    operator<<(ostream&, const file_pg_stats_t& s);
+    friend std::ostream&    operator<<(std::ostream&, const file_pg_stats_t& s);
 };
 
 struct lgdata_pg_stats_t {
@@ -112,8 +112,8 @@ struct lgdata_pg_stats_t {
     void              clear();
     w_rc_t            audit() const; 
     base_stat_t       total_bytes() const;
-    void              print(ostream&, const char *) const;/* pretty print */
-    friend ostream&   operator<<(ostream&, const lgdata_pg_stats_t& s);
+    void              print(std::ostream&, const char *) const;/* pretty print */
+    friend std::ostream&   operator<<(std::ostream&, const lgdata_pg_stats_t& s);
 };
 
 /* interior pages of large record tree (all space is overhead) */
@@ -126,8 +126,8 @@ struct lgindex_pg_stats_t {
     void               clear();
     w_rc_t             audit() const; 
     base_stat_t        total_bytes() const;
-    void               print(ostream&, const char *) const;/* pretty print */
-    friend ostream&    operator<<(ostream&, const lgindex_pg_stats_t& s);
+    void               print(std::ostream&, const char *) const;/* pretty print */
+    friend std::ostream&    operator<<(std::ostream&, const lgindex_pg_stats_t& s);
 };
 
 struct file_stats_t {
@@ -157,8 +157,8 @@ struct file_stats_t {
     w_rc_t            audit() const; 
     base_stat_t        total_bytes() const;
     base_stat_t        alloc_pg_cnt() const;
-    void             print(ostream&, const char *) const;/* pretty print */
-    friend ostream&    operator<<(ostream&, const file_stats_t& s);
+    void             print(std::ostream&, const char *) const;/* pretty print */
+    friend std::ostream&    operator<<(std::ostream&, const file_stats_t& s);
 };
 
 /*
@@ -178,8 +178,8 @@ struct btree_lf_stats_t {
     void               clear();
     w_rc_t             audit() const; 
     base_stat_t        total_bytes() const;
-    void               print(ostream&, const char *) const;/* pretty print */
-    friend ostream&    operator<<(ostream&, const btree_lf_stats_t& s);
+    void               print(std::ostream&, const char *) const;/* pretty print */
+    friend std::ostream&    operator<<(std::ostream&, const btree_lf_stats_t& s);
 };
 
 /*
@@ -194,8 +194,8 @@ struct btree_int_stats_t {
     void               clear();
     w_rc_t             audit() const; 
     base_stat_t        total_bytes() const;
-    void               print(ostream&, const char *) const;/* pretty print */
-    friend ostream&    operator<<(ostream&, const btree_int_stats_t& s);
+    void               print(std::ostream&, const char *) const;/* pretty print */
+    friend std::ostream&    operator<<(std::ostream&, const btree_int_stats_t& s);
 };
 
 // returns by bulk load and
@@ -228,8 +228,8 @@ struct btree_stats_t {
     w_rc_t          audit() const; 
     base_stat_t     total_bytes() const;
     base_stat_t     alloc_pg_cnt() const;
-    void            print(ostream&, const char *) const;/* pretty print */
-    friend ostream& operator<<(ostream&, const btree_stats_t& s);
+    void            print(std::ostream&, const char *) const;/* pretty print */
+    friend std::ostream& operator<<(std::ostream&, const btree_stats_t& s);
 };
 
 struct rtree_stats_t {
@@ -246,8 +246,8 @@ struct rtree_stats_t {
     void               clear();
     w_rc_t             audit() const; 
     base_stat_t        total_bytes() const;
-    void               print(ostream&, const char *) const;/* pretty print */
-    friend ostream&    operator<<(ostream&, const rtree_stats_t& s);
+    void               print(std::ostream&, const char *) const;/* pretty print */
+    friend std::ostream&    operator<<(std::ostream&, const rtree_stats_t& s);
 };
 
 struct volume_hdr_stats_t {
@@ -262,8 +262,8 @@ struct volume_hdr_stats_t {
     void        clear();
     w_rc_t        audit() const; 
     base_stat_t        total_bytes() const;
-    void         print(ostream&, const char *) const;/* pretty print */
-    friend ostream&    operator<<(ostream&, const volume_hdr_stats_t& s);
+    void         print(std::ostream&, const char *) const;/* pretty print */
+    friend std::ostream&    operator<<(std::ostream&, const volume_hdr_stats_t& s);
 };
 
 struct volume_map_stats_t {
@@ -278,8 +278,8 @@ struct volume_map_stats_t {
     base_stat_t    alloc_pg_cnt() const;
     base_stat_t    unalloc_pg_cnt() const;
     base_stat_t    unlink_pg_cnt() const;
-    void           print(ostream&, const char *) const;/* pretty print */
-    friend ostream&    operator<<(ostream&, const volume_map_stats_t& s);
+    void           print(std::ostream&, const char *) const;/* pretty print */
+    friend std::ostream&    operator<<(std::ostream&, const volume_map_stats_t& s);
 };
 
 
@@ -299,8 +299,8 @@ struct sm_du_stats_t {
     void              clear();
     w_rc_t            audit() const; 
     base_stat_t       total_bytes() const;
-    void              print(ostream&, const char *) const;/* pretty print */
-    friend ostream&   operator<<(ostream&, const sm_du_stats_t& s);
+    void              print(std::ostream&, const char *) const;/* pretty print */
+    friend std::ostream&   operator<<(std::ostream&, const sm_du_stats_t& s);
 };
 
 

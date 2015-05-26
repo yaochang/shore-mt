@@ -307,7 +307,7 @@ public:
     bool operator==(const lockid_t& p) const;
     /**\brief inequality operator for lockid_t*/
     bool operator!=(const lockid_t& p) const;
-    friend ostream& operator<<(ostream& o, const lockid_t& i);
+    friend std::ostream& operator<<(std::ostream& o, const lockid_t& i);
 public:
     /// Used by lock cache
     uint4_t           hash() const; // used by lock_cache
@@ -537,15 +537,15 @@ public:
 
 /** \example lockid_test.cpp*/
 
-ostream& operator<<(ostream& o, const lockid_t::user1_t& u);
-ostream& operator<<(ostream& o, const lockid_t::user2_t& u);
-ostream& operator<<(ostream& o, const lockid_t::user3_t& u);
-ostream& operator<<(ostream& o, const lockid_t::user4_t& u);
+std::ostream& operator<<(std::ostream& o, const lockid_t::user1_t& u);
+std::ostream& operator<<(std::ostream& o, const lockid_t::user2_t& u);
+std::ostream& operator<<(std::ostream& o, const lockid_t::user3_t& u);
+std::ostream& operator<<(std::ostream& o, const lockid_t::user4_t& u);
 
-istream& operator>>(istream& o, lockid_t::user1_t& u);
-istream& operator>>(istream& o, lockid_t::user2_t& u);
-istream& operator>>(istream& o, lockid_t::user3_t& u);
-istream& operator>>(istream& o, lockid_t::user4_t& u);
+std::istream& operator>>(std::istream& o, lockid_t::user1_t& u);
+std::istream& operator>>(std::istream& o, lockid_t::user2_t& u);
+std::istream& operator>>(std::istream& o, lockid_t::user3_t& u);
+std::istream& operator>>(std::istream& o, lockid_t::user4_t& u);
 
 
 

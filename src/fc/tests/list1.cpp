@@ -60,7 +60,7 @@ int main()
         l.push(&array[i]);
     }
 
-    cout << l << endl;
+    std::cout << l << std::endl;
 
     for (i = 0; i < 10; i++)  {
 #if W_DEBUG_LEVEL>0

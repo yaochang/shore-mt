@@ -126,7 +126,7 @@ key_ranges_map::key_ranges_map(const sinfo_s& sinfo,
 key_ranges_map::~key_ranges_map()
 {
     // Delete the allocated keys in the map
-    vector<foo*>::iterator iter;
+    std::vector<foo*>::iterator iter;
 
     DBG(<<"Destroying the ranges map: ");
 
@@ -412,7 +412,7 @@ w_rc_t key_ranges_map::getPartitionByKey(const Key& key, lpid_t& pid)
  ******************************************************************/
 
 w_rc_t key_ranges_map::getPartitions(const Key& key1, const Key& key2,
-                                     vector<lpid_t>& pidVec) 
+                                     std::vector<lpid_t>& pidVec) 
 {
     w_rc_t r = RCOK;
     
@@ -459,7 +459,7 @@ w_rc_t key_ranges_map::getPartitions(const Key& key1, const Key& key2,
  *
  ******************************************************************/
 
-w_rc_t key_ranges_map::getAllPartitions(vector<lpid_t>& pidVec) 
+w_rc_t key_ranges_map::getAllPartitions(std::vector<lpid_t>& pidVec) 
 {
     _rwlock.acquire_read();
     for(KRMapIt iter = _keyRangesMap.begin(); iter != _keyRangesMap.end(); iter++) {
@@ -686,7 +686,7 @@ key_ranges_map& key_ranges_map::operator=(const key_ranges_map& krm)
     _numPartitions = 0;
     _fookeys.clear();
     _keyRangesMap.clear();
-    for (vector<foo*>::const_iterator cit = krm._fookeys.begin() ;
+    for (std::vector<foo*>::const_iterator cit = krm._fookeys.begin() ;
 	 cit != krm._fookeys.end(); ++cit) {
 	foo* newkv = new foo((*cit)->_m, (*cit)->_len, true);
 	mapcit = krm._keyRangesMap.lower_bound(*(*cit));

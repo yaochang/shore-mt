@@ -101,7 +101,7 @@ xct_t::vtable_collect(vtable_row_t &t)
     // xct_gtid_attr
     if(is_extern2pc()) {
         w_ostrstream        s;
-        s << *gtid() << ends;
+        s << *gtid() << std::ends;
         t.set_string(xct_gtid_attr, s.c_str());
     } else {
         t.set_string(xct_gtid_attr, "");
@@ -109,21 +109,21 @@ xct_t::vtable_collect(vtable_row_t &t)
     // xct_tid_attr
     {
         w_ostrstream o;
-        o << tid() << ends;
+        o << tid() << std::ends;
         t.set_string(xct_tid_attr, o.c_str());
     }
 
     // xct_state_attr
     {
         w_ostrstream o;
-        o << state() << ends;
+        o << state() << std::ends;
         t.set_string(xct_state_attr, o.c_str());
     }
 
     // xct_coordinator_attr
     if(state() == xct_prepared) {
         w_ostrstream        s;
-        s << get_coordinator() << ends;
+        s << get_coordinator() << std::ends;
         t.set_string(xct_coordinator_attr, s.c_str());
     } else {
         t.set_string(xct_coordinator_attr, "");

@@ -301,7 +301,7 @@ log_m::make_log_name(uint4_t idx, char* buf, int bufsz)
     // this is a static function w_assert2(_partition_lock.is_mine()==true);
     w_ostrstream s(buf, (int) bufsz);
     s << _logdir << _SLASH
-      << _log_prefix << idx << ends;
+      << _log_prefix << idx << std::ends;
     w_assert1(s);
     return buf;
 }
@@ -365,7 +365,7 @@ log_m::_make_master_name(
     array[1] = min_chkpt_rec_lsn;
 
     _create_master_chkpt_string(s, 2, array, old_style);
-    s << ends;
+    s << std::ends;
     w_assert1(s);
 }
 
@@ -441,7 +441,7 @@ log_m::_write_master(lsn_t l, lsn_t min)
 
 void
 log_m::_create_master_chkpt_string(
-                ostream&        s,
+                std::ostream&        s,
                 int                arraysize,
                 const lsn_t*        array,
                 bool                old_style)
@@ -491,7 +491,7 @@ log_m::_check_version(uint4_t major, uint4_t minor)
 
 void
 log_m::_create_master_chkpt_contents(
-                ostream&        s,
+                std::ostream&        s,
                 int                arraysize,
                 const lsn_t*        array
                 )
@@ -499,13 +499,13 @@ log_m::_create_master_chkpt_contents(
     for(int i=0; i< arraysize; i++) {
             s << '_' << array[i];
     }
-    s << ends;
+    s << std::ends;
 }
 
 
 rc_t
 log_m::_parse_master_chkpt_contents(
-                istream&            s,
+                std::istream&            s,
                 int&                    listlength,
                 lsn_t*                    lsnlist
                 )
@@ -538,7 +538,7 @@ log_m::_parse_master_chkpt_contents(
  *********************************************************************/
 rc_t
 log_m::_parse_master_chkpt_string(
-                istream&            s,
+                std::istream&            s,
                 lsn_t&              master_lsn,
                 lsn_t&              min_chkpt_rec_lsn,
                 int&                    number_of_others,
@@ -645,7 +645,7 @@ log_m::_read_master(
             W_FATAL(fcOUTOFMEMORY);
         w_auto_delete_array_t<char> ad_fname(buf);
         w_ostrstream s(buf, int(smlevel_0::max_devname));
-        s << _logdir << _SLASH << fname << ends;
+        s << _logdir << _SLASH << fname << std::ends;
 
         FILE* f = fopen(buf, "r");
         if(f) {

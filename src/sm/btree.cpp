@@ -1066,7 +1066,7 @@ btree_m::fetch_init(
 rc_t
 btree_m::mr_fetch_init(
     cursor_t&                 cursor, // IO- cursor to be filled in
-    vector<lpid_t>&         roots,        // I-  roots of the subtrees
+    std::vector<lpid_t>&         roots,        // I-  roots of the subtrees
     int                        nkc,
     const key_type_s*        kc,
     bool                unique,        // I-  true if btree is unique
@@ -1648,8 +1648,8 @@ btree_m::_scramble_key(
                     /* XXX */
                     if(kc[i].length <= 4) {
                         if(malloced) delete[] malloced;
-                        cout << "Unaligned, scramble, ptr=" << (void*)src
-                                << ", align=" << kc[i].length << endl;
+                        std::cout << "Unaligned, scramble, ptr=" << (void*)src
+                                << ", align=" << kc[i].length << std::endl;
                         return RC(eALIGNPARM);
                     }
                 }
@@ -1740,8 +1740,8 @@ btree_m::_unscramble_key(
                 /* XXXX */
                 if(len == 8) { len = 4; }
                 if(len == 4 && (char *)(alignon(((ptrdiff_t)src), len)) != src) {
-                    cerr << "Invalid alignment, unscramble, ptr="
-                        << (void*)src << ", align=" << len << endl;
+                    std::cerr << "Invalid alignment, unscramble, ptr="
+                        << (void*)src << ", align=" << len << std::endl;
                     return RC(eALIGNPARM);
                 }
             }
@@ -1790,9 +1790,9 @@ btree_m::print(const lpid_t& root,
         W_COERCE( page.fix(root, LATCH_SH) ); // coerce ok-- debugging
 
         for (int i = 0; i < 5 - page.level(); i++) {
-            cout << '\t';
+            std::cout << '\t';
         }
-        cout 
+        std::cout 
              << (page.is_smo() ? "*" : " ")
              << (page.is_delete() ? "D" : " ")
              << " "
@@ -1801,9 +1801,9 @@ btree_m::print(const lpid_t& root,
              << ", prev " << page.prev()
              << ", next " << page.next()
              << ", nrec " << page.nrecs()
-             << endl;
+             << std::endl;
         page.print(kt, print_elem);
-        cout << flush;
+        std::cout << std::flush;
         if (page.next())  {
             nxtpid.page = page.next();
         }

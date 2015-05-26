@@ -106,7 +106,7 @@ w_debug::w_debug(const char *n, const char *f) :
         if(strstr(s, "No previous regular expression")) {
         // this is ok
         } else {
-        cerr << "Error in regex, flags not set: " <<  s << endl;
+        cerr << "Error in regex, flags not set: " <<  s << std::endl;
         }
         mask = _none;
     }
@@ -131,7 +131,7 @@ w_debug::setflags(const char *newflags)
     {
         char *s;
         if((s=re_comp_debug(newflags)) != 0) {
-            cerr << "Error in regex, flags not set: " <<  s << endl;
+            cerr << "Error in regex, flags not set: " <<  s << std::endl;
             mask = _none;
             return;
         }
@@ -157,7 +157,7 @@ w_debug::re_exec_debug(const char* string)
     if (!re_ready)  {
         cerr << __LINE__ 
         << " " << __FILE__ 
-        << ": No compiled string." <<endl;
+        << ": No compiled string." <<std::endl;
         return 0;
     }
     int match = (re_exec_posix(string)==1);
@@ -175,7 +175,7 @@ w_debug::re_comp_debug(const char* pattern)
     if(res) {
         cerr << __LINE__ 
         << " " << __FILE__ 
-        << " Error in re_comp_debug: " << res << endl;
+        << " Error in re_comp_debug: " << res << std::endl;
     }
     re_ready = true;
     return NULL;
@@ -226,12 +226,12 @@ w_debug::memdump(void *p, int len)
     for(i=0; i< len; i++) {
         W_FORM2(clog,("%2.2x", (*(c+i))&0xff));
         if(i%32 == 31) {
-            clog << endl << "x";
+            clog << std::endl << "x";
         } else if(i%4 == 3) {
             clog <<  " x";
         }
     }
-    clog << "--done" << endl;
+    clog << "--done" << std::endl;
 }
 #endif /* __ERRLOG_C__ */
 

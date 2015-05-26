@@ -147,14 +147,14 @@ public:
 private:
     /**\brief Helper for _write_master */
     static void         _create_master_chkpt_contents(
-                                    ostream&        s,
+                                    std::ostream&        s,
                                     int             arraysize,
                                     const lsn_t*    array
                                     );
 
     /**\brief Helper for _make_master_name */
     static void         _create_master_chkpt_string(
-                            ostream&        o,
+                            std::ostream&        o,
                             int                arraysize,
                             const lsn_t* array,
                             bool        old_style = false
@@ -162,14 +162,14 @@ private:
 
     /**\brief Helper for _read_master */
     static rc_t         _parse_master_chkpt_contents(
-                            istream&        s,
+                            std::istream&        s,
                             int&        listlength,
                             lsn_t*        lsnlist
                             );
 
     /**\brief Helper for _read_master */
     static rc_t         _parse_master_chkpt_string(
-                            istream&         s,
+                            std::istream&         s,
                             lsn_t&        master_lsn,
                             lsn_t&        min_chkpt_rec_lsn,
                             int&        number_of_others,

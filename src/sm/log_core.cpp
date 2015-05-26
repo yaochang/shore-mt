@@ -126,7 +126,7 @@ log_core::new_log_m(
     if(THE_LOG != NULL) {
         // not mt-safe
         smlevel_0::errlog->clog << error_prio  << "Log already created. " 
-                << endl << flushl;
+                << std::endl << flushl;
         return RC(eINTERNAL); // server programming error
     }
 
@@ -134,7 +134,7 @@ log_core::new_log_m(
         // not mt-safe, but this is not going to happen in concurrency scenario
         smlevel_0::errlog->clog << error_prio  
                 << "Error: cannot open the log file(s) " << dir_name()
-                << ":" << endl << rc << flushl;
+                << ":" << std::endl << rc << flushl;
         return rc;
     }
 
@@ -244,7 +244,7 @@ log_core::scavenge(lsn_t min_rec_lsn, lsn_t min_xct_lsn)
     }
 
     DBGTHRD( << "scavenge until lsn " << lsn << ", min_num is " 
-         << min_num << endl );
+         << min_num << std::endl );
 
     /*
      *  recycle all partitions  whose num is less than
@@ -259,7 +259,7 @@ log_core::scavenge(lsn_t min_rec_lsn, lsn_t min_xct_lsn)
             //            set_durable(first_lsn(p->num() + 1));
         }
         w_assert3(durable_lsn() >= p->first_lsn());
-        DBGTHRD( << "scavenging log " << p->num() << endl );
+        DBGTHRD( << "scavenging log " << p->num() << std::endl );
         count++;
         p->close(true);
         p->destroy();
@@ -440,7 +440,7 @@ log_core::prime(char* buf, int fd, fileoff_t start, lsn_t next)
             W_FATAL_MSG(e.err_num(), 
                         << "cannot read log: lsn " << first 
                         << "pread(): " << e 
-                        << "pread() returns " << n << endl);
+                        << "pread() returns " << n << std::endl);
         }
     }
     return next.lo() - first.lo();
@@ -618,13 +618,13 @@ log_core::fetch(lsn_t& ll, logrec_t*& rp, lsn_t* nxt)
             << "Fatal error: log record " << ll 
             << " is corrupt in lsn_ck().hi() " 
             << r.get_lsn_ck()
-            << endl);
+            << std::endl);
     } else if (r.lsn_ck().lo() != ll.lo()) {
         W_FATAL_MSG(fcINTERNAL,
             << "Fatal error: log record " << ll 
             << "is corrupt in lsn_ck().lo()" 
             << r.get_lsn_ck()
-            << endl);
+            << std::endl);
     }
 
     if (nxt) {
@@ -711,7 +711,7 @@ log_core::_close_min(partition_number_t n)
             << "Out of log space  (" 
             << space_left()
             << "); No empty partitions."
-            << endl;
+            << std::endl;
             fprintf(stderr, "%s\n", msg.c_str());
         }
         
@@ -732,7 +732,7 @@ log_core::_close_min(partition_number_t n)
          */
         if(victim->num() >= min_chkpt_rec_lsn().hi()) {
             w_ostrstream msg;
-            msg << " Cannot close min partition -- still in use!" << endl;
+            msg << " Cannot close min partition -- still in use!" << std::endl;
             // not mt-safe
             smlevel_0::errlog->clog << error_prio  << msg.c_str() << flushl;
         }
@@ -1140,8 +1140,8 @@ log_core::log_core(
         errlog->clog << error_prio 
         << "Log buf size (sm_logbufsize) too small: "
         << bsize << ", require at least " << 64 * 1024 
-        << endl; 
-        errlog->clog << error_prio << endl;
+        << std::endl; 
+        errlog->clog << error_prio << std::endl;
         fprintf(stderr,
             "Log buf size (sm_logbufsize) too small: %ld, need %d\n",
             bsize, 64*1024);
@@ -1218,7 +1218,7 @@ log_core::log_core(
     if (reformat) 
     {
         smlevel_0::errlog->clog << emerg_prio 
-            << "Reformatting logs..." << endl;
+            << "Reformatting logs..." << std::endl;
 
         while ((dd = os_readdir(ldir)))  
         {
@@ -1245,17 +1245,17 @@ log_core::log_core(
             }
             if(parse_ok) {
                 smlevel_0::errlog->clog << debug_prio 
-                    << "\t" << name << "..." << endl;
+                    << "\t" << name << "..." << std::endl;
 
                 {
                     w_ostrstream s(fname, (int) smlevel_0::max_devname);
-                    s << dir_name() << _SLASH << name << ends;
+                    s << dir_name() << _SLASH << name << std::ends;
                     w_assert1(s);
                     if( unlink(fname) < 0) {
                         w_rc_t e = RC(fcOS);
                         smlevel_0::errlog->clog << debug_prio 
                             << "unlink(" << fname << "):"
-                            << endl << e << endl;
+                            << std::endl << e << std::endl;
                     }
                 }
             }
@@ -1519,7 +1519,7 @@ log_core::log_core(
                 smlevel_0::errlog->clog  << error_prio
                     << "log read: can't seek to " << start_pos
                      << " starting log scan at origin"
-                     << endl;
+                     << std::endl;
                 start_pos = pos;
             }
             else
@@ -1617,7 +1617,7 @@ log_core::log_core(
             if (!f) {
                 w_rc_t e = RC(fcOS);
                 smlevel_0::errlog->clog  << fatal_prio
-                    << "fopen(" << fname << "):" << endl << e << endl;
+                    << "fopen(" << fname << "):" << std::endl << e << std::endl;
                 W_COERCE(e);
             }
             skip_log *s = new skip_log; // deleted below
@@ -1713,7 +1713,7 @@ log_core::log_core(
                 if (e.is_error()) {
                     smlevel_0::errlog->clog << fatal_prio 
                             << " Cannot stat fd " << fileno(f)
-                            << ":" << endl << e << endl << flushl;
+                            << ":" << std::endl << e << std::endl << flushl;
                     W_COERCE(e);
                 }
                 DBGTHRD(<< "size of " << fname << " is " << statbuf.st_size);
@@ -1785,56 +1785,56 @@ log_core::log_core(
     if(0){
         // Print various interesting info to the log:
         errlog->clog << info_prio 
-            << "Log max_partition_size " << max_partition_size() << endl
+            << "Log max_partition_size " << max_partition_size() << std::endl
             << "Log max_partition_size * PARTITION_COUNT " 
-                    << max_partition_size() * PARTITION_COUNT << endl
-            << "Log min_partition_size " << min_partition_size() << endl
+                    << max_partition_size() * PARTITION_COUNT << std::endl
+            << "Log min_partition_size " << min_partition_size() << std::endl
             << "Log min_partition_size*PARTITION_COUNT " 
-                    << min_partition_size() * PARTITION_COUNT << endl;
+                    << min_partition_size() * PARTITION_COUNT << std::endl;
 
         errlog->clog << info_prio 
             << "Log BLOCK_SIZE (log write size) " << BLOCK_SIZE
-            << endl
+            << std::endl
             << "Log segsize() (log buffer size) " << segsize()
-            << endl
+            << std::endl
             << "Log segsize()/BLOCK_SIZE " << double(segsize())/double(BLOCK_SIZE)
-            << endl;
+            << std::endl;
 
         errlog->clog << info_prio 
-            << "User-option smlevel_0::max_logsz " << max_logsz << endl
+            << "User-option smlevel_0::max_logsz " << max_logsz << std::endl
             << "Log _partition_data_size " << _partition_data_size 
-            << endl
+            << std::endl
             << "Log _partition_data_size/segsize() " 
                 << double(_partition_data_size)/double(segsize())
-            << endl
+            << std::endl
             << "Log _partition_data_size/segsize()+BLOCK_SIZE " 
                 << _partition_data_size + BLOCK_SIZE
-            << endl;
+            << std::endl;
 
         errlog->clog << info_prio 
             << "Log _start " << start_byte() << " end_byte() " << end_byte()
-            << endl
+            << std::endl
             << "Log _curr_lsn " << _curr_lsn 
             << " _durable_lsn " << _durable_lsn
-            << endl; 
+            << std::endl; 
         errlog->clog << info_prio 
             << "Curr epoch  base_lsn " << _cur_epoch.base_lsn
-            << endl
+            << std::endl
             << "Curr epoch  base " << _cur_epoch.base
-            << endl
+            << std::endl
             << "Curr epoch  start " << _cur_epoch.start
-            << endl
+            << std::endl
             << "Curr epoch  end " << _cur_epoch.end
-            << endl;
+            << std::endl;
         errlog->clog << info_prio 
             << "Old epoch  base_lsn " << _old_epoch.base_lsn
-            << endl
+            << std::endl
             << "Old epoch  base " << _old_epoch.base
-            << endl
+            << std::endl
             << "Old epoch  start " << _old_epoch.start
-            << endl
+            << std::endl
             << "Old epoch  end " << _old_epoch.end
-            << endl;
+            << std::endl;
     }
 }
 
@@ -1844,11 +1844,11 @@ log_core::log_core(
 
    NEVER CHANGE THESE WHILE LOG INSERTS MIGHT BE IN PROGRESS!
  */
-bool use_decoupled_memcpy = true;
+bool use_decoupled_memcpy = false;
 bool enable_fastpath = false;
-bool enable_mcs_expose = true;
-bool use_combination_array = true;
-bool use_expose_groups = true;
+bool enable_mcs_expose = false;
+bool use_combination_array = false;
+bool use_expose_groups = false;
 bool print_lsn_groups = false;
 bool print_expose_groups = false;
 bool print_working_set = false;
@@ -1955,8 +1955,8 @@ log_core::destroy_file(partition_number_t n, bool pmsg)
     if (unlink(fname) == -1)  {
         w_rc_t e = RC(eOS);
         smlevel_0::errlog->clog  << error_prio
-            << "destroy_file " << n << " " << fname << ":" <<endl
-             << e << endl;
+            << "destroy_file " << n << " " << fname << ":" <<std::endl
+             << e << std::endl;
         if(pmsg) {
             smlevel_0::errlog->clog << error_prio 
             << "warning : cannot free log file \"" 
@@ -2837,9 +2837,9 @@ rc_t log_core::compensate(lsn_t orig_lsn, lsn_t undo_lsn)
                 (long long int)(lsn_ck.lo()), 
                 orig_lsn.hi(), 
                 (long long int)(orig_lsn.lo()));
-cerr 
+std::cerr 
     << __LINE__ << " " __FILE__ << " "
-    << "log rec is  " << *s << endl;
+    << "log rec is  " << *s << std::endl;
         return RC(eBADCOMPENSATION);
     }
     w_assert1(s->prev() == lsn_t::null || s->prev() >= undo_lsn);

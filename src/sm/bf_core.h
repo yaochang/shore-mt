@@ -173,7 +173,7 @@ public:
                                         return rc;
                                                                 }
 
-    void                         dump(ostream &o, bool debugging=1)const;
+    void                         dump(std::ostream &o, bool debugging=1)const;
 
 #if W_DEBUG_LEVEL > 2
     int                          audit() const;
@@ -182,7 +182,7 @@ public:
     void                         snapshot(u_int& npinned, u_int& nfree);
     void                         snapshot_me(u_int& sh, u_int& ex, u_int& nd);
 
-    friend ostream&              operator<<(ostream& out, const bf_core_m& mgr);
+    friend std::ostream&              operator<<(std::ostream& out, const bf_core_m& mgr);
  
     static bool                  can_replace(bfcb_t* p, int rounds);
 
@@ -216,7 +216,7 @@ private:
 };
 
 
-extern ostream&         operator<<(ostream& out, const bf_core_m& mgr);
+extern std::ostream&         operator<<(std::ostream& out, const bf_core_m& mgr);
 
 /**\brief Protects _clean_segment, _replace_out, and replacement() from conflicting. 
  * \details

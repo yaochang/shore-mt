@@ -90,10 +90,10 @@ struct Pmap
     inline    void    clear_all() { bm_zero(bits, _count); }
     inline    void    set_all() { bm_fill(bits, _count); }
 
-    ostream    &print(ostream &s) const;
+    std::ostream    &print(std::ostream &s) const;
 };
 
-extern    ostream &operator<<(ostream &, const Pmap &pmap);
+extern    std::ostream &operator<<(std::ostream &, const Pmap &pmap);
 
 /* Aligned Pmaps, aka page map. Bit map showing which pages
  * are allocated (bit set) or just reserved (bit not set).

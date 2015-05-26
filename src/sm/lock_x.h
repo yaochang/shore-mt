@@ -312,7 +312,7 @@ public:
 
     bool             is_quark_marker() const;
 
-    friend ostream&  operator<<(ostream&, const lock_request_t& l);
+    friend std::ostream&  operator<<(std::ostream&, const lock_request_t& l);
 
 private:
     /* disabled */
@@ -386,10 +386,10 @@ public:
     void             set_waiting_request_is_blocking(bool b) { _blocking=b; }
 
     /// unsafe output operator, for debugging
-    friend ostream & operator<<(ostream &o, const xct_lock_info_t &x);
+    friend std::ostream & operator<<(std::ostream &o, const xct_lock_info_t &x);
 
     /// unsafe output operator, for debugging
-    ostream &        dump_locks(ostream &out) const;
+    std::ostream &        dump_locks(std::ostream &out) const;
 
     /// Unsafe, for debugging
     rc_t             get_locks(
@@ -675,7 +675,7 @@ public:
         NORET ~safe_queue_iterator_t() {}
     };
 
-    friend ostream&  operator<<(ostream&, const lock_head_t& l);
+    friend std::ostream&  operator<<(std::ostream&, const lock_head_t& l);
 
 private:
     // disabled

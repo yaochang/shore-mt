@@ -576,7 +576,7 @@ public:
     void	     alloc_sdesc_cache();
     void	     free_sdesc_cache();
 
-    virtual void     _dump(ostream &) const; // to be over-ridden
+    virtual void     _dump(std::ostream &) const; // to be over-ridden
     static int       collect(vtable_t&, bool names_too);
     virtual void     vtable_collect(vtable_row_t& t);
     static  void     vtable_collect_names(vtable_row_t& t);
@@ -725,7 +725,7 @@ smthread_t::pin_count()
 }
 
 void
-DumpBlockedThreads(ostream& o);
+DumpBlockedThreads(std::ostream& o);
 
 /*
  * redefine DBGTHRD to use our threads

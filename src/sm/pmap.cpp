@@ -38,7 +38,7 @@ Rome Research Laboratory Contract No. F30602-97-2-0247.
 #endif
 #include "sm_int_0.h"
 
-ostream    &Pmap::print(ostream &s) const
+std::ostream    &Pmap::print(std::ostream &s) const
 {
     for (unsigned i = 0; i < sizeof(bits); i++)
     {
@@ -47,7 +47,7 @@ ostream    &Pmap::print(ostream &s) const
     return s;
 }
 
-ostream    &operator<<(ostream &s, const Pmap &pmap)
+std::ostream    &operator<<(std::ostream &s, const Pmap &pmap)
 {
     return pmap.print(s);
 }

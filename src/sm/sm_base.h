@@ -311,8 +311,8 @@ public:
         );
 
     typedef w_rc_t (*RELOCATE_RECORD_CALLBACK_FUNC) (
-	   vector<rid_t>&    old_rids, 
-           vector<rid_t>&    new_rids
+	   std::vector<rid_t>&    old_rids, 
+           std::vector<rid_t>&    new_rids
        );
 
 /**\cond skip */
@@ -561,14 +561,14 @@ public:
 };
 
 /**\cond  skip */
-ostream&
-operator<<(ostream& o, smlevel_0::store_flag_t flag);
+std::ostream&
+operator<<(std::ostream& o, smlevel_0::store_flag_t flag);
 
-ostream&
-operator<<(ostream& o, const smlevel_0::store_operation_t op);
+std::ostream&
+operator<<(std::ostream& o, const smlevel_0::store_operation_t op);
 
-ostream&
-operator<<(ostream& o, const smlevel_0::store_deleting_t value);
+std::ostream&
+operator<<(std::ostream& o, const smlevel_0::store_deleting_t value);
 
 /**\endcond  skip */
 

@@ -152,10 +152,10 @@ protected:
 	btree_p& leaf_page,
 	file_mrbt_p& new_page,
 	file_mrbt_p& old_page,
-	vector<rid_t>& recs,
-	map<rid_t, slotid_t>& slot_map,
-	vector<rid_t>& old_rids,
-	vector<rid_t>& new_rids,
+	std::vector<rid_t>& recs,
+	std::map<rid_t, slotid_t>& slot_map,
+	std::vector<rid_t>& old_rids,
+	std::vector<rid_t>& new_rids,
 	const bool bIgnoreLatches); 
 
     static rc_t _move_recs_p(
@@ -164,11 +164,11 @@ protected:
 	const lpid_t& root,
 	file_mrbt_p& new_page,
 	file_mrbt_p& old_page,
-	vector<rid_t>& recs,
-	map<rid_t, slotid_t>& slot_map,
-	map<rid_t, lpid_t>& leaf_map,
-	vector<rid_t>& old_rids,
-	vector<rid_t>& new_rids,
+	std::vector<rid_t>& recs,
+	std::map<rid_t, slotid_t>& slot_map,
+	std::map<rid_t, lpid_t>& leaf_map,
+	std::vector<rid_t>& old_rids,
+	std::vector<rid_t>& new_rids,
 	const bool bIgnoreLatches); 
 
 

@@ -326,7 +326,7 @@ scan_index_i::_init(
 	    }
 
 	    // traverse all the subtrees that covers the region [bound,b2]
-	    vector<lpid_t> roots;
+	    std::vector<lpid_t> roots;
 	    cvec_t* bound_key;
 	    cvec_t* b2_key;
 	    _error_occurred = bt->_scramble_key(bound_key, bound, sd->sinfo().nkc, sd->sinfo().kc);

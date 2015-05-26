@@ -89,7 +89,7 @@ option_t::~option_t()
 w_rc_t option_t::init(const char* name, const char* newPoss,
                           const char* defaultVal, const char* descr,
                           bool req, OptionSetFunc setFunc,
-                      ostream *err_stream) 
+                      std::ostream *err_stream) 
 {
     _name = name;
     _possible_values = newPoss;
@@ -151,7 +151,7 @@ bool option_t::match(const char* matchName, bool exact)
     return equal;
 }
 
-w_rc_t option_t::set_value(const char* value, bool overRide, ostream* err_stream)
+w_rc_t option_t::set_value(const char* value, bool overRide, std::ostream* err_stream)
 {
     DBG(<<"option_t::set_value " << name()
         << " value = " << value);
@@ -229,7 +229,7 @@ bool option_t::str_to_bool(const char* str, bool& badStr)
     }
 }
 
-w_rc_t option_t::set_value_bool(option_t* opt, const char* value, ostream* err_stream)
+w_rc_t option_t::set_value_bool(option_t* opt, const char* value, std::ostream* err_stream)
 {
     bool badVal;
     str_to_bool(value, badVal);
@@ -245,7 +245,7 @@ w_rc_t
 option_t::set_value_int4(
         option_t* opt, 
         const char* value, 
-        ostream* err_stream)
+        std::ostream* err_stream)
 {
     long l;
     char* lastValid;
@@ -275,7 +275,7 @@ w_rc_t
 option_t::set_value_long(
         option_t* opt, 
         const char* value, 
-        ostream* err_stream)
+        std::ostream* err_stream)
 {
         /* XXX breaks on 64 bit machines? */
         return        set_value_int4(opt, value, err_stream);
@@ -285,7 +285,7 @@ w_rc_t
 option_t::set_value_int8(
         option_t* opt, 
         const char* value, 
-        ostream* err_stream)
+        std::ostream* err_stream)
 {
     w_base_t::int8_t MAYBE_UNUSED l;
 
@@ -316,7 +316,7 @@ w_rc_t
 option_t::set_value_long_long(
         option_t* opt, 
         const char* value, 
-        ostream* err_stream)
+        std::ostream* err_stream)
 {
         return        set_value_int8(opt, value, err_stream);
 }
@@ -324,7 +324,7 @@ option_t::set_value_long_long(
 w_rc_t option_t::set_value_charstr(
         option_t* opt, 
         const char* value, 
-        ostream * //err_stream_unused
+        std::ostream * //err_stream_unused
         )
 {
     W_DO(opt->copyValue(value));
@@ -382,7 +382,7 @@ w_rc_t option_group_t::add_option(
         const char* default_value, const char* description,
         bool required, option_t::OptionSetFunc setFunc,
         option_t*& newOpt,
-        ostream *err_stream
+        std::ostream *err_stream
         )
 {
     DBG(<<"option_group_t::add_option " << name );
@@ -589,7 +589,7 @@ option_group_t::lookup_by_class(
 
     regex = re_comp(newC);
     if (regex != NULL) {
-        cerr << "regular expression error: " << regex << endl;
+        std::cerr << "regular expression error: " << regex << std::endl;
         rc = RC(OPT_IllegalClass);
     } else {
             if (re_exec(_class_name) == 1) {
@@ -614,7 +614,7 @@ w_rc_t
 option_group_t::set_value(
     const char* name, bool exact,
     const char* value, bool overRide,
-    ostream* err_stream)
+    std::ostream* err_stream)
 {
     DBG(<<"option_group_t::set_value: " << name
         << " exact=" << exact);
@@ -631,7 +631,7 @@ option_group_t::set_value(
 
 
 void
-option_group_t::print_usage(bool longForm, ostream& err_stream)
+option_group_t::print_usage(bool longForm, std::ostream& err_stream)
 {
     option_t*        current;
 
@@ -661,13 +661,13 @@ option_group_t::print_usage(bool longForm, ostream& err_stream)
             }
         }
     }
-    if (!longForm) err_stream << endl;
-    err_stream << "[brackets means optional]" << endl;
+    if (!longForm) err_stream << std::endl;
+    err_stream << "[brackets means optional]" << std::endl;
 
     return;
 }
 
-void option_group_t::print_values(bool longForm, ostream& err_stream)
+void option_group_t::print_values(bool longForm, std::ostream& err_stream)
 {
     option_t*        current;
 
@@ -692,12 +692,12 @@ void option_group_t::print_values(bool longForm, ostream& err_stream)
             if (longForm) err_stream << "\n";
             }
     }
-    if (!longForm) err_stream << endl;
+    if (!longForm) err_stream << std::endl;
 
     return;
 }
 
-w_rc_t option_group_t::check_required(ostream* err_stream)
+w_rc_t option_group_t::check_required(std::ostream* err_stream)
 {
     DBG(<<"option_group_t::check_required");
     w_rc_t rc;
@@ -715,7 +715,7 @@ w_rc_t option_group_t::check_required(ostream* err_stream)
     return rc;
 }
 
-w_rc_t option_group_t::parse_command_line(const char** argv, int& argc, size_t min_len, ostream* err_stream)
+w_rc_t option_group_t::parse_command_line(const char** argv, int& argc, size_t min_len, std::ostream* err_stream)
 {
 
     /*
@@ -774,7 +774,7 @@ w_rc_t option_group_t::parse_command_line(const char** argv, int& argc, size_t m
 
 const char *option_stream_scan_t::default_label = "istream";
 
-option_stream_scan_t::option_stream_scan_t(istream &is, option_group_t *list)
+option_stream_scan_t::option_stream_scan_t(std::istream &is, option_group_t *list)
 : _input(is),
   _optList(list),
   _line(0),
@@ -814,7 +814,7 @@ void option_stream_scan_t::setLabel(const char *newLabel)
 
 w_rc_t option_stream_scan_t::scan(
         bool overRide, 
-        ostream& err_stream, 
+        std::ostream& err_stream, 
         bool exact,
         bool mismatch_ok
 )
@@ -1009,7 +1009,7 @@ option_file_scan_t::~option_file_scan_t()
 
 w_rc_t option_file_scan_t::scan(
         bool overRide, 
-        ostream& err_stream, 
+        std::ostream& err_stream, 
         bool exact,
         bool mismatch_ok
 )
@@ -1018,7 +1018,7 @@ w_rc_t option_file_scan_t::scan(
 
     DBG(<<"scanning options file " << _fileName);
 
-    ifstream f(_fileName);
+    std::ifstream f(_fileName);
 
     if (!f) {
         e = RC(fcOS);    

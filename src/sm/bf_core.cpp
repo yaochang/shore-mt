@@ -98,16 +98,16 @@ void page_write_mutex_t::dump_all()
 {
     for(int i=0; i < PWM_COUNT; i++) 
     {
-        cerr <<  " page_mutex " << i << " @ " 
-            <<  ::hex 
-            << u_long(&(page_write_mutex[i]._page_mutex)) << ::dec
+        std::cerr <<  " page_mutex " << i << " @ " 
+            << std::hex 
+            << u_long(&(page_write_mutex[i]._page_mutex)) << std::dec
 #ifdef Linux
 // This is COMPLETELY unportable code but it's helpful for the moment...
             << " owner " << page_write_mutex[i]._page_mutex.__data.__owner
 #endif
-            << endl;
+            << std::endl;
     }
-    cerr <<  flushl;
+    std::cerr <<  std::flush;
 }
 
 #if W_DEBUG_LEVEL > 1
@@ -204,7 +204,7 @@ void bf_stop(bfcb_t *p)
     j = atomic_inc_nv(i);
     if(p->pid().page ==pg || j == k) {
         bf_stop_here();
-        cerr << "page " << pg << endl;
+        std::cerr << "page " << pg << std::endl;
     }
 }
 
@@ -277,8 +277,8 @@ transit_bucket_t   transit_bucket_t::_transit_buckets[
  */
 int                bf_core_m::_hand = 0; // hand of clock
 
-inline ostream&
-bfcb_t::print_frame(ostream& o, bool in_htab)
+inline std::ostream&
+bfcb_t::print_frame(std::ostream& o, bool in_htab)
 {
     if (in_htab) {
         o << pid() << '\t'
@@ -291,11 +291,11 @@ bfcb_t::print_frame(ostream& o, bool in_htab)
       << is_hot() << '\t'
       << refbit() << '\t'
       << latch.id() 
-      << endl;
+      << std::endl;
     } else {
     o << pid() << '\t' 
       << " InTransit " << (old_pid_valid() ? (lpid_t)old_pid() : lpid_t::null)
-      << endl << flush;
+      << std::endl << std::flush;
     }
     return o;
 }
@@ -474,7 +474,7 @@ bf_core_m::bf_core_m(uint4_t n, char *bp)
     } pun1, pun2;
     cout << " sizeof(page_s) " 
     << ::hex << "0x" << sizeof(page_s) 
-    << ::dec << " " << sizeof(page_s) << endl;
+    << ::dec << " " << sizeof(page_s) << std::endl;
     for(int i=0; i < _num_bufs; i++) {
         pun2.ptr = _buftab[i].frame;
         cout << " check entry " << i 
@@ -483,7 +483,7 @@ bf_core_m::bf_core_m(uint4_t n, char *bp)
         << (unsigned)(&_buftab[i])
                 << " frame  @ " 
         << ::hex << pun2.u << ::dec 
-                << endl;
+                << std::endl;
         w_assert1(pun2.ptr != 0);
         if(i>0) {
            w_assert1(pun1.u + sizeof(page_s) == pun2.u);
@@ -737,7 +737,7 @@ bf_core_m::grab(
             gettimeofday(&my_time, NULL);
             CRITICAL_SECTION(plpcs,_ptrace_lock);
             _ptrace_out << pid << " " << pthread_self() << " " << ret->latch.mode() << " "
-                        << my_time.tv_sec << "." << my_time.tv_usec << endl;
+                        << my_time.tv_sec << "." << my_time.tv_usec << std::endl;
             plpcs.exit();
         }
 #endif
@@ -890,7 +890,7 @@ bf_core_m::find(
             gettimeofday(&my_time, NULL);
             CRITICAL_SECTION(plpcs,_ptrace_lock);
             _ptrace_out << p->pid() << " " << pthread_self() << " "  << p->latch.mode() << " "
-                        << my_time.tv_sec << "." << my_time.tv_usec << endl;
+                        << my_time.tv_sec << "." << my_time.tv_usec << std::endl;
             plpcs.exit();
         }
 #endif
@@ -966,7 +966,7 @@ bf_core_m::publish( bfcb_t* p, latch_mode_t mode, bool error_occurred)
             gettimeofday(&my_time, NULL);
             CRITICAL_SECTION(plpcs,_ptrace_lock);
             _ptrace_out << p->pid() << " " << pthread_self() << " " << p->latch.mode() << " "
-                        << my_time.tv_sec << "." << my_time.tv_usec << endl;
+                        << my_time.tv_sec << "." << my_time.tv_usec << std::endl;
             plpcs.exit();
         }
 #endif
@@ -998,7 +998,7 @@ bf_core_m::publish( bfcb_t* p, latch_mode_t mode, bool error_occurred)
 		CRITICAL_SECTION(plpcs,_ptrace_lock);
 		_ptrace_out << p->pid() << " " << pthread_self() << " "
 			    << p->latch.mode() << " "
-			    << my_time.tv_sec << "." << my_time.tv_usec << endl;
+			    << my_time.tv_sec << "." << my_time.tv_usec << std::endl;
 		plpcs.exit();
 	    }
 #endif	   	
@@ -1263,20 +1263,20 @@ bf_core_m::unpin(bfcb_t*& p, int ref_bit, bool W_IFDEBUG4(in_htab))
                 ) == false) {
                 // Print some useful info before we croak on the
                 // assert directly below this.
-                cerr 
-                    << " frame " << (void *)(p->frame()) << endl
-                    << " pid " << p->pid() << endl
-                    << " curr_rec_lsn " << p->curr_rec_lsn() << endl
-                    << " old_rec_lsn " << p->old_rec_lsn() << endl
-                    << " safe_rec_lsn " << p->safe_rec_lsn() << endl
-                    << " frame lsn " << p->frame()->lsn1 << endl
+                std::cerr 
+                    << " frame " << (void *)(p->frame()) << std::endl
+                    << " pid " << p->pid() << std::endl
+                    << " curr_rec_lsn " << p->curr_rec_lsn() << std::endl
+                    << " old_rec_lsn " << p->old_rec_lsn() << std::endl
+                    << " safe_rec_lsn " << p->safe_rec_lsn() << std::endl
+                    << " frame lsn " << p->frame()->lsn1 << std::endl
                     << " (p->rec_lsn <= p->frame->lsn1) "
-                           << int(p->safe_rec_lsn() <= p->frame()->lsn1) << endl
+                           << int(p->safe_rec_lsn() <= p->frame()->lsn1) << std::endl
                     << " p->frame->store_flags & smlevel_0::st_tmp "
-                        << int(p->get_storeflags() & smlevel_0::st_tmp) << endl
+                        << int(p->get_storeflags() & smlevel_0::st_tmp) << std::endl
                     << " smlevel_0::in_recovery_redo() " <<
-                        int(smlevel_0::in_recovery_redo()) << endl
-                    << endl;
+                        int(smlevel_0::in_recovery_redo()) << std::endl
+                    << std::endl;
             }
             w_assert0 ( 
                 (p->safe_rec_lsn() <= p->frame()->lsn1) ||
@@ -1323,7 +1323,7 @@ bf_core_m::unpin(bfcb_t*& p, int ref_bit, bool W_IFDEBUG4(in_htab))
             gettimeofday(&my_time, NULL);
             CRITICAL_SECTION(plpcs,_ptrace_lock);
             _ptrace_out << p->pid() << " " << pthread_self() << " " << p->latch.mode() << " "
-                        << my_time.tv_sec << "." << my_time.tv_usec << endl;
+                        << my_time.tv_sec << "." << my_time.tv_usec << std::endl;
             plpcs.exit();
         }
 #endif
@@ -1359,7 +1359,7 @@ bf_core_m::_remove(bfcb_t*& p)
 #if W_DEBUG_LEVEL > 2
         // W_FATAL(fcINTERNAL);
         // Not sure what to do here. It seems it's a legit situation.
-        cerr << "is_hot.  latch=" << &(p->latch) << endl;
+        std::cerr << "is_hot.  latch=" << &(p->latch) << std::endl;
         dumpthreads();
 #endif 
     }
@@ -1402,7 +1402,7 @@ bf_core_m::_remove(bfcb_t*& p)
             gettimeofday(&my_time, NULL);
             CRITICAL_SECTION(plpcs,_ptrace_lock);
             _ptrace_out << p->pid() << " " << pthread_self() << " " << p->latch.mode() << " "
-                        << my_time.tv_sec << "." << my_time.tv_usec << endl;
+                        << my_time.tv_sec << "." << my_time.tv_usec << std::endl;
             plpcs.exit();
         }
 #endif
@@ -1443,7 +1443,7 @@ bf_core_m::_remove(bfcb_t*& p)
             gettimeofday(&my_time, NULL);
             CRITICAL_SECTION(plpcs,_ptrace_lock);
             _ptrace_out << p->pid() << " " << pthread_self() << " " << p->latch.mode() << " "
-                        << my_time.tv_sec << "." << my_time.tv_usec << endl;
+                        << my_time.tv_sec << "." << my_time.tv_usec << std::endl;
             plpcs.exit();
         }
 #endif
@@ -1646,8 +1646,8 @@ bf_core_m::replacement()
                 w_assert3(p->refbit() >= 0);
             }
             if(looked_at >= patience) {
-                cerr << "bf_core_m: cannot find free resource" << endl;
-                cerr << *this;
+                std::cerr << "bf_core_m: cannot find free resource" << std::endl;
+                std::cerr << *this;
                 /*
                  * W_FATAL(fcFULL);
                  */
@@ -1746,7 +1746,7 @@ bf_core_m::replacement()
             gettimeofday(&my_time, NULL);
             CRITICAL_SECTION(plpcs,_ptrace_lock);
             _ptrace_out << p->pid() << " " << pthread_self() << " " << p->latch.mode() << " "
-                        << my_time.tv_sec << "." << my_time.tv_usec << endl;
+                        << my_time.tv_sec << "." << my_time.tv_usec << std::endl;
             plpcs.exit();
         }
 #endif
@@ -1815,18 +1815,18 @@ bf_core_m::audit() const
 
 /*********************************************************************
  *
- *  bf_core_m::dump(ostream, debugging)
+ *  bf_core_m::dump(std::ostream, debugging)
  *
- *  Dump content to ostream. If "debugging" is true, print
+ *  Dump content to std::ostream. If "debugging" is true, print
  *  synchronization info as well.
  *
  *********************************************************************/
 void
-bf_core_m::dump(ostream &o, bool /*debugging*/)const
+bf_core_m::dump(std::ostream &o, bool /*debugging*/)const
 {
     o << "bf_core_m:"
       << ' ' << _num_bufs << " frames"
-      << endl;
+      << std::endl;
 
     o   << "frame#"
     << '\t' << "pid" << '\t'
@@ -1838,7 +1838,7 @@ bf_core_m::dump(ostream &o, bool /*debugging*/)const
     << '\t' << "l_hot" 
     << '\t' << "refbit" 
     << '\t' << "l_id" 
-    << endl << flush;
+    << std::endl << std::flush;
 
     int n = 0;
     int t = 0;
@@ -1853,13 +1853,13 @@ bf_core_m::dump(ostream &o, bool /*debugging*/)const
         }
     }
 
-    o << "number of frames in the HASH TABLE: " << n << endl;
-    o << "number of frames in TRANSIT: " << t << endl;
-    o << endl << flush;
+    o << "number of frames in the HASH TABLE: " << n << std::endl;
+    o << "number of frames in TRANSIT: " << t << std::endl;
+    o << std::endl << std::flush;
 }
 
-ostream &
-operator<<(ostream& out, const bf_core_m& mgr)
+std::ostream &
+operator<<(std::ostream& out, const bf_core_m& mgr)
 {
     mgr.dump(out, 0);
     return out;
@@ -1902,7 +1902,7 @@ bfcb_t::vtable_collect(vtable_row_t &t)
             // attribute. Needs special handling b/c we don't have
             // a set_pid() method for this.
             w_ostrstream o;
-            o << pid() <<  ends;
+            o << pid() <<  std::ends;
             t.set_string(bp_pid_attr, o.c_str());
         }
 

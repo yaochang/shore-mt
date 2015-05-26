@@ -134,8 +134,8 @@ public:
     rc_t     update(uint4_t start_byte, const vec_t& data) const ;
 
     stid_t    stid() const {return stid_t(_page.pid().vol(), _cref.store);}
-    void     print(ostream &) const;
-    friend     ostream& operator<<(ostream&, const lg_tag_chunks_h &);
+    void     print(std::ostream &) const;
+    friend     std::ostream& operator<<(std::ostream&, const lg_tag_chunks_h &);
 
 private:
     shpid_t     _last_pid()      const  

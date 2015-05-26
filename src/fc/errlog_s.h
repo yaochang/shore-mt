@@ -52,7 +52,7 @@ public:
     bool operator!=(const simple_string &another) const {
         return strcmp(this->_s,another._s)!=0; 
     }
-    friend ostream &operator<<(ostream &out, const simple_string x);
+    friend std::ostream &operator<<(std::ostream &out, const simple_string x);
 };
 
 // w_base_t::uint4_t w_hash(const simple_string &s){
@@ -71,8 +71,8 @@ public:
     // const simple_string & hash_key() { return _ident; } 
     ErrLogInfo(ErrLog *e);
     void dump() const {
-        cerr <<  _ident;
-        cerr << endl;
+        std::cerr <<  _ident;
+        std::cerr << std::endl;
     };
 private:
     NORET ErrLogInfo(const ErrLogInfo &); // disabled

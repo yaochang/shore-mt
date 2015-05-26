@@ -315,7 +315,7 @@ xct_t* xct_i::erase_and_next() {
 
 
 
-static void pretty_print(ostream &out, xct_list const* /* rec */) {
+static void pretty_print(std::ostream &out, xct_list const* /* rec */) {
     xct_link* cur = &_xlist._anchor;
     out << "[anchor: " << cur->_tid << "]  ";
     while( (cur=cur->_next) ) {
@@ -331,8 +331,8 @@ static void pretty_print(ostream &out, xct_list const* /* rec */) {
 #include <sstream>
 char const*
 db_pretty_print(xct_list const* rec, int /* i=0 */, char const* /* s=0 */) {
-    static stringstream out;
-    static string str;
+    static std::stringstream out;
+    static std::string str;
     out.str("");
     pretty_print(out, rec);
     str = out.str();
@@ -611,31 +611,31 @@ xct_t::set_elr_enabled(bool enable) {
 
 #if W_DEBUG_LEVEL > 2
 /* debugger-callable */
-extern "C" void dumpXct(const xct_t *x) { if(x) { cout << *x <<endl;} }
+extern "C" void dumpXct(const xct_t *x) { if(x) { std::cout << *x <<std::endl;} }
 
 /* help for debugger-callable dumpThreadById() below */
 class PrintSmthreadById : public SmthreadFunc
 {
     public:
-        PrintSmthreadById(ostream& out, int i ) : o(out), _i(0) {
+        PrintSmthreadById(std::ostream& out, int i ) : o(out), _i(0) {
                 _i = sthread_base_t::id_t(i);
         };
         void operator()(const smthread_t& smthread);
     private:
-        ostream&        o;
+        std::ostream&        o;
         sthread_base_t::id_t                 _i;
 };
 void PrintSmthreadById::operator()(const smthread_t& smthread)
 {
     if (smthread.id == _i)  {
-        o << "--------------------" << endl << smthread;
+        o << "--------------------" << std::endl << smthread;
     }
 }
 
 /* debugger-callable */
 extern "C" void 
 dumpThreadById(int i) { 
-    PrintSmthreadById f(cout, i);
+    PrintSmthreadById f(std::cout, i);
     smthread_t::for_each_smthread(f);
 }
 #endif 
@@ -1086,11 +1086,11 @@ xct_t::check_lock_totals(int nex, int nix, int nsix, int nextents) const
 
         if(nextents != num_extents) {
             smlevel_0::errlog->clog  << fatal_prio
-            << "FATAL: " <<endl
-            << "nextents logged in xct_prepare_fi_log:" << nextents <<endl
+            << "FATAL: " <<std::endl
+            << "nextents logged in xct_prepare_fi_log:" << nextents <<std::endl
             << "num_extents locked via "
             << "xct_prepare_lk_log and xct_prepare_alk_logs : " << num_extents
-            << endl;
+            << std::endl;
             lm->dump(smlevel_0::errlog->clog);
             W_FATAL(eINTERNAL);
         }
@@ -1127,7 +1127,7 @@ xct_t::obtain_locks(lock_mode_t mode, int num, const lockid_t *locks)
         if(rc.is_error()) {
             lm->dump(smlevel_0::errlog->clog);
             smlevel_0::errlog->clog << fatal_prio
-                << "can't obtain lock " <<rc <<endl;
+                << "can't obtain lock " <<rc <<std::endl;
             W_FATAL(eINTERNAL);
         }
         {
@@ -1170,7 +1170,7 @@ xct_t::obtain_one_lock(lock_mode_t mode, const lockid_t &lock)
     if(rc.is_error()) {
         lm->dump(smlevel_0::errlog->clog);
         smlevel_0::errlog->clog << fatal_prio
-            << "can't obtain lock " <<rc <<endl;
+            << "can't obtain lock " <<rc <<std::endl;
         W_FATAL(eINTERNAL);
     }
 #if W_DEBUG_LEVEL > 2
@@ -1300,16 +1300,16 @@ xct_t::wait_for_log_space(fileoff_t amt) {
 }
 
 void
-xct_t::dump(ostream &out) 
+xct_t::dump(std::ostream &out) 
 {
     out << "xct_t: "
             << num_active_xcts() << " transactions"
-        << endl;
+        << std::endl;
     xct_i i;
     xct_t* xd;
     while ((xd = i.next()))  {
-        out << "********************" << endl;
-        out << *xd << endl;
+        out << "********************" << std::endl;
+        out << *xd << std::endl;
     }
 }
 
@@ -1411,8 +1411,8 @@ DECLARE_TLS(lock_info_ptr, agent_lock_info);
  *  Print out tid and status
  *
  *********************************************************************/
-ostream&
-operator<<(ostream& o, const xct_t& x)
+std::ostream&
+operator<<(std::ostream& o, const xct_t& x)
 {
     o << "tid="<< x.tid();
 
@@ -1423,14 +1423,14 @@ operator<<(ostream& o, const xct_t& x)
         o << "<NONE>";
     }
 
-    o << endl << " state=" << x.state() << " num_threads=" << x._core->_threads_attached << endl << "   ";
+    o << std::endl << " state=" << x.state() << " num_threads=" << x._core->_threads_attached << std::endl << "   ";
 
     o << " defaultTimeout=";
     print_timeout(o, x.timeout_c());
-    o << " first_lsn=" << x._first_lsn << " last_lsn=" << x._last_lsn << endl << "   ";
+    o << " first_lsn=" << x._first_lsn << " last_lsn=" << x._last_lsn << std::endl << "   ";
 
     o << " num_storesToFree=" << x._core->_storesToFree.num_members()
-      << " num_loadStores=" << x._core->_loadStores.num_members() << endl << "   ";
+      << " num_loadStores=" << x._core->_loadStores.num_members() << std::endl << "   ";
 
     o << " in_compensated_op=" << x._in_compensated_op << " anchor=" << x._anchor;
 
@@ -1879,11 +1879,11 @@ xct_t::prepare()
             int        total_EX, total_IX, total_SIX, num_extents;
             W_DO(lock_info()->get_lock_totals(total_EX, total_IX, total_SIX, num_extents));
             if(total_EX != 0) {
-                cout 
+                std::cout 
                    << "WARNING: " << total_EX 
                    << " write locks held by a read-only transaction thread. "
                    << " ****** voting read-only ***** "
-                   << endl;
+                   << std::endl;
              }
             // w_assert9(total_EX == 0);
         }
@@ -2519,8 +2519,8 @@ xct_t::_flush_logbuf()
                 << " prevlsn:" << _last_log->prev() 
                 );
 
-        LOGTRACE( << setiosflags(ios::right) << _last_lsn
-                      << resetiosflags(ios::right) << " I: " << *_last_log 
+        LOGTRACE( << std::setiosflags(std::ios::right) << _last_lsn
+                      << std::resetiosflags(std::ios::right) << " I: " << *_last_log 
                       << " ... " );
         if(log) {
         logrec_t* l = _last_log;
@@ -2559,13 +2559,13 @@ xct_t::_flush_logbuf()
             }
             else {
                 w_ostrstream trouble;
-                trouble << "Log reservations disabled." << endl;
+                trouble << "Log reservations disabled." << std::endl;
                 trouble << " tid " << tid() 
                     << " state " << state() 
                     << "_log_bytes_ready " << _log_bytes_ready
                     << "_log_bytes_rsvd " << _log_bytes_rsvd 
                     << " bytes_used " << bytes_used
-                    << endl;
+                    << std::endl;
                 fprintf(stderr, "%s\n", trouble.c_str());
                 // return RC(eOUTOFLOGSPACE);
             }
@@ -2773,7 +2773,7 @@ xct_t::get_logbuf(logrec_t*& ret, page_p const* p)
                     log->release_space(MIN_BYTES_READY - needed); 
                     
                     // nothing's working... give up and abort
-                    stringstream tmp;
+                    std::stringstream tmp;
                     tmp << "Log too full. me=" << me()->id
                     << " pthread=" << pthread_self()
                     << ": min_chkpt_rec_lsn=" << log->min_chkpt_rec_lsn()
@@ -2781,7 +2781,7 @@ xct_t::get_logbuf(logrec_t*& ret, page_p const* p)
                     // also print info that shows why we didn't croak
                     // on the first check
                     << "; space left " << log->space_left()
-                    << endl;
+                    << std::endl;
                     fprintf(stderr, "%s\n", tmp.str().c_str());
                     INC_TSTAT(log_full_giveup);
                     badnews = true;
@@ -3255,8 +3255,8 @@ xct_t::rollback(const lsn_t &save_pt)
             /*
              *  Undo action of r.
              */
-            LOGTRACE( << setiosflags(ios::right) << nxt
-                      << resetiosflags(ios::right) << " U: " << r 
+            LOGTRACE( << std::setiosflags(std::ios::right) << nxt
+                      << std::resetiosflags(std::ios::right) << " U: " << r 
                       << " ... " );
 
 #if W_DEBUG_LEVEL > 2
@@ -3294,15 +3294,15 @@ xct_t::rollback(const lsn_t &save_pt)
             }
 
         } else  if (r.is_cpsn())  {
-            LOGTRACE( << setiosflags(ios::right) << nxt
-                      << resetiosflags(ios::right) << " U: " << r 
+            LOGTRACE( << setiosflags(std::ios::right) << nxt
+                      << std::resetiosflags(std::ios::right) << " U: " << r 
                       << " compensating to" << r.undo_nxt() );
             nxt = r.undo_nxt();
             // r.prev() could just as well be null
 
         } else {
-            LOGTRACE( << setiosflags(ios::right) << nxt
-              << resetiosflags(ios::right) << " U: " << r 
+            LOGTRACE( << setiosflags(std::ios::right) << nxt
+              << std::resetiosflags(std::ios::right) << " U: " << r 
                       << " skipping to " << r.prev());
             nxt = r.prev();
             // w_assert9(r.undo_nxt() == lsn_t::null);
@@ -3446,11 +3446,11 @@ xct_t::DumpStoresToFree()
 
     FUNC(xct_t::DumpStoresToFree);
     CRITICAL_SECTION(xctstructure, *this);
-    cout << "list of stores to free";
+    std::cout << "list of stores to free";
     while ((e = i.next()))  {
-        cout << " <- " << e->stid;
+        std::cout << " <- " << e->stid;
     }
-    cout << endl;
+    std::cout << std::endl;
 }
 
 /*
@@ -3805,8 +3805,8 @@ xct_t::release_1thread_log_mutex()
 }
 
 
-ostream &
-xct_t::dump_locks(ostream &out) const
+std::ostream &
+xct_t::dump_locks(std::ostream &out) const
 {
     return lock_info()->dump_locks(out);
 }

@@ -244,7 +244,7 @@ stnode_p::format(const lpid_t& pid, tag_t tag,
 MAKEPAGECODE(stnode_p, page_p)
     
 
-ostream& operator<<(ostream &o, const extlink_t &e)
+std::ostream& operator<<(std::ostream &o, const extlink_t &e)
 {
       o    << " num_set:" << e.num_set()
            << " owner:" << e.owner 
@@ -1176,7 +1176,7 @@ vol_t::check_disk()
     stnode_i st(_spid);
     extlink_i ei(_epid);
     smlevel_0::errlog->clog << info_prio 
-        << "\tstore  <status>: extent-list" << "." << endl;
+        << "\tstore  <status>: extent-list" << "." << std::endl;
     for (extnum_t i = 1; i < _num_exts; i++)  {
         stnode_t stnode;
         W_DO(st.get(i, stnode));
@@ -2226,7 +2226,7 @@ rc_t vol_t::next_ext(extnum_t ext, extnum_t &result)
  *  Dump extents from start to end.
  *
  *********************************************************************/
-rc_t vol_t::dump_exts(ostream &o, extnum_t start, extnum_t end)
+rc_t vol_t::dump_exts(std::ostream &o, extnum_t start, extnum_t end)
 {
     if (!_is_valid_ext(start))
         start = _num_exts - 1;
@@ -2257,11 +2257,11 @@ rc_t vol_t::dump_exts(ostream &o, extnum_t start, extnum_t end)
         }
 
         if (i % 5 == 4)
-            o << endl;
+            o << std::endl;
     }
 
     if (end % 5 != 4)
-        o << endl;
+        o << std::endl;
     
     return RCOK;
 }
@@ -2275,7 +2275,7 @@ rc_t vol_t::dump_exts(ostream &o, extnum_t start, extnum_t end)
  *  Dump stores from start to end.
  *
  *********************************************************************/
-rc_t vol_t::dump_stores(ostream &o, int start, int end)
+rc_t vol_t::dump_stores(std::ostream &o, int start, int end)
 {
     if (!is_valid_store(start))
         start = _num_exts - 1;
@@ -4581,30 +4581,30 @@ vol_t::write_vhdr(int fd, volhdr_t& vhdr, bool raw_device)
     for (i = 0; i < tmpsz; i++) tmp[i] = '\0';
 
     /*
-     *  Open an ostream on tmp to write header bytes
+     *  Open an std::ostream on tmp to write header bytes
      */
     w_ostrstream s(tmp, tmpsz);
     if (!s)  {
             /* XXX really eCLIBRARY */
         return RC(eOS);
     }
-    s.seekp(0, ios::beg);
+    s.seekp(0, std::ios::beg);
     if (!s)  {
         return RC(eOS);
     }
 
     // write out the volume header
     i = 0;
-    s << prolog[i++] << vhdr.format_version() << endl;
-    s << prolog[i++] << vhdr.device_quota_KB() << endl;
-    s << prolog[i++] << vhdr.lvid() << endl;
-    s << prolog[i++] << vhdr.ext_size() << endl;
-    s << prolog[i++] << vhdr.num_exts() << endl;
-    s << prolog[i++] << vhdr.hdr_exts() << endl;
-    s << prolog[i++] << vhdr.hdr_pages() << endl;
-    s << prolog[i++] << vhdr.epid() << endl;
-    s << prolog[i++] << vhdr.spid() << endl;
-    s << prolog[i++] << vhdr.page_sz() << endl;
+    s << prolog[i++] << vhdr.format_version() << std::endl;
+    s << prolog[i++] << vhdr.device_quota_KB() << std::endl;
+    s << prolog[i++] << vhdr.lvid() << std::endl;
+    s << prolog[i++] << vhdr.ext_size() << std::endl;
+    s << prolog[i++] << vhdr.num_exts() << std::endl;
+    s << prolog[i++] << vhdr.hdr_exts() << std::endl;
+    s << prolog[i++] << vhdr.hdr_pages() << std::endl;
+    s << prolog[i++] << vhdr.epid() << std::endl;
+    s << prolog[i++] << vhdr.spid() << std::endl;
+    s << prolog[i++] << vhdr.page_sz() << std::endl;
     if (!s)  {
         return RC(eOS);
     }
@@ -4658,7 +4658,7 @@ vol_t::read_vhdr(int fd, volhdr_t& vhdr)
      *  Read the header strings from tmp using an istream.
      */
     w_istrstream s(tmp, tmpsz);
-    s.seekg(0, ios::beg);
+    s.seekg(0, std::ios::beg);
     if (!s)  {
             /* XXX c library */ 
         return RC(eOS);
@@ -4689,22 +4689,22 @@ vol_t::read_vhdr(int fd, volhdr_t& vhdr)
     if ( !s || vhdr.page_sz() != page_sz ||
         vhdr.format_version() != volume_format_version ) {
 
-        cout << "Volume format bad:" << endl;
-        cout << "version " << vhdr.format_version() << endl;
-        cout << "   expected " << volume_format_version << endl;
-        cout << "page size " << vhdr.page_sz() << endl;
-        cout << "   expected " << page_sz << endl;
+        std::cout << "Volume format bad:" << std::endl;
+        std::cout << "version " << vhdr.format_version() << std::endl;
+        std::cout << "   expected " << volume_format_version << std::endl;
+        std::cout << "page size " << vhdr.page_sz() << std::endl;
+        std::cout << "   expected " << page_sz << std::endl;
 
-        cout << "Other: " << endl;
-        cout << "ext size " << vhdr.ext_size() << endl;
-        cout << "# extents " << vhdr.num_exts() << endl;
-        cout << "# hdr extents " << vhdr.hdr_exts() << endl;
-        cout << "# hdr pages " << vhdr.hdr_pages() << endl;
-        cout << "1st epid " << vhdr.epid() << endl;
-        cout << "1st spid " << vhdr.spid() << endl;
+        std::cout << "Other: " << std::endl;
+        std::cout << "ext size " << vhdr.ext_size() << std::endl;
+        std::cout << "# extents " << vhdr.num_exts() << std::endl;
+        std::cout << "# hdr extents " << vhdr.hdr_exts() << std::endl;
+        std::cout << "# hdr pages " << vhdr.hdr_pages() << std::endl;
+        std::cout << "1st epid " << vhdr.epid() << std::endl;
+        std::cout << "1st spid " << vhdr.spid() << std::endl;
 
-        cout << "Buffer: " << endl;
-        cout << buf << endl;
+        std::cout << "Buffer: " << std::endl;
+        std::cout << buf << std::endl;
 
         if (smlevel_0::log) {
             return RC(eBADFORMAT);

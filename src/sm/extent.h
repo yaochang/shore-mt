@@ -94,7 +94,7 @@ public:
 
     space_bucket_t         get_page_bucket(int i)const;
 
-    friend ostream& operator<<(ostream &, const extlink_t &e);
+    friend std::ostream& operator<<(std::ostream &, const extlink_t &e);
 };
 
 inline NORET

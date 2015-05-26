@@ -87,8 +87,8 @@ public:
 
     void        assert_empty() const;
     void        dump();
-    void        dump(ostream &o);
-    void        _dump(ostream &o);
+    void        dump(std::ostream &o);
+    void        _dump(std::ostream &o);
 
 
     lock_head_t*    find_lock_head(

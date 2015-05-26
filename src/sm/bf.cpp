@@ -626,7 +626,7 @@ bf_cleaner_thread_t::run()
     
     lpid_t* pids = new lpid_t[bf_m::npages()];
     if (! pids)  {
-        W_FATAL_MSG(fcOUTOFMEMORY, << " creating bf cleaner page list" << endl);
+        W_FATAL_MSG(fcOUTOFMEMORY, << " creating bf cleaner page list" << std::endl);
         return;
     }
 
@@ -635,7 +635,7 @@ bf_cleaner_thread_t::run()
 #ifdef W_TRACE
     // for use with DBG()
     sthread_base_t::id_t _id = me()->id;
-    DBG( << " cleaner " << _id << " activated" << endl );
+    DBG( << " cleaner " << _id << " activated" << std::endl );
 #endif
 
     int ntimes = 0;
@@ -785,9 +785,9 @@ bf_cleaner_thread_t::run()
     // We exited the loop above because we were told to retire.
 
 #ifdef W_TRACE
-    DBG( << " cleaner " << _id << " retired" << endl
-         << "\tswept " << ntimes << " times " << endl );
-    DBG( << endl );
+    DBG( << " cleaner " << _id << " retired" << std::endl
+         << "\tswept " << ntimes << " times " << std::endl );
+    DBG( << std::endl );
 #endif
 
     // clean up page writers
@@ -854,7 +854,7 @@ bf_m::bf_m(uint4_t max, char *bp, uint4_t pg_writer_cnt)
 
     bf_cleaner_thread_t::_dirty_threshold = npages()/8;
     if(bf_cleaner_thread_t::_dirty_threshold < 4) {
-        W_FATAL_MSG(OPT_BadValue, << " Buffer pool too small. " << endl);
+        W_FATAL_MSG(OPT_BadValue, << " Buffer pool too small. " << std::endl);
     }
 }
 
@@ -1626,9 +1626,9 @@ bf_m::unfix(const page_s* buf, bool dirty, int ref_bit)
             if( log && b->frame()->lsn1 == lsn_t(0,1) ) {
                 if (b->get_storeflags() & smlevel_0::st_tmp) {
                     // Don't mark it as dirty
-                    // cerr << "tmp page " << b->pid() << endl;
+                    // std::cerr << "tmp page " << b->pid() << std::endl;
                 } else {
-                    // cerr << "cleaning page " << b->pid() << endl;
+                    // std::cerr << "cleaning page " << b->pid() << std::endl;
                     b->mark_clean();
                 }
             } else {
@@ -2620,7 +2620,7 @@ bf_m::min_rec_lsn()
  *
  *********************************************************************/
 void 
-bf_m::dump(ostream &o)
+bf_m::dump(std::ostream &o)
 {
     _core->dump(o);
     if(bf_cleaner_thread_t::_histogram) {
@@ -2628,7 +2628,7 @@ bf_m::dump(ostream &o)
         for(int i=0; i< npages()+1; i++) {
              j = bf_cleaner_thread_t::_histogram[i];
              if(j!= 0) {
-                o << i << " pages: " << j << " sweeps" <<endl;
+                o << i << " pages: " << j << " sweeps" <<std::endl;
              }
         }
     }
@@ -2990,7 +2990,7 @@ bf_m::_scan(const bf_filter_t& filter, bool write_dirty, bool discard)
             if (write_dirty && b->dirty())  {
 #if W_DEBUG_LEVEL > 1
                 if (b->get_storeflags() & st_tmp) {
-                    cerr << "calling _write_out tmp pid " << b->pid() << endl;
+                    std::cerr << "calling _write_out tmp pid " << b->pid() << std::endl;
                 }
 #endif
                 CRITICAL_SECTION(cs, page_write_mutex_t::locate(b->pid())); 

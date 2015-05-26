@@ -93,13 +93,13 @@ _setdebuginfo(
         w_assert3(_d.name);
         memcpy(_d.name, name, l);
     }
-    cerr << __LINE__ << ":" 
+    std::cerr << __LINE__ << ":" 
         << _d.name << " = " << _d.value 
         << " init:" << _d.initialized 
         << " valid:" << _d.valid 
         << " matches:" << _d.matches 
         << " kind:" << int(_d.kind)
-        << endl;
+        << std::endl;
 }
 
 void
@@ -137,8 +137,8 @@ getdebuginfo(
         else if(strcmp(k, "yield")==0){ _k = debug_yield; }
         else if(strcmp(k, "delay")==0){ _k = debug_delay; }
         else {
-            cerr << k << ": bad value for environment variable " 
-                << K << endl;
+            std::cerr << k << ": bad value for environment variable " 
+                << K << std::endl;
         }
 
         if( (n = ::getenv(T)) ) {
@@ -168,7 +168,7 @@ crashtest(
     int line
 ) 
 {
-    cerr << "crashtest" << endl;
+    std::cerr << "crashtest" << std::endl;
 
 
     if(_debuginfo.value == 0 || 
@@ -206,12 +206,12 @@ delaytest(
         /*
          * put the thread to sleep for X millisecs
          */
-        cerr << "DELAY " 
+        std::cerr << "DELAY " 
                 << _debuginfo.value 
                 << " at " << _debuginfo.name
                 << " at line " << line
                 << " file " << file
-                << endl;
+                << std::endl;
         me()->sleep(_debuginfo.value, _debuginfo.name);
     }
 }
@@ -271,7 +271,7 @@ ssmtest(
                 return aborttest();
                 break;
         default:
-                cerr<< "Unknown kind: " << int(_debuginfo.kind) <<endl;
+                std::cerr<< "Unknown kind: " << int(_debuginfo.kind) <<std::endl;
                 return RCOK;
     }
     if(::strcmp(_debuginfo.name,c) != 0) return RCOK;

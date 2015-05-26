@@ -270,7 +270,7 @@ w_rc_t key_type_s::get_key_type(
     if(kc[j].variable) o << '*';
     o << kc[j].length;
     }
-    o << ends;
+    o << std::ends;
     if(o.fail()) return RC(smlevel_0::eRECWONTFIT);
     return RCOK;
 }

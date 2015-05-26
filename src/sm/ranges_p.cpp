@@ -58,7 +58,7 @@ rc_t ranges_m::create(const stid_t stid, lpid_t& pid, const lpid_t& subroot)
     return RCOK;
 }
 
-rc_t ranges_m::create(const stid_t stid, lpid_t& pid, vector<cvec_t*>& keys, vector<lpid_t>& subroots) 
+rc_t ranges_m::create(const stid_t stid, lpid_t& pid, std::vector<cvec_t*>& keys, std::vector<lpid_t>& subroots) 
 {
     W_DO(io->alloc_a_page(stid, lpid_t::eof, pid, true, IX, true));
     ranges_p page;
@@ -164,7 +164,7 @@ rc_t ranges_p::fill_page(key_ranges_map& partitions)
     return RCOK;
 }
 
-rc_t ranges_p::fill_page(vector<cvec_t*>& keys, vector<lpid_t>& subroots)
+rc_t ranges_p::fill_page(std::vector<cvec_t*>& keys, std::vector<lpid_t>& subroots)
 {
     // pin: should only be called for initial partitions
     //map<char*, lpid_t, cmp_greater> partitions_map = partitions.getMap();
@@ -265,7 +265,7 @@ rc_t ranges_p::delete_partition(const lpid_t& root_to_delete,
 
     if(slot_to_delete == 0) {
 	// TODO: return error
-	cout << "ERROR" << endl;
+	std::cout << "ERROR" << std::endl;
     }
 
     // free the slot

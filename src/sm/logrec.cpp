@@ -70,7 +70,7 @@
 #include "rtree_p.h"
 
 #include <iomanip>
-typedef        ios::fmtflags        ios_fmtflags;
+typedef        std::ios::fmtflags        ios_fmtflags;
 
 #include <new>
 
@@ -134,13 +134,13 @@ logrec_t::cat_str() const
       return 0;
     }
 #if W_DEBUG_LEVEL > 2
-    cerr << "unexpected log record flags: ";
-        if( _cat & t_undo ) cerr << "t_undo ";
-        if( _cat & t_redo ) cerr << "t_redo ";
-        if( _cat & t_logical ) cerr << "t_logical ";
-        if( _cat & t_cpsn ) cerr << "t_cpsn ";
-        if( _cat & t_status ) cerr << "t_status ";
-        cerr << endl;
+    std::cerr << "unexpected log record flags: ";
+        if( _cat & t_undo ) std::cerr << "t_undo ";
+        if( _cat & t_redo ) std::cerr << "t_redo ";
+        if( _cat & t_logical ) std::cerr << "t_logical ";
+        if( _cat & t_cpsn ) std::cerr << "t_cpsn ";
+        if( _cat & t_status ) std::cerr << "t_status ";
+        std::cerr << std::endl;
 #endif 
         
     W_FATAL(smlevel_0::eINTERNAL);
@@ -1724,10 +1724,10 @@ btree_insert_log::undo(page_p* W_IFDEBUG9(page))
             goto again;
         }
         smlevel_2::bt->print(dp->root);
-        cerr         << " key=" << key  << endl
-                << " el =" << el  << endl
+        std::cerr         << " key=" << key  << std::endl
+                << " el =" << el  << std::endl
                 << " rc =" << rc  
-                <<endl;
+                <<std::endl;
         W_FATAL(rc.err_num());
     }
 }
@@ -1804,10 +1804,10 @@ btree_remove_log::undo(page_p* W_IFDEBUG9(page))
                                      smlevel_0::t_cc_none, key, el); 
     if(rc.is_error()) {
         smlevel_2::bt->print(dp->root);
-        cerr         << " key=" << key << endl
-                << " el =" << el  << endl
+        std::cerr         << " key=" << key << std::endl
+                << " el =" << el  << std::endl
                 << " rc =" << rc  
-                <<endl;
+                <<std::endl;
         W_FATAL(rc.err_num());
     }
 }
@@ -2221,11 +2221,11 @@ void store_operation_log::undo(page_p* /*page*/)
  *
  *********************************************************************/
 #include "logtype_gen.h"
-ostream& 
-operator<<(ostream& o, const logrec_t& l)
+std::ostream& 
+operator<<(std::ostream& o, const logrec_t& l)
 {
     ios_fmtflags        f = o.flags();
-    o.setf(ios::left, ios::left);
+    o.setf(std::ios::left, std::ios::left);
 
     const char *rb = l.is_rollback()? "U" : "F"; // rollback/undo or forward
 

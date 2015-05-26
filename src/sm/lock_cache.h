@@ -84,7 +84,7 @@ struct lock_cache_elem_t : public w_base_t {
 
     void dump() const {
         if(mode != NL) {
-            cout << "\tlock_id " << lock_id << " mode " << mode << endl;
+            std::cout << "\tlock_id " << lock_id << " mode " << mode << std::endl;
         }
     }
 

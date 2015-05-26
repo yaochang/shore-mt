@@ -199,7 +199,7 @@ public:
 
 
 public:
-    inline ostream&    print_frame(ostream& o, bool in_htab);
+    inline std::ostream&    print_frame(std::ostream& o, bool in_htab);
     void         unpin_frame();
     void         pin_frame();
     bool         pin_frame_if_pinned();

@@ -98,7 +98,7 @@ double rand48::drand()
  * Not operators because that would conflict
  * with the std:: operators for unsigned ints, alas.
  */
-void out(ofstream& o, const unsigned48_t& what)
+void out(std::ofstream& o, const unsigned48_t& what)
 {
     /*
      * expect "........,........,........"
@@ -115,7 +115,7 @@ void out(ofstream& o, const unsigned48_t& what)
         PUN.dummy[0] << "," << 
         PUN.dummy[1] << "," << 
         PUN.dummy[2] << "," << 
-        PUN.dummy[3] << endl;
+        PUN.dummy[3] << std::endl;
 }
 
 /**\brief Used by testers.  
@@ -123,7 +123,7 @@ void out(ofstream& o, const unsigned48_t& what)
  * Not operators because that would conflict
  * with the std:: operators for unsigned ints, alas.
  */
-void in(ifstream& i, unsigned48_t& res)
+void in(std::ifstream& i, unsigned48_t& res)
 {
     /*
      * print "0x........,0x........,0x........"
@@ -146,7 +146,7 @@ void in(ifstream& i, unsigned48_t& res)
     }
     if(j < sizeof(PUN.dummy)/sizeof(unsigned short) ) {
         // This actually sets the badbit:
-        i.clear(ios::badbit|i.rdstate());
+        i.clear(std::ios::badbit|i.rdstate());
     }
     res = PUN.seed;
 }

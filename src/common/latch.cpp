@@ -226,7 +226,7 @@ private:
         holder_list::iterator it=holders.begin();
         for(; it!=holders.end() && it->_latch;  ++it) 
         {
-            it->print(cerr);
+            it->print(std::cerr);
         }
     }
 public:
@@ -693,16 +693,16 @@ latch_t::_downgrade(latch_holder_t* me)
 #endif
 }
 
-void latch_holder_t::print(ostream &o) const
+void latch_holder_t::print(std::ostream &o) const
 {
     o << "Holder " << latch_t::latch_mode_str[int(_mode)] 
         << " cnt=" << _count 
-    << " threadid/" << ::hex << w_base_t::uint8_t(_threadid) 
+    << " threadid/" << std::hex << w_base_t::uint8_t(_threadid) 
     << " latch:";
     if(_latch) {
-        o  << *_latch << endl;
+        o  << *_latch << std::endl;
     } else { 
-        o  << "NULL" << endl;
+        o  << "NULL" << std::endl;
     }
 }
 
@@ -726,18 +726,18 @@ latch_t::is_mine() const {
 // NOTE: this is not safe, but it can be used by unit tests
 // and for debugging
 #include <w_stream.h>
-ostream &latch_t::print(ostream &out) const
+std::ostream &latch_t::print(std::ostream &out) const
 {
     out <<    "latch(" << this << "): " << name();
     out << " held in " << latch_mode_str[int(mode())] << " mode ";
     out << "by " << num_holders() << " threads " ;
     out << "total " << latch_cnt() << " times " ;
-    out << endl;
+    out << std::endl;
     return out;
 }
 
 
-ostream& operator<<(ostream& out, const latch_t& l)
+std::ostream& operator<<(std::ostream& out, const latch_t& l)
 {
     return l.print(out);
 }
@@ -745,7 +745,7 @@ ostream& operator<<(ostream& out, const latch_t& l)
 // For use in debugger:
 void print_latch(const latch_t *l)
 {
-    if(l != NULL) l->print(cerr);
+    if(l != NULL) l->print(std::cerr);
 }
 
 // For use in debugger:
@@ -770,7 +770,7 @@ void print_all_latches()
 			 iter ++) count++;
 	}
     holder_list_list_t::iterator  iter;
-    cerr << "ALL " << count << " LATCHES {" << endl;
+    std::cerr << "ALL " << count << " LATCHES {" << std::endl;
     for(iter= holder_list_list.begin(); 
          iter != holder_list_list.end(); iter ++)
     {
@@ -780,17 +780,17 @@ void print_all_latches()
         latch_holder_t **whoslist = iter->second;
 		DBG(<<" whoslist " << (void *)(whoslist));
 		if(who) {
-        cerr << "{ Thread id:" << ::dec << who->id 
-         << " @ sthread/" << ::hex << w_base_t::uint8_t(who)
-         << " @ pthread/" << ::hex << w_base_t::uint8_t(who->myself())
-         << endl << "\t";
+        std::cerr << "{ Thread id:" << std::dec << who->id 
+         << " @ sthread/" << std::hex << w_base_t::uint8_t(who)
+         << " @ pthread/" << std::hex << w_base_t::uint8_t(who->myself())
+         << std::endl << "\t";
 		} else {
-        cerr << "{ empty }"
-         << endl << "\t";
+        std::cerr << "{ empty }"
+         << std::endl << "\t";
 		}
 		DBG(<<"");
         holders_print whose(*whoslist); 
-        cerr <<  "} " << endl << flush;
+        std::cerr <<  "} " << std::endl << std::flush;
     }
-    cerr <<  "}" << endl << flush ;
+    std::cerr <<  "}" << std::endl << std::flush ;
 }

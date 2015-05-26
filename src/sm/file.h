@@ -188,7 +188,9 @@ public:
     static recflags_t   choose_rec_implementation(
         uint4_t                    est_hdr_len,
         smsize_t                   est_data_len,
-        smsize_t&                  rec_size);
+        smsize_t&                  rec_size,
+        file_p*                    page);
+
 
 private:
     /*
@@ -511,7 +513,8 @@ public:
     static recflags_t   choose_rec_implementation(
         uint4_t                    est_hdr_len,
         smsize_t                   est_data_len,
-        smsize_t&                  rec_size);
+        smsize_t&                  rec_size,
+        file_p*                    page);
         
     rc_t                 shift(slotid_t snum, file_mrbt_p* rsib);
 };

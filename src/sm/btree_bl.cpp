@@ -254,10 +254,10 @@ btree_impl::_handle_dup_keys(
         if (!eod) {
             W_DO( fi->next_page(pid, eof, NULL /* allocated only*/) );
             if (page_cnt >= max_page_cnt) {
-                cerr 
+                std::cerr 
                 << "btree_impl::_handle_dup_keys: "
-                << " too many duplicate key entries" << endl;
-                cerr << "      returning OUT OF SPACE error" << endl;
+                << " too many duplicate key entries" << std::endl;
+                std::cerr << "      returning OUT OF SPACE error" << std::endl;
                 return RC(eOUTOFSPACE);
 
             }

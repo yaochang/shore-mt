@@ -513,14 +513,14 @@ private:
 
     // given previous level, compute next and return total for next
     int _compute_level(int level, int *_last, int *_next);
-    void _print_level(ostream& o, int *row) const {
+    void _print_level(std::ostream& o, int *row) const {
         int t = 0;
         for(int j=0; j<_order; j++) {
             o << " " << row[j];
             t += row[j];
         }
-        o << " total=" <<t <<endl;
-        o << "--done--" <<endl;
+        o << " total=" <<t <<std::endl;
+        o << "--done--" <<std::endl;
     }
 
 public:
@@ -543,8 +543,8 @@ public:
 
     int compute_dummies(int goal);
 
-    void print(ostream& o) const {
-        o << "fib_t #s of order " << _order <<endl;
+    void print(std::ostream& o) const {
+        o << "fib_t #s of order " << _order <<std::endl;
         _print_level(o, _f);
     }
 
@@ -629,7 +629,7 @@ fib_t::_compute_level(int level, int *_last, int *_next)
     }
 #if W_DEBUG_LEVEL > 1
     if(0) {
-        _print_level(cout, _next);
+        _print_level(std::cout, _next);
     }
 #endif 
     return total;
@@ -703,10 +703,10 @@ public:
         return RCOK;
     }
 
-    friend ostream & operator<< (ostream &o,  const run_t& r) ;
+    friend std::ostream & operator<< (std::ostream &o,  const run_t& r) ;
 };
 
-ostream & operator<< (ostream &o, const run_t& r)  
+std::ostream & operator<< (std::ostream &o, const run_t& r)  
 {
     const char *isempty = r.empty() ? " Empty" : "";
     const char *isdummy = (r._first_page==0) ? " Dummy" : "";
@@ -847,14 +847,14 @@ public:
             w_assert3(total() == 1);
         }
     }
-    void print(ostream &o) const {
+    void print(std::ostream &o) const {
         for(int i=0; i<order()+1; i++) {
             o << " " <<num(i)
             ;
         }
         if(last()) o << " LAST " ;
         if(done()) o << " DONE " ;
-        o <<endl;
+        o <<std::endl;
     }
 };
 
@@ -1441,25 +1441,25 @@ public:
     w_rc_t             pin_orig_rec(file_p& ifile_page, stid_t&f, 
                             record_t *&rec, rid_t&        r); 
 
-    friend ostream & operator<< (ostream &o,  const tape_t& t) ;
+    friend std::ostream & operator<< (std::ostream &o,  const tape_t& t) ;
 
     void            check_tape_file(bool printall) const;
 };
 
-ostream & operator<< (ostream &o, const tape_t& t)  
+std::ostream & operator<< (std::ostream &o, const tape_t& t)  
 {
     o << t._tape_number
         <<" store "  << t._store
         <<" puts "  << t._count_put
         <<" gets "  << t._count_get
         <<" curr_run"  << t._first_run
-        << endl
+        << std::endl
         ;
     int i = t._first_run;
     if(i<0) i=0;
     for(; i < t._last_run; i++) {
         run_t& R = t._list[i];
-        o <<", (" << R << ")" << endl ;
+        o <<", (" << R << ")" << std::endl ;
     }
     return o;
 }
@@ -1486,7 +1486,7 @@ void  tape_t::check_tape_file(bool W_IFDEBUG3(printall)) const
     bool eof=false;
     int  numrecords=0;
     if(printall) {
-        DBG(<< endl <<"START check_tape_file " << _tape_number);
+        DBG(<< std::endl <<"START check_tape_file " << _tape_number);
     }
 
     W_COERCE( fi->first_page(fid, pid, NULL /* allocated only */) );
@@ -1571,7 +1571,7 @@ void  tape_t::check_tape_file(bool W_IFDEBUG3(printall)) const
     // re-do and print all the info.
     if(bad>0 && !printall) check_tape_file(true);
     if(printall) {
-        DBG(<<"END check_tape_file " << _tape_number << endl << endl);
+        DBG(<<"END check_tape_file " << _tape_number << std::endl << std::endl);
     }
 #endif
 }
@@ -1821,7 +1821,8 @@ run_mgr::run_mgr(
 #endif
             file_p::choose_rec_implementation(0,/*est hdr len */
                 _min_rec_sz,  /* est data len */
-                space_needed // output
+                space_needed, // output
+                NULL // no page fixed
                 );
         _numslots = int(file_p::data_sz) / align(space_needed);
         w_assert3(_numslots > 0);
@@ -2036,7 +2037,7 @@ run_mgr::put_rec(file_p &fp, slotid_t slot)
         s << 
             "Internal error: @ " << __LINE__
             << " " << __FILE__
-            << endl
+            << std::endl
             <<  "_numslots " << _numslots
             << " rec_curr " << rec_curr
             << " rec_last " << rec_last
@@ -2044,12 +2045,12 @@ run_mgr::put_rec(file_p &fp, slotid_t slot)
             << " sizeof(*rec_last)"  << sizeof(*rec_last)
             << " rid " << rid
             << " for slot slot  " << slot
-            << endl
+            << std::endl
             ;
 
         s << 
             "Bad estimate for minimum record size yields poor space use"
-            << endl;
+            << std::endl;
         s << 
             "Use a smaller hint for minimum record size to be safe.";
 
@@ -2828,7 +2829,7 @@ error:
     delete [] stack;
     record_free(MAXSTACKDEPTH * sizeof(qs_stack_item));
     // not likely 
-    cerr << "_QuickSort: stack too small" <<endl;
+    std::cerr << "_QuickSort: stack too small" <<std::endl;
     DBG(<<"");
     W_FATAL(eOUTOFMEMORY);
 }
@@ -2950,7 +2951,7 @@ blob::prime(const sm_skey_t &key)
         callback_epilogue();
         if(rc.is_error()) {
                 W_FATAL_MSG(fcINTERNAL, << "Cannot pin " << _rid1
-                    << " at offset " << key.offset() << endl << " rc=" << rc);
+                    << " at offset " << key.offset() << std::endl << " rc=" << rc);
         }
         INC_STAT_SORT(sort_rec_pins);
         _last1 = _len1 + key.offset();
@@ -2989,7 +2990,7 @@ blob::next(const char *&key1, smsize_t& l)
             if(rc.is_error()) {
                         W_FATAL_MSG(fcINTERNAL,
                         << "Cannot get next_bytes " << _rid1
-                        << endl
+                        << std::endl
                         << " rc= " <<rc);
             }
             INC_STAT_SORT(sort_rec_pins);

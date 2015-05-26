@@ -117,7 +117,7 @@ public:
         return matches;
     }
 
-    ostream &print(ostream &o) const 
+    std::ostream &print(std::ostream &o) const 
     {
         {
             const char *sep="";

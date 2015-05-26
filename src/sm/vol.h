@@ -233,8 +233,8 @@ public:
 
     rc_t            update_ext_histo(const lpid_t& pid, space_bucket_t b);
     rc_t            next_ext(extnum_t ext, extnum_t &res);
-    rc_t            dump_exts(ostream &, extnum_t start, extnum_t end);
-    rc_t            dump_stores(ostream &, int start, int end);
+    rc_t            dump_exts(std::ostream &, extnum_t start, extnum_t end);
+    rc_t            dump_stores(std::ostream &, int start, int end);
 
     rc_t            find_free_store(snum_t& fnum);
     rc_t            alloc_store(

@@ -51,27 +51,27 @@ const cvec_t         kvl_t::bof("\0BOF", 4); // not used
 
 /*********************************************************************
  *
- *  operator<<(ostream, kvl)
+ *  operator<<(std::ostream, kvl)
  *
- *  Pretty print "kvl" to "ostream".
+ *  Pretty print "kvl" to "std::ostream".
  *
  *********************************************************************/
-ostream& 
-operator<<(ostream& o, const kvl_t& kvl)
+std::ostream& 
+operator<<(std::ostream& o, const kvl_t& kvl)
 {
     return o << "k(" << kvl.stid << '.' << kvl.h << '.' << kvl.g << ')';
 }
 
 /*********************************************************************
  *
- *  operator>>(istream, kvl)
+ *  operator>>(std::istream, kvl)
  *
- *  Read a kvl from istream into "kvl". Format of kvl is a string
+ *  Read a kvl from std::istream into "kvl". Format of kvl is a string
  *  of format "k(stid.h.g)".
  *
  *********************************************************************/
-istream& 
-operator>>(istream& i, kvl_t& kvl)
+std::istream& 
+operator>>(std::istream& i, kvl_t& kvl)
 {
     char c[6];
     i >> c[0] >> c[1] >> kvl.stid >> c[2]
@@ -80,7 +80,7 @@ operator>>(istream& i, kvl_t& kvl)
     c[5] = '\0';
     if (i) {
         if (strcmp(c, "k(..)"))  {
-            i.clear(ios::badbit|i.rdstate());  // error
+            i.clear(std::ios::badbit|i.rdstate());  // error
         }
     }
     return i;

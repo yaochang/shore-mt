@@ -148,7 +148,7 @@ public:
                             }
     void                 corrupt();
 
-    friend ostream& operator<<(ostream&, const logrec_t&);
+    friend std::ostream& operator<<(std::ostream&, const logrec_t&);
 
 protected:
     enum category_t {

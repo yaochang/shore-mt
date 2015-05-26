@@ -26,7 +26,7 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 ## This package uses an assembler.
 ## Define CCAS and CCASFLAGS 
 AM_PROG_AS
-AM_PROG_AR
+#AM_PROG_AR
 
 # Checks for programs.
 ## preprocessor required

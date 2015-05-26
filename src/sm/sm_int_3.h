@@ -151,8 +151,8 @@ public:
 };
 /**\endcond  skip */
 
-ostream&
-operator<<(ostream& o, smlevel_3::sm_store_property_t p);
+std::ostream&
+operator<<(std::ostream& o, smlevel_3::sm_store_property_t p);
 
 #if (SM_LEVEL >= 3)
 #    include <dir.h>

@@ -184,10 +184,10 @@ rc_t device_m::list_devices(const char**& dev_list, devid_t*& devid_list, u_int&
 
 void device_m::dump() const
 {
-    cout << "DEVICE TABLE: " << endl;
+    std::cout << "DEVICE TABLE: " << std::endl;
     w_list_const_i<device_s,queue_based_lock_t> scan(_tab);
     while(scan.next()) {
-        cout << scan.curr()->name << "  id:" << scan.curr()->id << "  quota = "  << scan.curr()->quota_pages << endl;
+        std::cout << scan.curr()->name << "  id:" << scan.curr()->id << "  quota = "  << scan.curr()->quota_pages << std::endl;
     }
 }
 

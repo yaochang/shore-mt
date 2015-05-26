@@ -138,7 +138,7 @@ Rome Research Laboratory Contract No. F30602-97-2-0247.
 
 /* XXX missing type in vc++, hack around it here too, don't pollute
    global namespace too badly. */
-typedef    ios::fmtflags    w_dbg_fmtflags;
+typedef    std::ios::fmtflags    w_dbg_fmtflags;
 
 
 #ifdef W_TRACE
@@ -157,9 +157,9 @@ typedef    ios::fmtflags    w_dbg_fmtflags;
 #define RETURN \
                 do { \
             if(_w_debug.flag_on(__func__,__FILE__)) {\
-            w_dbg_fmtflags old = _w_debug.clog.setf(ios::dec, ios::basefield); \
+            w_dbg_fmtflags old = _w_debug.clog.setf(std::ios::dec, std::ios::basefield); \
             _w_debug.clog  << __LINE__ << " " << _strip_filename(__FILE__) << ":" ; \
-            _w_debug.clog.setf(old, ios::basefield); \
+            _w_debug.clog.setf(old, std::ios::basefield); \
             _w_debug.clog << "return from " << __func__ << flushl; } } while(0); \
             return 
 
@@ -221,9 +221,9 @@ extern w_debug _w_debug;
 
 #    define DBG1(a) do {\
     if(_w_debug.flag_on(__func__,__FILE__)) {                \
-        w_dbg_fmtflags old = _w_debug.clog.setf(ios::dec, ios::basefield); \
+        w_dbg_fmtflags old = _w_debug.clog.setf(std::ios::dec, std::ios::basefield); \
         _w_debug.clog  << _strip_filename(__FILE__) << ":" << __LINE__ << ":" ; \
-        _w_debug.clog.setf(old, ios::basefield); \
+        _w_debug.clog.setf(old, std::ios::basefield); \
         _w_debug.clog  a    << flushl; \
     } } while(0)
 
